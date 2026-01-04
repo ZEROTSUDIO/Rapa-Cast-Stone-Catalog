@@ -1,110 +1,87 @@
 <x-front.layout>
-    <!-- Hero Carousel -->
-
-    <section id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5000">
-
-        {{-- Indicators (homepage-only, so keep inline) --}}
-        <div class="carousel-indicators">
-            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true"
-                aria-label="Slide 1"></button>
-            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    <!-- Hero Section -->
+    <section class="hero-bg h-screen flex items-center justify-center text-white text-center relative">
+        <div class="absolute inset-0 bg-gradient-radial from-transparent to-[#3A352F]/30"></div>
+        <div class="relative z-10 max-w-4xl px-6">
+            <h1 class="font-heading text-6xl md:text-8xl font-light tracking-[4px] mb-10 drop-shadow-lg">
+                TIMELESS STONE DESIGN
+            </h1>
+            <p class="text-sm tracking-[3px] uppercase mb-12 opacity-95 font-light">
+                Architectural Cast Stone Furniture
+            </p>
+            <div class="flex flex-wrap justify-center gap-8 md:gap-12">
+                <span class="text-xs tracking-[2.5px] uppercase opacity-85">Handcrafted</span>
+                <span class="text-xs tracking-[2.5px] uppercase opacity-85">Export Quality</span>
+                <span class="text-xs tracking-[2.5px] uppercase opacity-85">Natural Stone</span>
+            </div>
         </div>
-
-        {{-- Slides --}}
-        <div class="carousel-inner">
-
-            <x-front.hero-slide active image="https://images.unsplash.com/photo-1615529182904-14819c35db37?w=1600"
-                title="TIMELESS STONE DESIGN" subtitle="Architectural Cast Stone Furniture" :tags="['HANDCRAFTED', 'EXPORT QUALITY', 'NATURAL STONE']" />
-
-            <x-front.hero-slide image="https://images.unsplash.com/photo-1567016432779-094069958ea5?w=1600"
-                title="ORGANIC FORMS" subtitle="Bringing Nature Into Your Space" :tags="['SUSTAINABLE', 'MINIMALIST', 'ARTISANAL']" />
-
-            <x-front.hero-slide image="https://images.unsplash.com/photo-1618220179428-22790b461013?w=1600"
-                title="SCULPTED ELEGANCE" subtitle="Where Art Meets Function" :tags="['BESPOKE', 'CONTEMPORARY', 'DURABLE']" />
-
-        </div>
-
-        {{-- Controls --}}
-        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-
-        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
     </section>
 
-    <!-- Category Highlight -->
-    <section class="section">
-        <div class="container">
-            <p class="section-subtitle">Explore Our</p>
-            <h2 class="section-title">Collections</h2>
-            <div class="row">
+    <!-- Collections -->
+    <section class="py-32 px-6">
+        <div class="max-w-7xl mx-auto">
+            <p class="text-center text-xs text-[#8B7F6E] tracking-[2px] uppercase mb-4 font-normal">Explore Our</p>
+            <h2 class="font-heading text-5xl md:text-6xl text-center mb-20 tracking-wide font-light">Collections</h2>
+
+            <div class="grid md:grid-cols-3 gap-6 scroll-reveal">
                 @foreach ($categories as $category)
-                    <div class="col-md-4 mb-4">
-                        <a href="/catalogs?category={{ $category->slug }}" class="text-decoration-none">
-                            <div class="category-card">
-                                <img src="{{ $category->image ? asset($category->image) : 'https://images.unsplash.com/photo-1503602642458-232111445657?w=600' }}"
-                                    alt="Seating">
-                                <div class="category-overlay">
-                                    <h3>{{ $category->name }}</h3>
-                                    <p>{{ $category->description }}</p>
+                    <a href="{{ url('/catalogs?category=' . $category->slug) }}" class="block">
+                        <div
+                            class="category-card group relative h-[550px] overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-600 hover:-translate-y-2">
+                            <img src="{{ $category->image ? asset($category->image) : 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800' }}"
+                                alt="{{ $category->name }}" class="category-image w-full h-full object-cover">
+                            <div
+                                class="absolute inset-0 bg-gradient-to-t from-[#3A352F]/85 to-transparent flex items-end">
+                                <div class="p-10 text-white">
+                                    <h3 class="font-heading text-4xl mb-2">{{ $category->name }}</h3>
+                                    <p class="text-xs tracking-[1.5px] uppercase opacity-90">
+                                        {{ Str::limit($category->description, 30) }}</p>
                                 </div>
                             </div>
-                        </a>
-                    </div>
+                        </div>
+                    </a>
                 @endforeach
             </div>
         </div>
     </section>
 
     <!-- Featured Products -->
-    <section class="section" style="background-color: var(--soft-sand);">
-        <div class="container">
-            <p class="section-subtitle">Curated Selection</p>
-            <h2 class="section-title">Featured Pieces</h2>
-            <div class="row">
-                <div class="col-md-4">
-                    <a href="" class="text-decoration-none">
-                        <div class="product-card">
-                            <div class="product-image-wrapper">
-                                <img src="https://images.unsplash.com/photo-1503602642458-232111445657?w=600"
-                                    alt="Product" class="product-image">
-                            </div>
-                            <h4>Monolith Console</h4>
-                            <p>Cast Stone, Polished Finish</p>
-                            <p class="product-price">From $2,400</p>
-                        </div>
-                    </a>
+    <section class="py-32 px-6 bg-[#F5F1E8]">
+        <div class="max-w-7xl mx-auto">
+            <p class="text-center text-xs text-[#8B7F6E] tracking-[2px] uppercase mb-4 font-normal">Curated Selection
+            </p>
+            <h2 class="font-heading text-5xl md:text-6xl text-center mb-20 tracking-wide font-light">Featured Pieces
+            </h2>
+
+            <div class="grid md:grid-cols-3 gap-12 scroll-reveal">
+                <div class="product-card group">
+                    <div class="overflow-hidden mb-8 shadow-lg">
+                        <img src="https://images.unsplash.com/photo-1503602642458-232111445657?w=600" alt="Product"
+                            class="product-image w-full h-[500px] object-cover">
+                    </div>
+                    <h4 class="font-heading text-3xl mb-3 tracking-wide">Monolith Console</h4>
+                    <p class="text-sm text-[#8B7F6E] mb-5 tracking-wide">Cast Stone, Polished Finish</p>
+                    <p class="text-sm text-[#6B5E52] tracking-wide">From $2,400</p>
                 </div>
-                <div class="col-md-4">
-                    <a href="" class="text-decoration-none">
-                        <div class="product-card">
-                            <div class="product-image-wrapper">
-                                <img src="https://images.unsplash.com/photo-1540932239986-30128078f3c5?w=600"
-                                    alt="Product" class="product-image">
-                            </div>
-                            <h4>Terra Dining Table</h4>
-                            <p>Natural Stone Top, Oak Base</p>
-                            <p class="product-price">From $3,800</p>
-                        </div>
-                    </a>
+
+                <div class="product-card group">
+                    <div class="overflow-hidden mb-8 shadow-lg">
+                        <img src="https://images.unsplash.com/photo-1540932239986-30128078f3c5?w=600" alt="Product"
+                            class="product-image w-full h-[500px] object-cover">
+                    </div>
+                    <h4 class="font-heading text-3xl mb-3 tracking-wide">Terra Dining Table</h4>
+                    <p class="text-sm text-[#8B7F6E] mb-5 tracking-wide">Natural Stone Top, Oak Base</p>
+                    <p class="text-sm text-[#6B5E52] tracking-wide">From $3,800</p>
                 </div>
-                <div class="col-md-4">
-                    <a href="" class="text-decoration-none">
-                        <div class="product-card">
-                            <div class="product-image-wrapper">
-                                <img src="https://images.unsplash.com/photo-1567016432779-094069958ea5?w=600"
-                                    alt="Product" class="product-image">
-                            </div>
-                            <h4>Sculptural Pedestal</h4>
-                            <p>Hand-Carved Limestone</p>
-                            <p class="product-price">From $1,600</p>
-                        </div>
-                    </a>
+
+                <div class="product-card group">
+                    <div class="overflow-hidden mb-8 shadow-lg">
+                        <img src="https://images.unsplash.com/photo-1567016432779-094069958ea5?w=600" alt="Product"
+                            class="product-image w-full h-[500px] object-cover">
+                    </div>
+                    <h4 class="font-heading text-3xl mb-3 tracking-wide">Sculptural Pedestal</h4>
+                    <p class="text-sm text-[#8B7F6E] mb-5 tracking-wide">Hand-Carved Limestone</p>
+                    <p class="text-sm text-[#6B5E52] tracking-wide">From $1,600</p>
                 </div>
             </div>
         </div>

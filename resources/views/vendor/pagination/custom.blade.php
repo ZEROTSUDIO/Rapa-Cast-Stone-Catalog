@@ -1,13 +1,15 @@
 @if ($paginator->hasPages())
-    <nav role="navigation" aria-label="Pagination Navigation" class="d-flex justify-content-center mt-5">
-        <div class="pagination">
+    <nav role="navigation" aria-label="Pagination Navigation" class="flex justify-center mt-12">
+        <div class="flex gap-2">
             {{-- Previous Page Link --}}
             @if ($paginator->onFirstPage())
-                <span class="filter-btn disabled" aria-disabled="true" aria-label="@lang('pagination.previous')">
+                <span class="px-4 py-2 border border-[#E8E3D8] text-[#B5A693] cursor-not-allowed text-xs tracking-[2px]"
+                    aria-disabled="true" aria-label="@lang('pagination.previous')">
                     &lsaquo;
                 </span>
             @else
-                <a href="{{ $paginator->previousPageUrl() }}" rel="prev" class="filter-btn text-decoration-none"
+                <a href="{{ $paginator->previousPageUrl() }}" rel="prev"
+                    class="px-4 py-2 border border-[#B5A693] text-[#6B5E52] hover:bg-[#3A352F] hover:text-white transition-colors duration-300 text-xs tracking-[2px]"
                     aria-label="@lang('pagination.previous')">
                     &lsaquo;
                 </a>
@@ -17,17 +19,20 @@
             @foreach ($elements as $element)
                 {{-- "Three Dots" Separator --}}
                 @if (is_string($element))
-                    <span class="filter-btn disabled" aria-disabled="true">{{ $element }}</span>
+                    <span class="px-4 py-2 border border-transparent text-[#B5A693] text-xs tracking-[2px]"
+                        aria-disabled="true">{{ $element }}</span>
                 @endif
 
                 {{-- Array Of Links --}}
                 @if (is_array($element))
                     @foreach ($element as $page => $url)
                         @if ($page == $paginator->currentPage())
-                            <span class="filter-btn active" aria-current="page">{{ $page }}</span>
+                            <span
+                                class="px-4 py-2 border border-[#3A352F] bg-[#3A352F] text-white text-xs tracking-[2px]"
+                                aria-current="page">{{ $page }}</span>
                         @else
                             <a href="{{ $url }}#products"
-                                class="filter-btn text-decoration-none">{{ $page }}</a>
+                                class="px-4 py-2 border border-[#B5A693] text-[#6B5E52] hover:bg-[#3A352F] hover:text-white transition-colors duration-300 text-xs tracking-[2px]">{{ $page }}</a>
                         @endif
                     @endforeach
                 @endif
@@ -36,11 +41,13 @@
             {{-- Next Page Link --}}
             @if ($paginator->hasMorePages())
                 <a href="{{ $paginator->nextPageUrl() }}#products" rel="next"
-                    class="filter-btn text-decoration-none" aria-label="@lang('pagination.next')">
+                    class="px-4 py-2 border border-[#B5A693] text-[#6B5E52] hover:bg-[#3A352F] hover:text-white transition-colors duration-300 text-xs tracking-[2px]"
+                    aria-label="@lang('pagination.next')">
                     &rsaquo;
                 </a>
             @else
-                <span class="filter-btn disabled" aria-disabled="true" aria-label="@lang('pagination.next')">
+                <span class="px-4 py-2 border border-[#E8E3D8] text-[#B5A693] cursor-not-allowed text-xs tracking-[2px]"
+                    aria-disabled="true" aria-label="@lang('pagination.next')">
                     &rsaquo;
                 </span>
             @endif

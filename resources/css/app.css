@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -6,6 +6,100 @@
 @source '../**/*.js';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-heading: "Cormorant", serif;
+    --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
+        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+        "Noto Color Emoji";
+}
+
+/* Custom Styles from Reference */
+.page {
+    display: none;
+    animation: fadeIn 0.6s ease-in-out;
+}
+.page.active {
+    display: block;
+}
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.nav-link-hover {
+    position: relative;
+}
+.nav-link-hover::after {
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 1px;
+    background: #b5a693;
+    transition: width 0.4s ease;
+}
+.nav-link-hover:hover::after {
+    width: 100%;
+}
+.hero-bg {
+    background: linear-gradient(rgba(58, 53, 47, 0.15), rgba(58, 53, 47, 0.25)),
+        url("https://images.unsplash.com/photo-1615529182904-14819c35db37?w=1600");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+.category-image {
+    transition: transform 0.8s ease, filter 0.6s ease;
+    filter: brightness(0.95) saturate(0.9);
+}
+.category-card:hover .category-image {
+    transform: scale(1.08);
+    filter: brightness(1) saturate(1);
+}
+.product-image {
+    transition: transform 0.7s ease, filter 0.5s ease;
+    filter: brightness(0.96) saturate(0.95);
+}
+.product-card:hover .product-image {
+    transform: scale(1.05);
+    filter: brightness(1) saturate(1);
+}
+.thumbnail {
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    filter: brightness(0.95);
+}
+.thumbnail:hover,
+.thumbnail.active {
+    opacity: 1;
+    transform: scale(1.05);
+    filter: brightness(1);
+}
+.article-image {
+    transition: transform 0.7s ease, filter 0.5s ease;
+    filter: brightness(0.96) saturate(0.9);
+}
+.article-card:hover .article-image {
+    transform: scale(1.08);
+    filter: brightness(1) saturate(1);
+}
+.scroll-reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.scroll-reveal.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+.gradient-text {
+    background: linear-gradient(135deg, #3a352f 0%, #8b7f6e 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
