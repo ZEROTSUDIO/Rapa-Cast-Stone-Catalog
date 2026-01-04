@@ -18,11 +18,17 @@ class ProductFactory extends Factory
      */
     public function definition(): array
     {
-        $name = fake()->word();
+        $name = fake()->sentence();
         return [
             'name' => $name,
             'slug' => Str::slug($name),
-            'description' => fake()->paragraph(3),
+            'description' => fake()->text(300),
+            'specification' => [
+                'color' => fake()->colorName(),
+                'weight' => fake()->numberBetween(1, 100) . 'kg',
+                'dimensions' => fake()->numberBetween(10, 100) . 'x' . fake()->numberBetween(10, 100) . 'cm',
+                'material' => fake()->randomElement(['Stone', 'Concrete', 'Marble']),
+            ],
             'category_id' => Category::factory(),
         ];
     }

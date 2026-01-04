@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rapa Cast Stone - Architectural Stone Furniture</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Cormorant', serif;
+        }
+        .page {
+            display: none;
+            animation: fadeIn 0.6s ease-in-out;
+        }
+        .page.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .nav-link-hover {
+            position: relative;
+        }
+        .nav-link-hover::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 1px;
+            background: #B5A693;
+            transition: width 0.4s ease;
+        }
+        .nav-link-hover:hover::after {
+            width: 100%;
+        }
+        .hero-bg {
+            background: linear-gradient(rgba(58, 53, 47, 0.15), rgba(58, 53, 47, 0.25)), 
+                        url('https://images.unsplash.com/photo-1615529182904-14819c35db37?w=1600');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        .category-image {
+            transition: transform 0.8s ease, filter 0.6s ease;
+            filter: brightness(0.95) saturate(0.9);
+        }
+        .category-card:hover .category-image {
+            transform: scale(1.08);
+            filter: brightness(1) saturate(1);
+        }
+        .product-image {
+            transition: transform 0.7s ease, filter 0.5s ease;
+            filter: brightness(0.96) saturate(0.95);
+        }
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+            filter: brightness(1) saturate(1);
+        }
+        .thumbnail {
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            filter: brightness(0.95);
+        }
+        .thumbnail:hover, .thumbnail.active {
+            opacity: 1;
+            transform: scale(1.05);
+            filter: brightness(1);
+        }
+        .article-image {
+            transition: transform 0.7s ease, filter 0.5s ease;
+            filter: brightness(0.96) saturate(0.9);
+        }
+        .article-card:hover .article-image {
+            transform: scale(1.08);
+            filter: brightness(1) saturate(1);
+        }
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .scroll-reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #3A352F 0%, #8B7F6E 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+<body class="bg-[#FDFBF7] text-[#3A352F]">
+    
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-[#FDFBF7]/98 backdrop-blur-xl border-b border-[#B5A693]/15 shadow-sm">
+        <div class="max-w-7xl mx-auto px-6 py-6">
+            <div class="flex items-center justify-between">
+                <a href="#" onclick="showPage('home')" class="font-serif text-xl font-medium tracking-[3px] text-[#3A352F] hover:text-[#B5A693] transition-colors duration-400">
+                    RAPA CAST STONE
+                </a>
+                
+                <div class="hidden md:flex items-center space-x-12">
+                    <a href="#" onclick="showPage('home')" class="nav-link-hover text-[#6B5E52] text-xs font-normal tracking-[1.5px] uppercase hover:text-[#B5A693] transition-colors duration-400">Home</a>
+                    <a href="#" onclick="showPage('about')" class="nav-link-hover text-[#6B5E52] text-xs font-normal tracking-[1.5px] uppercase hover:text-[#B5A693] transition-colors duration-400">About</a>
+                    <a href="#" onclick="showPage('catalog')" class="nav-link-hover text-[#6B5E52] text-xs font-normal tracking-[1.5px] uppercase hover:text-[#B5A693] transition-colors duration-400">Catalog</a>
+                    <a href="#" onclick="showPage('articles')" class="nav-link-hover text-[#6B5E52] text-xs font-normal tracking-[1.5px] uppercase hover:text-[#B5A693] transition-colors duration-400">Journal</a>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <div class="hidden lg:flex items-center">
+                        <input type="text" placeholder="Search..." class="bg-transparent border-b border-[#B5A693] px-0 py-2 text-[#6B5E52] text-sm focus:border-[#3A352F] focus:outline-none transition-all duration-400 w-32 focus:w-48">
+                        <button class="ml-2 text-[#6B5E52] hover:text-[#B5A693] transition-colors duration-400">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <button id="mobileMenuBtn" class="md:hidden text-[#6B5E52]">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="hidden md:hidden mt-6 pb-4 space-y-4">
+                <a href="#" onclick="showPage('home')" class="block text-[#6B5E52] text-sm tracking-wider uppercase">Home</a>
+                <a href="#" onclick="showPage('about')" class="block text-[#6B5E52] text-sm tracking-wider uppercase">About</a>
+                <a href="#" onclick="showPage('catalog')" class="block text-[#6B5E52] text-sm tracking-wider uppercase">Catalog</a>
+                <a href="#" onclick="showPage('articles')" class="block text-[#6B5E52] text-sm tracking-wider uppercase">Journal</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HOME PAGE -->
+    <div id="home" class="page active">
+        <!-- Hero Section -->
+        <section class="hero-bg h-screen flex items-center justify-center text-white text-center relative">
+            <div class="absolute inset-0 bg-gradient-radial from-transparent to-[#3A352F]/30"></div>
+            <div class="relative z-10 max-w-4xl px-6">
+                <h1 class="font-serif text-6xl md:text-8xl font-light tracking-[4px] mb-10 drop-shadow-lg">
+                    TIMELESS STONE DESIGN
+                </h1>
+                <p class="text-sm tracking-[3px] uppercase mb-12 opacity-95 font-light">
+                    Architectural Cast Stone Furniture
+                </p>
+                <div class="flex flex-wrap justify-center gap-8 md:gap-12">
+                    <span class="text-xs tracking-[2.5px] uppercase opacity-85">Handcrafted</span>
+                    <span class="text-xs tracking-[2.5px] uppercase opacity-85">Export Quality</span>
+                    <span class="text-xs tracking-[2.5px] uppercase opacity-85">Natural Stone</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Collections -->
+        <section class="py-32 px-6">
+            <div class="max-w-7xl mx-auto">
+                <p class="text-center text-xs text-[#8B7F6E] tracking-[2px] uppercase mb-4 font-normal">Explore Our</p>
+                <h2 class="font-serif text-5xl md:text-6xl text-center mb-20 tracking-wide font-light">Collections</h2>
+                
+                <div class="grid md:grid-cols-3 gap-6 scroll-reveal">
+                    <div class="category-card group relative h-[550px] overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-600 hover:-translate-y-2">
+                        <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800" alt="Seating" class="category-image w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#3A352F]/85 to-transparent flex items-end">
+                            <div class="p-10 text-white">
+                                <h3 class="font-serif text-4xl mb-2">Seating</h3>
+                                <p class="text-xs tracking-[1.5px] uppercase opacity-90">Benches & Stools</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="category-card group relative h-[550px] overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-600 hover:-translate-y-2">
+                        <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800" alt="Tables" class="category-image w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#3A352F]/85 to-transparent flex items-end">
+                            <div class="p-10 text-white">
+                                <h3 class="font-serif text-4xl mb-2">Tables</h3>
+                                <p class="text-xs tracking-[1.5px] uppercase opacity-90">Dining & Coffee</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="category-card group relative h-[550px] overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-600 hover:-translate-y-2">
+                        <img src="https://images.unsplash.com/photo-1604580864964-0462f5d5b1a8?w=800" alt="Decorative" class="category-image w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#3A352F]/85 to-transparent flex items-end">
+                            <div class="p-10 text-white">
+                                <h3 class="font-serif text-4xl mb-2">Decorative</h3>
+                                <p class="text-xs tracking-[1.5px] uppercase opacity-90">Sculptures & Objects</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Products -->
+        <section class="py-32 px-6 bg-[#F5F1E8]">
+            <div class="max-w-7xl mx-auto">
+                <p class="text-center text-xs text-[#8B7F6E] tracking-[2px] uppercase mb-4 font-normal">Curated Selection</p>
+                <h2 class="font-serif text-5xl md:text-6xl text-center mb-20 tracking-wide font-light">Featured Pieces</h2>
+                
+                <div class="grid md:grid-cols-3 gap-12 scroll-reveal">
+                    <div class="product-card group">
+                        <div class="overflow-hidden mb-8 shadow-lg">
+                            <img src="https://images.unsplash.com/photo-1503602642458-232111445657?w=600" alt="Product" class="product-image w-full h-[500px] object-cover">
+                        </div>
+                        <h4 class="font-serif text-3xl mb-3 tracking-wide">Monolith Console</h4>
+                        <p class="text-sm text-[#8B7F6E] mb-5 tracking-wide">Cast Stone, Polished Finish</p>
+                        <p class="text-sm text-[#6B5E52] tracking-wide">From $2,400</p>
+                    </div>
+
+                    <div class="product-card group">
+                        <div class="overflow-hidden mb-8 shadow-lg">
+                            <img src="https://images.unsplash.com/photo-1540932239986-30128078f3c5?w=600" alt="Product" class="product-image w-full h-[500px] object-cover">
+                        </div>
+                        <h4 class="font-serif text-3xl mb-3 tracking-wide">Terra Dining Table</h4>
+                        <p class="text-sm text-[#8B7F6E] mb-5 tracking-wide">Natural Stone Top, Oak Base</p>
+                        <p class="text-sm text-[#6B5E52] tracking-wide">From $3,800</p>
+                    </div>
+
+                    <div class="product-card group">
+                        <div class="overflow-hidden mb-8 shadow-lg">
+                            <img src="https://images.unsplash.com/photo-1567016432779-094069958ea5?w=600" alt="Product" class="product-image w-full h-[500px] object-cover">
+                        </div>
+                        <h4 class="font-serif text-3xl mb-3 tracking-wide">Sculptural Pedestal</h4>
+                        <p class="text-sm text-[#8B7F6E] mb-5 tracking-wide">Hand-Carved Limestone</p>
+                        <p class="text-sm text-[#6B5E52] tracking-wide">From $1,600</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ABOUT PAGE -->
+    <div id="about" class="page">
+        <section class="pt-40 pb-32 px-6">
+            <div class="max-w-4xl mx-auto text-center">
+                <p class="text-xs text-[#8B7F6E] tracking-[2px] uppercase mb-4 font-normal">Our Story</p>
+                <h2 class="font-serif text-5xl md:text-6xl mb-20 tracking-wide font-light">About Rapa Cast Stone</h2>
+                
+                <div class="space-y-10 text-lg leading-relaxed text-[#6B5E52] font-light">
+                    <p>Founded in 2010, Rapa Cast Stone has been crafting exceptional architectural stone furniture for discerning clients worldwide. Our workshop combines traditional stone-working techniques with contemporary design sensibilities.</p>
+                    <p>Each piece is meticulously handcrafted by skilled artisans using the finest natural materials. We work primarily with limestone, marble, and custom cast stone formulations to create furniture that embodies quiet luxury and timeless elegance.</p>
+                    <p>Our commitment to quality and sustainability drives every decision we make, from material sourcing to production methods. We believe in creating pieces that will be treasured for generations.</p>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-16 mt-24 pt-16 border-t border-b border-[#E8E3D8] py-16">
+                    <div>
+                        <h3 class="font-serif text-6xl text-[#B5A693] mb-2 font-light">15+</h3>
+                        <p class="text-xs text-[#8B7F6E] tracking-[2px] uppercase">Years Experience</p>
+                    </div>
+                    <div>
+                        <h3 class="font-serif text-6xl text-[#B5A693] mb-2 font-light">500+</h3>
+                        <p class="text-xs text-[#8B7F6E] tracking-[2px] uppercase">Projects Completed</p>
+                    </div>
+                    <div>
+                        <h3 class="font-serif text-6xl text-[#B5A693] mb-2 font-light">25+</h3>
+                        <p class="text-xs text-[#8B7F6E] tracking-[2px] uppercase">Countries Exported</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="pb-32 px-6">
+            <div class="max-w-7xl mx-auto">
+                <div class="grid md:grid-cols-2 gap-8">
+                    <img src="https://images.unsplash.com/photo-1565183928294-7d22f2d53282?w=800" alt="Workshop" class="w-full h-[450px] object-cover shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+                    <img src="https://images.unsplash.com/photo-1572981976783-4e49b3f1e6c7?w=800" alt="Craftsmanship" class="w-full h-[450px] object-cover shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- CATALOG PAGE -->
+    <div id="catalog" class="page">
+        <section class="pt-40 pb-32 px-6">
+            <div class="max-w-7xl mx-auto">
+                <p class="text-center text-xs text-[#8B7F6E] tracking-[2px] uppercase mb-4 font-normal">Browse Our</p>
+                <h2 class="font-serif text-5xl md:text-6xl text-center mb-20 tracking-wide font-light">Product Catalog</h2>
+
+                <div class="bg-[#F5F1E8] py-8 mb-20 border-t border-b border-[#B5A693]/20">
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <button class="filter-btn px-8 py-3 border border-[#B5A693] text-[#6B5E52] text-xs tracking-[2px] uppercase transition-all duration-400 hover:bg-[#6B5E52] hover:text-white hover:border-[#6B5E52] active bg-[#6B5E52] text-white">All</button>
+                        <button class="filter-btn px-8 py-3 border border-[#B5A693] text-[#6B5E52] text-xs tracking-[2px] uppercase transition-all duration-400 hover:bg-[#6B5E52] hover:text-white hover:border-[#6B5E52]">Seating</button>
+                        <button class="filter-btn px-8 py-3 border border-[#B5A693] text-[#6B5E52] text-xs tracking-[2px] uppercase transition-all duration-400 hover:bg-[#6B5E52] hover:text-white hover:border-[#6B5E52]">Tables</button>
+                        <button class="filter-btn px-8 py-3 border border-[#B5A693] text-[#6B5E52] text-xs tracking-[2px] uppercase transition-all duration-400 hover:bg-[#6B5E52] hover:text-white hover:border-[#6B5E52]">Decorative</button>
+                        <button class="filter-btn px-8 py-3 border border-[#B5A693] text-[#6B5E52] text-xs tracking-[2px] uppercase transition-all duration-400 hover:bg-[#6B5E52] hover:text-white hover:border-[#6B5E52]">Outdoor</button>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-12">
+                    <div class="product-card group cursor-pointer" onclick="showPage('product-detail')">
+                        <div class="overflow-hidden mb-8 shadow-lg">
+                            <img src="https://images.unsplash.com/photo-1503602642458-232111445657?w=600" alt="Product" class="product-image w-full h-[500px] object-cover">
+                        </div>
+                        <h4 class="font-serif text-3xl mb-3 tracking-wide">Monolith Console</h4>
+                        <p class="text-sm text-[#8B7F6E] mb-5 tracking-wide">Cast Stone, Polished Finish</p>
+                        <p class="text-sm text-[#6B5E52] tracking-wide">From $2,400</p>
+                    </div>
+
+                    <div class="product-card group">
+                        <div class="overflow-hidden mb-8 shadow-lg">
+                            <img src="https://images.unsplash.com/photo-1540932239986-30128078f3c5?w=600" alt="Product" class="product-image w-full h-[500px] object-cover">
+                        </div>
+                        <h4 class="font-serif text-3xl mb-3 tracking-wide">Terra Dining Table</h4>
+                        <p class="text-sm text-[#8B7F6E] mb-5 tracking-wide">Natural Stone Top, Oak Base</p>
+                        <p class="text-sm text-[#6B5E52] tracking-wide">From $3,800</p>
+                    </div>
+
+                    <div class="product-card group">
+                        <div class="overflow-hidden mb-8 shadow-lg">
+                            <img src="https://images.unsplash.com/photo-1567016432779-094069958ea5?w=600" alt="Product" class="product-image w-full h-[500px] object-cover">
+                        </div>
+                        <h4 class="font-serif text-3xl mb-3 tracking-wide">Sculptural Pedestal</h4>
+                        <p class="text-sm text-[#8B7F6E] mb-5 tracking-wide">Hand-Carved Limestone</p>
+                        <p class="text-sm text-[#6B5E52] tracking-wide">From $1,600</p>
+                    </div>
+
+                    <div class="product-card group">
+                        <div class="overflow-hidden mb-8 shadow-lg">
+                            <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600" alt="Product" class="product-image w-full h-[500px] object-cover">
+                        </div>
+                        <h4 class="font-serif text-3xl mb-3 tracking-wide">Minimalist Bench</h4>
+                        <p class="text-sm text-[#8B7F6E] mb-5 tracking-wide">Solid Limestone Block</p>
+                        <p class="text-sm text-[#6B5E52] tracking-wide">From $1,900</p>
+                    </div>
+
+                    <div class="product-card group">
+                        <div class="overflow-hidden mb-8 shadow-lg">
+                            <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600" alt="Product" class="product-image w-full h-[500px] object-cover">
+                        </div>
+                        <h4 class="font-serif text-3xl mb-3 tracking-wide">Oval Coffee Table</h4>
+                        <p class="text-sm text-[#8B7F6E] mb-5 tracking-wide">Marble Top, Metal Base</p>
+                        <p class="text-sm text-[#6B5E52] tracking-wide">From $2,800</p>
+                    </div>
+
+                    <div class="product-card group">
+                        <div class="overflow-hidden mb-8 shadow-lg">
+                            <img src="https://images.unsplash.com/photo-1604580864964-0462f5d5b1a8?w=600" alt="Product" class="product-image w-full h-[500px] object-cover">
+                        </div>
+                        <h4 class="font-serif text-3xl mb-3 tracking-wide">Abstract Sculpture</h4>
+                        <p class="text-sm text-[#8B7F6E] mb-5 tracking-wide">Cast Stone, Matte Finish</p>
+                        <p class="text-sm text-[#6B5E52] tracking-wide">From $950</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- PRODUCT DETAIL PAGE -->
+    <div id="product-detail" class="page">
+        <section class="pt-40 pb-32 px-6">
+            <div class="max-w-7xl mx-auto">
+                <div class="grid lg:grid-cols-2 gap-16">
+                    <div class="sticky top-32 self-start">
+                        <div class="overflow-hidden mb-6 shadow-2xl">
+                            <img id="mainImg" src="https://images.unsplash.com/photo-1503602642458-232111445657?w=800" alt="Product" class="w-full h-[650px] object-cover">
+                        </div>
+                        <div class="grid grid-cols-4 gap-5">
+                            <div class="overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
+                                <img src="https://images.unsplash.com/photo-1503602642458-232111445657?w=200" class="thumbnail active w-full h-28 object-cover cursor-pointer opacity-60" onclick="changeImage(this)">
+                            </div>
+                            <div class="overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
+                                <img src="https://images.unsplash.com/photo-1540932239986-30128078f3c5?w=200" class="thumbnail w-full h-28 object-cover cursor-pointer opacity-60" onclick="changeImage(this)">
+                            </div>
+                            <div class="overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
+                                <img src="https://images.unsplash.com/photo-1567016432779-094069958ea5?w=200" class="thumbnail w-full h-28 object-cover cursor-pointer opacity-60" onclick="changeImage(this)">
+                            </div>
+                            <div class="overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
+                                <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=200" class="thumbnail w-full h-28 object-cover cursor-pointer opacity-60" onclick="changeImage(this)">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lg:pl-12">
+                        <p class="text-xs text-[#8B7F6E] tracking-[2px] uppercase mb-6">Console Tables / Cast Stone</p>
+                        <h1 class="font-serif text-6xl mb-6 font-light tracking-wide">Monolith Console</h1>
+                        
+                        <div class="space-y-6 text-lg leading-relaxed text-[#6B5E52] mb-10 font-light">
+                            <p>The Monolith Console exemplifies minimalist design philosophy, featuring clean lines and exceptional craftsmanship. Hand-cast in our workshop using premium stone aggregate, each piece displays unique natural variations that make it truly one-of-a-kind.</p>
+                            <p>Perfect for modern interiors, this console combines architectural presence with functional elegance. The polished finish highlights the material's inherent beauty while providing a durable, easy-to-maintain surface.</p>
+                        </div>
+
+                        <div class="bg-gradient-to-br from-[#F5F1E8] to-[#E8E3D8] p-12 mb-10 shadow-inner">
+                            <h4 class="font-serif text-3xl mb-8 tracking-wide">Specifications</h4>
+                            <div class="space-y-4">
+                                <div class="flex justify-between pb-4 border-b border-[#B5A693]/25">
+                                    <span class="text-[#8B7F6E] tracking-wide">Material</span>
+                                    <span class="text-[#6B5E52] font-light">Cast Stone, Polished</span>
+                                </div>
+                                <div class="flex justify-between pb-4 border-b border-[#B5A693]/25">
+                                    <span class="text-[#8B7F6E] tracking-wide">Dimensions</span>
+                                    <span class="text-[#6B5E52] font-light">140 × 40 × 75 cm</span>
+                                </div>
+                                <div class="flex justify-between pb-4 border-b border-[#B5A693]/25">
+                                    <span class="text-[#8B7F6E] tracking-wide">Weight</span>
+                                    <span class="text-[#6B5E52] font-light">Approx. 85 kg</span>
+                                </div>
+                                <div class="flex justify-between pb-4 border-b border-[#B5A693]/25">
+                                    <span class="text-[#8B7F6E] tracking-wide">Finish Options</span>
+                                    <span class="text-[#6B5E52] font-light">Polished, Matte, Honed</span>
+                                </div>
+                                <div class="flex justify-between pb-4">
+                                    <span class="text-[#8B7F6E] tracking-wide">Lead Time</span>
+                                    <span class="text-[#6B5E52] font-light">6-8 weeks</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="w-full bg-[#6B5E52] text-white py-5 text-xs tracking-[2.5px] uppercase hover:bg-[#3A352F] transition-all duration-400 shadow-lg hover:shadow-xl hover:-translate-y-1">
+                            Request Quote
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ARTICLES PAGE -->
+    <div id="articles" class="page">
+        <section class="pt-40 pb-32 px-6">
+            <div class="max-w-6xl mx-auto">
+                <p class="text-center text-xs text-[#8B7F6E] tracking-[2px] uppercase mb-4 font-normal">Read Our</p>
+                <h2 class="font-serif text-5xl md:text-6xl text-center mb-20 tracking-wide font-light">Journal</h2>
+
+                <div class="space-y-20">
+                    <article class="article-card flex flex-col lg:flex-row gap-12 pb-20 border-b border-[#E8E3D8] hover:translate-x-2 transition-transform duration-400">
+                        <div class="lg:w-[480px] flex-shrink-0 overflow-hidden shadow-2xl h-[360px]">
+                            <img src="https://images.unsplash.com/photo-1615529182904-14819c35db37?w=400" alt="Article" class="article-image w-full h-full object-cover">
+                        </div>
+                        <div class="flex-1 flex flex-col justify-center">
+                            <p class="text-xs text-[#8B7F6E] tracking-[2px] uppercase mb-6">Design / December 2024</p>
+                            <h3 class="font-serif text-4xl mb-6 tracking-wide leading-tight">The Return of Stone in Contemporary Interiors</h3>
+                            <p class="text-lg leading-relaxed text-[#6B5E52] mb-8 font-light">
+                                As minimalism evolves into a more tactile, grounded aesthetic, natural stone is experiencing a renaissance in interior design. We explore why architects and designers are increasingly turning to this ancient material...
+                            </p>
+                            <a href="#" onclick="showPage('article-detail')" class="text-xs tracking-[2px] uppercase text-[#6B5E52] hover:text-[#B5A693] transition-colors duration-400 inline-block">
+                                Read More →
+                            </a>
+                        </div>
+                    </article>
+
+                    <article class="article-card flex flex-col lg:flex-row gap-12 pb-20 border-b border-[#E8E3D8] hover:translate-x-2 transition-transform duration-400">
+                        <div class="lg:w-[480px] flex-shrink-0 overflow-hidden shadow-2xl h-[360px]">
+                            <img src="https://images.unsplash.com/photo-1565183928294-7d22f2d53282?w=400" alt="Article" class="article-image w-full h-full object-cover">
+                        </div>
+                        <div class="flex-1 flex flex-col justify-center">
+                            <p class="text-xs text-[#8B7F6E] tracking-[2px] uppercase mb-6">Craftsmanship / November 2024</p>
+                            <h3 class="font-serif text-4xl mb-6 tracking-wide leading-tight">From Quarry to Living Room: The Journey of Stone Furniture</h3>
+                            <p class="text-lg leading-relaxed text-[#6B5E52] mb-8 font-light">
+                                Follow the transformation of raw limestone into refined furniture pieces. Our artisans share insights into the meticulous process that brings each design to life...
+                            </p>
+                            <a href="#" class="text-xs tracking-[2px] uppercase text-[#6B5E52] hover:text-[#B5A693] transition-colors duration-400 inline-block">
+                                Read More →
+                            </a>
+                        </div>
+                    </article>
+
+                    <article class="article-card flex flex-col lg:flex-row gap-12 pb-20 border-b border-[#E8E3D8] hover:translate-x-2 transition-transform duration-400">
+                        <div class="lg:w-[480px] flex-shrink-0 overflow-hidden shadow-2xl h-[360px]">
+                            <img src="https://images.unsplash.com/photo-1572981976783-4e49b3f1e6c7?w=400" alt="Article" class="article-image w-full h-full object-cover">
+                        </div>
+                        <div class="flex-1 flex flex-col justify-center">
+                            <p class="text-xs text-[#8B7F6E] tracking-[2px] uppercase mb-6">Sustainability / October 2024</p>
+                            <h3 class="font-serif text-4xl mb-6 tracking-wide leading-tight">Sustainable Luxury: Why Stone Furniture Matters</h3>
+                            <p class="text-lg leading-relaxed text-[#6B5E52] mb-8 font-light">
+                                In an era of fast furniture and disposable design, stone furniture represents a commitment to longevity and environmental responsibility. Discover the sustainable advantages of natural materials...
+                            </p>
+                            <a href="#" class="text-xs tracking-[2px] uppercase text-[#6B5E52] hover:text-[#B5A693] transition-colors duration-400 inline-block">
+                                Read More →
+                            </a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ARTICLE DETAIL PAGE -->
+    <div id="article-detail" class="page">
+        <section class="pt-40 pb-32 px-6">
+            <div class="max-w-5xl mx-auto">
+                <div class="overflow-hidden shadow-2xl mb-20">
+                    <img src="https://images.unsplash.com/photo-1615529182904-14819c35db37?w=1200" alt="Article" class="w-full h-[600px] object-cover">
+                </div>
+
+                <div class="max-w-3xl mx-auto">
+                    <p class="text-xs text-[#8B7F6E] tracking-[2px] uppercase mb-8">Design / December 2024</p>
+                    <h1 class="font-serif text-5xl md:text-7xl mb-12 font-light tracking-wide leading-tight">The Return of Stone in Contemporary Interiors</h1>
+
+                    <div class="space-y-10 text-lg leading-relaxed text-[#6B5E52] font-light">
+                        <p>
+                            Natural stone has been a cornerstone of architecture and design for millennia. From ancient monuments to modern minimalism, this enduring material continues to captivate designers and homeowners alike. But what makes stone furniture particularly relevant in today's design landscape?
+                        </p>
+
+                        <h2 class="font-serif text-4xl mt-20 mb-8 font-normal tracking-wide">A Material for Our Time</h2>
+                        <p>
+                            The contemporary fascination with natural stone reflects a broader cultural shift toward authenticity and permanence. In an age dominated by synthetic materials and mass production, stone offers something increasingly rare: genuine materiality. Each piece carries the weight of geological time, surface variations that tell stories of natural formation, and a tactile presence that cannot be replicated.
+                        </p>
+
+                        <p>
+                            Leading architects and interior designers are embracing stone not as a cold, austere element, but as a warm, grounding presence. When thoughtfully integrated, stone furniture creates a dialogue between the built environment and the natural world, bringing a sense of calm and permanence to contemporary spaces.
+                        </p>
+
+                        <h2 class="font-serif text-4xl mt-20 mb-8 font-normal tracking-wide">Beyond Aesthetics: The Practical Case</h2>
+                        <p>
+                            Stone furniture offers compelling practical advantages. Its durability means pieces can last generations, making it an inherently sustainable choice. Stone requires minimal maintenance, ages gracefully, and maintains its structural integrity far longer than most alternatives. For clients seeking investment pieces that transcend trends, stone furniture represents both financial and aesthetic value.
+                        </p>
+
+                        <p>
+                            The thermal properties of stone also contribute to interior comfort, naturally moderating temperature fluctuations. In hot climates, stone surfaces remain cool; in cooler environments, they absorb and slowly release warmth. This subtle environmental regulation enhances living spaces in ways that synthetic materials simply cannot match.
+                        </p>
+
+                        <h2 class="font-serif text-4xl mt-20 mb-8 font-normal tracking-wide">The Future of Stone Design</h2>
+                        <p>
+                            As we look ahead, the integration of traditional stone-working techniques with contemporary design innovation promises exciting possibilities. Advanced fabrication methods allow for increasingly refined forms while preserving the authentic character that makes stone furniture so compelling.
+                        </p>
+
+                        <p>
+                            The return of stone in contemporary interiors is not mere nostalgia—it represents a sophisticated understanding of material culture and a commitment to creating spaces that endure. For those seeking to create interiors of lasting beauty and significance, stone furniture offers an unparalleled foundation.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gradient-to-br from-[#3A352F] to-[#2D2822] text-white/85 pt-24 pb-12 mt-32 border-t border-[#6B5E52]">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-12 mb-16">
+                <div>
+                    <h5 class="font-serif text-xl mb-8 tracking-wider text-white">RAPA CAST STONE</h5>
+                    <p class="text-sm leading-relaxed text-white/60 tracking-wide">
+                        Crafting exceptional architectural stone furniture since 2010. Each piece embodies quiet luxury and timeless elegance.
+                    </p>
+                </div>
+                <div>
+                    <h5 class="font-serif text-lg mb-8 tracking-wider text-white">Explore</h5>
+                    <div class="space-y-3">
+                        <a href="#" onclick="showPage('home')" class="block text-sm text-white/65 hover:text-[#B5A693] transition-colors tracking-wide">Home</a>
+                        <a href="#" onclick="showPage('about')" class="block text-sm text-white/65 hover:text-[#B5A693] transition-colors tracking-wide">About</a>
+                        <a href="#" onclick="showPage('catalog')" class="block text-sm text-white/65 hover:text-[#B5A693] transition-colors tracking-wide">Catalog</a>
+                        <a href="#" onclick="showPage('articles')" class="block text-sm text-white/65 hover:text-[#B5A693] transition-colors tracking-wide">Journal</a>
+                    </div>
+                </div>
+                <div>
+                    <h5 class="font-serif text-lg mb-8 tracking-wider text-white">Contact</h5>
+                    <div class="space-y-3">
+                        <a href="mailto:info@rapacaststone.com" class="block text-sm text-white/65 hover:text-[#B5A693] transition-colors tracking-wide">info@rapacaststone.com</a>
+                        <a href="tel:+1234567890" class="block text-sm text-white/65 hover:text-[#B5A693] transition-colors tracking-wide">+1 (234) 567-890</a>
+                        <p class="text-sm text-white/60 mt-6 leading-relaxed tracking-wide">
+                            123 Stone Workshop Lane<br>
+                            Craftsman District<br>
+                            New York, NY 10001
+                        </p>
+                    </div>
+                </div>
+                <div>
+                    <h5 class="font-serif text-lg mb-8 tracking-wider text-white">Follow</h5>
+                    <div class="space-y-3">
+                        <a href="#" class="block text-sm text-white/65 hover:text-[#B5A693] transition-colors tracking-wide">Instagram</a>
+                        <a href="#" class="block text-sm text-white/65 hover:text-[#B5A693] transition-colors tracking-wide">Pinterest</a>
+                        <a href="#" class="block text-sm text-white/65 hover:text-[#B5A693] transition-colors tracking-wide">LinkedIn</a>
+                    </div>
+                </div>
+            </div>
+            <div class="pt-8 border-t border-white/15 text-center">
+                <p class="text-xs text-white/45 tracking-wider">
+                    © 2024 Rapa Cast Stone. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Page Navigation
+        function showPage(pageId) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            window.scrollTo({top: 0, behavior: 'smooth'});
+            
+            // Close mobile menu if open
+            document.getElementById('mobileMenu').classList.add('hidden');
+        }
+
+        // Product Image Gallery
+        function changeImage(thumbnail) {
+            const mainImg = document.getElementById('mainImg');
+            const thumbnails = document.querySelectorAll('.thumbnail');
+            
+            mainImg.src = thumbnail.src.replace('w=200', 'w=800');
+            thumbnails.forEach(t => t.classList.remove('active'));
+            thumbnail.classList.add('active');
+        }
+
+        // Filter Buttons
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    filterBtns.forEach(b => {
+                        b.classList.remove('active', 'bg-[#6B5E52]', 'text-white');
+                        b.classList.add('text-[#6B5E52]');
+                    });
+                    this.classList.add('active', 'bg-[#6B5E52]', 'text-white');
+                    this.classList.remove('text-[#6B5E52]');
+                });
+            });
+
+            // Mobile Menu Toggle
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            
+            mobileMenuBtn.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // Scroll Reveal Animation
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -100px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('revealed');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.scroll-reveal').forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>
