@@ -9,4 +9,8 @@ class Topic extends Model
 {
     /** @use HasFactory<\Database\Factories\TopicFactory> */
     use HasFactory;
+    public function articles()
+    {
+        return $this->hasMany(Article::class, 'topic_id');
+    }
 }
