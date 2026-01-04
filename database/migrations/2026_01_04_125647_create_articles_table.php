@@ -13,6 +13,18 @@ return new class extends Migration
     {
         Schema::create('articles', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
+            $table->string('slug')->unique();
+            $table->foreignId('topic_id')->constrained(
+                table: 'topics',
+                indexName: 'articles_topic_id'
+            );
+            $table->foreignId('author_id')->constrained(
+                table: 'users',
+                indexName: 'articles_author_id'
+            );
+            $table->string('image')->nullable();
+            $table->text('body');
             $table->timestamps();
         });
     }
