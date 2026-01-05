@@ -16,13 +16,13 @@ class UserSeeder extends Seeder
     {
         //
         User::create([
-            'name' => 'Aaaaaaaa',
-            'username' => 'Aaaaaaaa',
-            'email' => 'Aaaaaaaa@gmail.com',
+            'name' => 'Admin',
+            'username' => 'Admin341',
+            'email' => 'a.r.bayhaqi341@gmail.com',
             'email_verified_at' => now(),
-            'password' => Hash::make('password'),
+            'password' => Hash::make('341201017J@h'),
             'remember_token' => Str::random(10)
         ]);
-        User::factory(5)->create();
+        User::factory(2)->create();
     }
 }

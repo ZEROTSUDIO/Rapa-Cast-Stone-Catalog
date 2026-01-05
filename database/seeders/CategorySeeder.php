@@ -16,15 +16,15 @@ class CategorySeeder extends Seeder
         //
         Category::factory(3)->create();
         Category::create([
-            'name' => 'Vase',
-            'slug' => 'vase',
-            'description' => 'Vases',
+            'name' => 'Fountain',
+            'slug' => 'fountain',
+            'description' => 'Fountains',
             'image' => 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800'
         ]);
         Category::create([
-            'name' => 'Plate',
-            'slug' => 'plate',
-            'description' => 'Plates',
+            'name' => 'Pottery',
+            'slug' => 'pottery',
+            'description' => 'Potteries',
             'image' => 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800'
         ]);
     }
