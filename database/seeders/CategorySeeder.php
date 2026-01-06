@@ -14,7 +14,7 @@ class CategorySeeder extends Seeder
     public function run(): void
     {
         //
-        Category::factory(3)->create();
+
         Category::create([
             'name' => 'Fountain',
             'slug' => 'fountain',
@@ -27,5 +27,25 @@ class CategorySeeder extends Seeder
             'description' => 'Potteries',
             'image' => 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800'
         ]);
+        Category::create([
+            'name' => 'Water Fall',
+            'slug' => 'water-fall',
+            'description' => 'Water Falls',
+            'image' => 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800'
+        ]);
+        Category::create([
+            'name' => 'Fire Place',
+            'slug' => 'fire-place',
+            'description' => 'Fire Places',
+            'image' => 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800'
+        ]);
+        Category::create([
+            'name' => 'Lantern',
+            'slug' => 'lantern',
+            'description' => 'Lanterns',
+            'image' => 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800'
+        ]);
+
+        Category::factory(3)->create();
     }
 }

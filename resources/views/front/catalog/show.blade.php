@@ -52,7 +52,7 @@
                         <div class="mb-12 space-y-4 border-t border-[#E8E3D8] pt-8">
                             <h4 class="font-heading text-xl mb-4 text-[#3A352F]">Specifications</h4>
                             @if ($catalog->specification)
-                                @foreach (json_decode($catalog->specification) as $key => $value)
+                                @foreach ($catalog->specification as $key => $value)
                                     <div
                                         class="flex justify-between items-center text-sm border-b border-[#E8E3D8] pb-2 last:border-0">
                                         <span

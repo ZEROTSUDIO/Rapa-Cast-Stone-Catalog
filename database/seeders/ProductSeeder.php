@@ -17,32 +17,36 @@ class ProductSeeder extends Seeder
         $this->call([
             CategorySeeder::class,
         ]);
+
+        $fountain = Category::where('slug', 'fountain')->firstOrFail();
+        $pottery  = Category::where('slug', 'pottery')->firstOrFail();
+
         Product::create([
             'name' => 'Relief Lotus',
             'slug' => 'relief-lotus',
-            'category_id' => 4,
+            'category_id' => $fountain->id,
             'image' => null,
             'description' => 'Relief Lotus',
-            'specification' => json_encode([
+            'specification' => [
                 'color' => 'Black',
                 'weight' => '10kg',
                 'dimensions' => '10x10x10cm',
                 'material' => 'Stone',
-            ]),
+            ],
             'is_featured' => true,
         ]);
         Product::create([
             'name' => 'Cream Gentong',
             'slug' => 'cream-gentong',
-            'category_id' => 5,
+            'category_id' => $pottery->id,
             'image' => null,
             'description' => 'Gentong dari cream',
-            'specification' => json_encode([
+            'specification' => [
                 'color' => 'Cream',
                 'weight' => '10kg',
                 'dimensions' => '10x10x10cm',
                 'material' => 'Cast Stone',
-            ]),
+            ],
             'is_featured' => true,
         ]);
 
