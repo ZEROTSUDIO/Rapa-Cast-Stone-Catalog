@@ -12,8 +12,7 @@
                         <a href="{{ url('/catalogs/' . $catalog->category->slug . '/' . $catalog->slug) }}"
                             class="block">
                             <div class="overflow-hidden mb-6 shadow-md hover:shadow-xl transition-shadow duration-500">
-                                <img src="{{ $catalog->image ? asset('images/' . $catalog->image) : 'https://images.unsplash.com/photo-1503602642458-232111445657?w=600' }}"
-                                    alt="{{ $catalog->name }}"
+                                <img src="{{ $catalog->image_url }}" alt="{{ $catalog->name }}"
                                     class="w-full h-[400px] object-cover transition-transform duration-700 group-hover:scale-105">
                             </div>
                             <h4 class="font-heading text-2xl mb-2 tracking-wide text-[#3A352F]">{{ $catalog->name }}

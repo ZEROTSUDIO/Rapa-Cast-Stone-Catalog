@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -27,6 +28,10 @@ class Product extends Model
     protected $casts = [
         'specification' => 'array',
     ];
+    protected function imageUrl(): Attribute
+    {
+        return Attribute::get(fn() => $this->image ? asset('images/' . $this->image) : 'https://images.unsplash.com/photo-1503602642458-232111445657?w=800');
+    }
     public function scopeFilter(Builder $query): void
     {
         if (request('search')) {

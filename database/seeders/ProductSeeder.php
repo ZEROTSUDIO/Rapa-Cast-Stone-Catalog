@@ -39,7 +39,7 @@ class ProductSeeder extends Seeder
             'name' => 'Cream Gentong',
             'slug' => 'cream-gentong',
             'category_id' => $pottery->id,
-            'image' => null,
+            'image' => 'img/100_2588.jpg',
             'description' => 'Gentong dari cream',
             'specification' => [
                 'color' => 'Cream',
