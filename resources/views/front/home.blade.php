@@ -1,21 +1,16 @@
 <x-front.layout>
     <!-- Hero Section -->
-    <section class="hero-bg h-screen flex items-center justify-center text-white text-center relative">
-        <div class="absolute inset-0 bg-gradient-radial from-transparent to-[#3A352F]/30"></div>
-        <div class="relative z-10 max-w-4xl px-6">
-            <h1 class="font-heading text-6xl md:text-8xl font-light tracking-[4px] mb-10 drop-shadow-lg">
-                TIMELESS STONE DESIGN
-            </h1>
-            <p class="text-sm tracking-[3px] uppercase mb-12 opacity-95 font-light">
-                Architectural Cast Stone Furniture
-            </p>
-            <div class="flex flex-wrap justify-center gap-8 md:gap-12">
-                <span class="text-xs tracking-[2.5px] uppercase opacity-85">Handcrafted</span>
-                <span class="text-xs tracking-[2.5px] uppercase opacity-85">Export Quality</span>
-                <span class="text-xs tracking-[2.5px] uppercase opacity-85">Natural Stone</span>
-            </div>
-        </div>
-    </section>
+    <!-- Hero Section -->
+    <x-carousel :totalSlides="3">
+        <x-front.hero-slide :index="0" image="https://images.unsplash.com/photo-1615529182904-14819c35db37?w=1600"
+            title="TIMELESS STONE DESIGN" subtitle="Architectural Cast Stone Furniture" :tags="['HANDCRAFTED', 'EXPORT QUALITY', 'NATURAL STONE']" />
+
+        <x-front.hero-slide :index="1" image="https://images.unsplash.com/photo-1567016432779-094069958ea5?w=1600"
+            title="ORGANIC FORMS" subtitle="Bringing Nature Into Your Space" :tags="['SUSTAINABLE', 'MINIMALIST', 'ARTISANAL']" />
+
+        <x-front.hero-slide :index="2" image="https://images.unsplash.com/photo-1618220179428-22790b461013?w=1600"
+            title="SCULPTED ELEGANCE" subtitle="Where Art Meets Function" :tags="['BESPOKE', 'CONTEMPORARY', 'DURABLE']" />
+    </x-carousel>
 
     <!-- Collections -->
     <section class="py-32 px-6">
