@@ -1,6 +1,5 @@
 <x-front.layout>
     <!-- Hero Section -->
-    <!-- Hero Section -->
     <x-carousel :totalSlides="3">
         <x-front.hero-slide :index="0" image="https://images.unsplash.com/photo-1615529182904-14819c35db37?w=1600"
             title="TIMELESS STONE DESIGN" subtitle="Architectural Cast Stone Furniture" :tags="['HANDCRAFTED', 'EXPORT QUALITY', 'NATURAL STONE']" />

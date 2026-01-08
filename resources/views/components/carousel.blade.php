@@ -4,7 +4,7 @@
     'totalSlides' => 1,
 ])
 
-<section id="{{ $id }}" class="relative overflow-hidden group" x-data="{
+<section id="{{ $id }}" class="relative h-screen overflow-hidden group" x-data="{
     active: 0,
     total: {{ $totalSlides }},
     autoplay: true,
