@@ -1,4 +1,4 @@
-<nav class="fixed top-0 left-0 right-0 z-50 bg-[#FDFBF7]/25 backdrop-blur-xl border-b border-[#B5A693]/15 shadow-sm"
+<nav class="fixed top-0 left-0 right-0 z-50 bg-[#FDFBF7]/85 backdrop-blur-xl border-b border-[#B5A693]/20 shadow-sm"
     x-data="{ mobileOpen: false }">
     <div class="max-w-7xl mx-auto px-6 py-6">
         <div class="flex items-center justify-between">
@@ -16,7 +16,7 @@
                 <!-- Dropdown for Catalogue -->
                 <div class="relative group" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
                     <button
-                        class="nav-link-hover text-[#6B5E52] text-xs font-normal tracking-[1.5px] uppercase hover:text-[#B5A693] transition-colors duration-400 flex items-center gap-1">
+                        class="nav-link-hover text-[#3A352F] text-xs font-normal tracking-[1.5px] uppercase hover:text-[#B5A693] transition-colors duration-400 flex items-center gap-1">
                         Catalogue
                         <svg class="w-3 h-3 transition-transform duration-300" :class="{ 'rotate-180': open }"
                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -48,8 +48,8 @@
                 <!-- Search -->
                 <form action="{{ url('/catalogs') }}" class="hidden lg:flex items-center">
                     <input type="text" name="search" placeholder="Search..."
-                        class="bg-transparent border-b border-[#B5A693] px-0 py-2 text-[#6B5E52] text-sm focus:border-[#3A352F] focus:outline-none transition-all duration-400 w-32 focus:w-48 placeholder-[#B5A693]/70">
-                    <button class="ml-2 text-[#6B5E52] hover:text-[#B5A693] transition-colors duration-400">
+                        class="bg-transparent border-b border-[#B5A693] px-0 py-2 text-[#3A352F] text-sm focus:border-[#3A352F] focus:outline-none transition-all duration-400 w-32 focus:w-48 placeholder-[#B5A693]">
+                    <button class="ml-2 text-[#3A352F] hover:text-[#B5A693] transition-colors duration-400">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
