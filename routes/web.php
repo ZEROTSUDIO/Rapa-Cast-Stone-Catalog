@@ -12,9 +12,9 @@ Route::get('/', function () {
     return view('front.home', ['categories' => $categories, 'title' => 'Homepage']);
 });
 
-Route::get('/home', function () {
-    return view('front.home', ['title' => 'Homepage']);
-});
+// Route::get('/home', function () {
+//     return view('front.home', ['title' => 'Homepage']);
+// });
 
 Route::get('/about', function () {
     return view('front.about', ['title' => 'About Us']);
@@ -71,4 +71,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/dashboard', function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/admin/catalogues', function () {
+        return view('admin.catalogue');
+    })->name('admin.catalogue');
 });

@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elegant Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.0/dist/quill.snow.css" rel="stylesheet">
+    <style>
+        :root {
+            --marble-white: #f8f9fa;
+            --marble-gray: #e9ecef;
+            --ceramic-blue: #2c3e50;
+            --gold-accent: #d4af37;
+            --premium-dark: #1a252f;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 260px;
+            background: linear-gradient(180deg, var(--premium-dark) 0%, var(--ceramic-blue) 100%);
+            padding: 20px;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+            z-index: 1000;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar.collapsed {
+            width: 70px;
+        }
+
+        .sidebar.collapsed .logo span,
+        .sidebar.collapsed .nav-link span {
+            display: none;
+        }
+
+        .sidebar.collapsed .logo {
+            justify-content: center;
+        }
+
+        .sidebar.collapsed .nav-link {
+            justify-content: center;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: var(--gold-accent);
+            border-radius: 3px;
+        }
+
+        .logo {
+            color: white;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(212, 175, 55, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            color: var(--gold-accent);
+        }
+
+        .nav-item {
+            margin-bottom: 8px;
+        }
+
+        .nav-link {
+            color: rgba(255,255,255,0.7);
+            padding: 12px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+            font-size: 15px;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: rgba(212, 175, 55, 0.2);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .sidebar.collapsed .nav-link:hover,
+        .sidebar.collapsed .nav-link.active {
+            transform: translateX(0);
+        }
+
+        .nav-link i {
+            font-size: 18px;
+            width: 20px;
+        }
+
+        .topbar {
+            position: fixed;
+            top: 0;
+            left: 260px;
+            right: 0;
+            height: 70px;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            z-index: 999;
+            transition: all 0.3s ease;
+        }
+
+        .topbar.expanded {
+            left: 70px;
+        }
+
+        .toggle-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--ceramic-blue);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-btn:hover {
+            color: var(--gold-accent);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .user-info:hover {
+            background: var(--marble-white);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--gold-accent), #c4981d);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .user-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: var(--premium-dark);
+            font-size: 14px;
+        }
+
+        .user-role {
+            font-size: 12px;
+            color: #6c757d;
+        }
+
+        .dropdown-menu {
+            border: none;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+            border-radius: 12px;
+            padding: 8px;
+            margin-top: 8px;
+        }
+
+        .dropdown-item {
+            padding: 10px 16px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dropdown-item:hover {
+            background: var(--marble-gray);
+        }
+
+        .dropdown-item i {
+            width: 20px;
+        }
+
+        .main-content {
+            margin-left: 260px;
+            margin-top: 70px;
+            padding: 30px;
+            min-height: calc(100vh - 70px);
+            transition: all 0.3s ease;
+        }
+
+        .main-content.expanded {
+            margin-left: 70px;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .card {
+            background: white;
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--gold-accent), var(--ceramic-blue));
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(248,249,250,0.9));
+            border-bottom: 1px solid var(--marble-gray);
+            padding: 20px 24px;
+            font-weight: 600;
+            color: var(--premium-dark);
+            font-size: 18px;
+        }
+
+        .card-body {
+            padding: 24px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--gold-accent);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+
+        .stat-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--premium-dark);
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            color: #6c757d;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .table {
+            margin-bottom: 0;
+        }
+
+        .table thead th {
+            background: linear-gradient(135deg, var(--marble-gray), var(--marble-white));
+            color: var(--premium-dark);
+            font-weight: 600;
+            border: none;
+            padding: 16px;
+            text-transform: uppercase;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+        }
+
+        .table tbody td {
+            padding: 16px;
+            vertical-align: middle;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .table tbody tr:hover {
+            background: rgba(212, 175, 55, 0.05);
+        }
+
+        .btn-premium {
+            background: linear-gradient(135deg, var(--gold-accent), #c4981d);
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn-premium:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(212, 175, 55, 0.4);
+            color: white;
+        }
+
+        .btn-elegant {
+            background: white;
+            color: var(--ceramic-blue);
+            border: 2px solid var(--marble-gray);
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-elegant:hover {
+            background: var(--marble-gray);
+            border-color: var(--ceramic-blue);
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--premium-dark);
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-control, .form-select {
+            border: 2px solid var(--marble-gray);
+            border-radius: 8px;
+            padding: 12px 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--gold-accent);
+            box-shadow: 0 0 0 0.25rem rgba(212, 175, 55, 0.15);
+        }
+
+        .image-upload-area {
+            border: 2px dashed var(--marble-gray);
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--marble-white);
+        }
+
+        .image-upload-area:hover {
+            border-color: var(--gold-accent);
+            background: white;
+        }
+
+        .image-upload-area i {
+            font-size: 48px;
+            color: var(--gold-accent);
+            margin-bottom: 16px;
+        }
+
+        .badge-premium {
+            background: linear-gradient(135deg, var(--gold-accent), #c4981d);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .badge-elegant {
+            background: var(--ceramic-blue);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--premium-dark);
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            color: #6c757d;
+            font-size: 14px;
+        }
+
+        #editor {
+            height: 300px;
+            background: white;
+        }
+
+        .ql-toolbar {
+            border-radius: 8px 8px 0 0;
+            border: 2px solid var(--marble-gray);
+            background: var(--marble-white);
+        }
+
+        .ql-container {
+            border-radius: 0 0 8px 8px;
+            border: 2px solid var(--marble-gray);
+            border-top: none;
+        }
+
+        .settings-item {
+            padding: 20px;
+            border-bottom: 1px solid var(--marble-gray);
+        }
+
+        .settings-item:last-child {
+            border-bottom: none;
+        }
+
+        .form-switch .form-check-input {
+            width: 48px;
+            height: 24px;
+            cursor: pointer;
+        }
+
+        .form-switch .form-check-input:checked {
+            background-color: var(--gold-accent);
+            border-color: var(--gold-accent);
+        }
+
+        .filter-section {
+            background: var(--marble-white);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: end;
+        }
+
+        .filter-item {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .pagination {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .pagination .page-link {
+            border: 2px solid var(--marble-gray);
+            border-radius: 8px;
+            padding: 8px 16px;
+            color: var(--ceramic-blue);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .pagination .page-link:hover {
+            background: var(--gold-accent);
+            border-color: var(--gold-accent);
+            color: white;
+        }
+
+        .pagination .page-link.active {
+            background: var(--gold-accent);
+            border-color: var(--gold-accent);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+                padding: 20px 10px;
+            }
+
+            .sidebar.collapsed {
+                width: 0;
+                padding: 0;
+            }
+
+            .logo span {
+                display: none;
+            }
+
+            .nav-link span {
+                display: none;
+            }
+
+            .nav-link {
+                justify-content: center;
+            }
+
+            .topbar {
+                left: 70px;
+            }
+
+            .topbar.expanded {
+                left: 0;
+            }
+
+            .main-content {
+                margin-left: 70px;
+                padding: 20px;
+            }
+
+            .main-content.expanded {
+                margin-left: 0;
+            }
+
+            .user-details {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="logo">
+            <i class="bi bi-gem"></i>
+            <span>ELEGANT</span>
+        </div>
+        <nav>
+            <div class="nav-item">
+                <a href="#" class="nav-link active" data-page="dashboard">
+                    <i class="bi bi-speedometer2"></i>
+                    <span>Dashboard</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link" data-page="table">
+                    <i class="bi bi-table"></i>
+                    <span>Data Table</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link" data-page="advanced-table">
+                    <i class="bi bi-grid-3x3-gap"></i>
+                    <span>Advanced Table</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link" data-page="simple-form">
+                    <i class="bi bi-file-text"></i>
+                    <span>Simple Form</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link" data-page="advanced-form">
+                    <i class="bi bi-file-earmark-richtext"></i>
+                    <span>Advanced Form</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link" data-page="settings">
+                    <i class="bi bi-gear"></i>
+                    <span>Settings</span>
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Top Navigation Bar -->
+    <div class="topbar" id="topbar">
+        <button class="toggle-btn" id="toggleSidebar">
+            <i class="bi bi-list"></i>
+        </button>
+        
+        <div class="user-menu">
+            <div class="dropdown">
+                <div class="user-info" data-bs-toggle="dropdown" aria-expanded="false">
+                    <div class="user-avatar">JD</div>
+                    <div class="user-details">
+                        <div class="user-name">John Doe</div>
+                        <div class="user-role">Administrator</div>
+                    </div>
+                    <i class="bi bi-chevron-down"></i>
+                </div>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                        <a class="dropdown-item" href="#">
+                            <i class="bi bi-person"></i>
+                            <span>My Profile</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="#">
+                            <i class="bi bi-gear"></i>
+                            <span>Account Settings</span>
+                        </a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <a class="dropdown-item" href="#">
+                            <i class="bi bi-box-arrow-right"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <!-- Dashboard Page -->
+        <div id="dashboard" class="page active">
+            <div class="page-header">
+                <h1 class="page-title">Dashboard Overview</h1>
+                <p class="page-subtitle">Welcome to your elegant admin dashboard</p>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-3 mb-3">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                            <i class="bi bi-people"></i>
+                        </div>
+                        <div class="stat-value">2,543</div>
+                        <div class="stat-label">Total Users</div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;">
+                            <i class="bi bi-graph-up"></i>
+                        </div>
+                        <div class="stat-value">$45.2K</div>
+                        <div class="stat-label">Revenue</div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white;">
+                            <i class="bi bi-cart"></i>
+                        </div>
+                        <div class="stat-value">1,832</div>
+                        <div class="stat-label">Orders</div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white;">
+                            <i class="bi bi-star"></i>
+                        </div>
+                        <div class="stat-value">4.8</div>
+                        <div class="stat-label">Rating</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header">Recent Activity</div>
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3 pb-3" style="border-bottom: 1px solid var(--marble-gray);">
+                                <div class="stat-icon me-3" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; width: 40px; height: 40px; font-size: 18px; margin-bottom: 0;">
+                                    <i class="bi bi-person-plus"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-1">New user registered</h6>
+                                    <small class="text-muted">2 minutes ago</small>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center mb-3 pb-3" style="border-bottom: 1px solid var(--marble-gray);">
+                                <div class="stat-icon me-3" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; width: 40px; height: 40px; font-size: 18px; margin-bottom: 0;">
+                                    <i class="bi bi-cash"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-1">Payment received</h6>
+                                    <small class="text-muted">15 minutes ago</small>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <div class="stat-icon me-3" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; width: 40px; height: 40px; font-size: 18px; margin-bottom: 0;">
+                                    <i class="bi bi-box-seam"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-1">New order placed</h6>
+                                    <small class="text-muted">1 hour ago</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">Quick Actions</div>
+                        <div class="card-body">
+                            <button class="btn btn-premium w-100 mb-2">
+                                <i class="bi bi-plus-circle me-2"></i>Create New
+                            </button>
+                            <button class="btn btn-elegant w-100 mb-2">
+                                <i class="bi bi-file-earmark me-2"></i>View Reports
+                            </button>
+                            <button class="btn btn-elegant w-100">
+                                <i class="bi bi-gear me-2"></i>Settings
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table Page -->
+        <div id="table" class="page">
+            <div class="page-header">
+                <h1 class="page-title">Data Table</h1>
+                <p class="page-subtitle">Manage your data efficiently</p>
+            </div>
+
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span>User Management</span>
+                    <button class="btn btn-premium btn-sm">
+                        <i class="bi bi-plus-circle me-1"></i>Add New
+                    </button>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>#001</td>
+                                    <td>John Anderson</td>
+                                    <td>john.anderson@email.com</td>
+                                    <td><span class="badge-premium">Admin</span></td>
+                                    <td><span class="badge bg-success">Active</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-elegant me-1"><i class="bi bi-pencil"></i></button>
+                                        <button class="btn btn-sm btn-elegant"><i class="bi bi-trash"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#002</td>
+                                    <td>Sarah Mitchell</td>
+                                    <td>sarah.mitchell@email.com</td>
+                                    <td><span class="badge-elegant">Editor</span></td>
+                                    <td><span class="badge bg-success">Active</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-elegant me-1"><i class="bi bi-pencil"></i></button>
+                                        <button class="btn btn-sm btn-elegant"><i class="bi bi-trash"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#003</td>
+                                    <td>Michael Roberts</td>
+                                    <td>michael.roberts@email.com</td>
+                                    <td><span class="badge-elegant">Viewer</span></td>
+                                    <td><span class="badge bg-warning">Pending</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-elegant me-1"><i class="bi bi-pencil"></i></button>
+                                        <button class="btn btn-sm btn-elegant"><i class="bi bi-trash"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Advanced Table Page -->
+        <div id="advanced-table" class="page">
+            <div class="page-header">
+                <h1 class="page-title">Advanced Data Table</h1>
+                <p class="page-subtitle">Advanced table with filters and pagination</p>
+            </div>
+
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span>Transaction Records</span>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-elegant btn-sm">
+                            <i class="bi bi-download me-1"></i>Export
+                        </button>
+                        <button class="btn btn-premium btn-sm">
+                            <i class="bi bi-plus-circle me-1"></i>Add New
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!-- Filter Section -->
+                    <div class="filter-section">
+                        <div class="filter-group">
+                            <div class="filter-item">
+                                <label class="form-label">Search</label>
+                                <input type="text" class="form-control" placeholder="Search transactions...">
+                            </div>
+                            <div class="filter-item">
+                                <label class="form-label">Status</label>
+                                <select class="form-select">
+                                    <option selected>All Status</option>
+                                    <option>Completed</option>
+                                    <option>Pending</option>
+                                    <option>Cancelled</option>
+                                </select>
+                            </div>
+                            <div class="filter-item">
+                                <label class="form-label">Date Range</label>
+                                <input type="date" class="form-control">
+                            </div>
+                            <div class="filter-item">
+                                <label class="form-label">Category</label>
+                                <select class="form-select">
+                                    <option selected>All Categories</option>
+                                    <option>Sales</option>
+                                    <option>Refunds</option>
+                                    <option>Subscriptions</option>
+                                </select>
+                            </div>
+                            <div class="filter-item" style="flex: 0;">
+                                <label class="form-label">&nbsp;</label>
+                                <button class="btn btn-premium">
+                                    <i class="bi bi-funnel me-1"></i>Filter
+                                </button>
+                            </div>
+                            <div class="filter-item" style="flex: 0;">
+                                <label class="form-label">&nbsp;</label>
+                                <button class="btn btn-elegant">
+                                    <i class="bi bi-arrow-clockwise me-1"></i>Reset
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Table -->
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th><input type="checkbox" class="form-check-input"></th>
+                                    <th>Transaction ID</th>
+                                    <th>Customer Name</th>
+                                    <th>Amount</th>
+                                    <th>Category</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="checkbox" class="form-check-input"></td>
+                                    <td>#TRX-001234</td>
+                                    <td>Emma Thompson</td>
+                                    <td>$1,250.00</td>
+                                    <td><span class="badge-elegant">Sales</span></td>
+                                    <td>Dec 24, 2025</td>
+                                    <td><span class="badge bg-success">Completed</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-elegant me-1"><i class="bi bi-eye"></i></button>
+                                        <button class="btn btn-sm btn-elegant me-1"><i class="bi bi-pencil"></i></button>
+                                        <button class="btn btn-sm btn-elegant"><i class="bi bi-trash"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox" class="form-check-input"></td>
+                                    <td>#TRX-001235</td>
+                                    <td>James Wilson</td>
+                                    <td>$2,890.00</td>
+                                    <td><span class="badge-premium">Subscription</span></td>
+                                    <td>Dec 24, 2025</td>
+                                    <td><span class="badge bg-success">Completed</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-elegant me-1"><i class="bi bi-eye"></i></button>
+                                        <button class="btn btn-sm btn-elegant me-1"><i class="bi bi-pencil"></i></button>
+                                        <button class="btn btn-sm btn-elegant"><i class="bi bi-trash"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox" class="form-check-input"></td>
+                                    <td>#TRX-001236</td>
+                                    <td>Sophia Martinez</td>
+                                    <td>$450.00</td>
+                                    <td><span class="badge-elegant">Sales</span></td>
+                                    <td>Dec 23, 2025</td>
+                                    <td><span class="badge bg-warning">Pending</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-elegant me-1"><i class="bi bi-eye"></i></button>
+                                        <button class="btn btn-sm btn-elegant me-1"><i class="bi bi-pencil"></i></button>
+                                        <button class="btn btn-sm btn-elegant"><i class="bi bi-trash"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox" class="form-check-input"></td>
+                                    <td>#TRX-001237</td>
+                                    <td>Oliver Brown</td>
+                                    <td>$125.00</td>
+                                    <td><span class="badge bg-secondary">Refund</span></td>
+                                    <td>Dec 23, 2025</td>
+                                    <td><span class="badge bg-danger">Cancelled</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-elegant me-1"><i class="bi bi-eye"></i></button>
+                                        <button class="btn btn-sm btn-elegant me-1"><i class="bi bi-pencil"></i></button>
+                                        <button class="btn btn-sm btn-elegant"><i class="bi bi-trash"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox" class="form-check-input"></td>
+                                    <td>#TRX-001238</td>
+                                    <td>Isabella Garcia</td>
+                                    <td>$3,450.00</td>
+                                    <td><span class="badge-elegant">Sales</span></td>
+                                    <td>Dec 22, 2025</td>
+                                    <td><span class="badge bg-success">Completed</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-elegant me-1"><i class="bi bi-eye"></i></button>
+                                        <button class="btn btn-sm btn-elegant me-1"><i class="bi bi-pencil"></i></button>
+                                        <button class="btn btn-sm btn-elegant"><i class="bi bi-trash"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox" class="form-check-input"></td>
+                                    <td>#TRX-001239</td>
+                                    <td>William Taylor</td>
+                                    <td>$780.00</td>
+                                    <td><span class="badge-premium">Subscription</span></td>
+                                    <td>Dec 22, 2025</td>
+                                    <td><span class="badge bg-warning">Pending</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-elegant me-1"><i class="bi bi-eye"></i></button>
+                                        <button class="btn btn-sm btn-elegant me-1"><i class="bi bi-pencil"></i></button>
+                                        <button class="btn btn-sm btn-elegant"><i class="bi bi-trash"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox" class="form-check-input"></td>
+                                    <td>#TRX-001240</td>
+                                    <td>Ava Anderson</td>
+                                    <td>$1,890.00</td>
+                                    <td><span class="badge-elegant">Sales</span></td>
+                                    <td>Dec 21, 2025</td>
+                                    <td><span class="badge bg-success">Completed</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-elegant me-1"><i class="bi bi-eye"></i></button>
+                                        <button class="btn btn-sm btn-elegant me-1"><i class="bi bi-pencil"></i></button>
+                                        <button class="btn btn-sm btn-elegant"><i class="bi bi-trash"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox" class="form-check-input"></td>
+                                    <td>#TRX-001241</td>
+                                    <td>Liam Johnson</td>
+                                    <td>$560.00</td>
+                                    <td><span class="badge-elegant">Sales</span></td>
+                                    <td>Dec 21, 2025</td>
+                                    <td><span class="badge bg-success">Completed</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-elegant me-1"><i class="bi bi-eye"></i></button>
+                                        <button class="btn btn-sm btn-elegant me-1"><i class="bi bi-pencil"></i></button>
+                                        <button class="btn btn-sm btn-elegant"><i class="bi bi-trash"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <div class="text-muted">
+                            Showing <strong>1-8</strong> of <strong>156</strong> results
+                        </div>
+                        <nav>
+                            <ul class="pagination mb-0">
+                                <li class="page-item">
+                                    <a class="page-link" href="#"><i class="bi bi-chevron-left"></i></a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link active" href="#">1</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">2</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">3</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">4</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">5</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#"><i class="bi bi-chevron-right"></i></a>
+                                </li>
+                            </ul>
+                        </nav>
+                        <div>
+                            <select class="form-select" style="width: auto;">
+                                <option>8 per page</option>
+                                <option>15 per page</option>
+                                <option>25 per page</option>
+                                <option>50 per page</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Simple Form Page -->
+        <div id="simple-form" class="page">
+            <div class="page-header">
+                <h1 class="page-title">Simple Form</h1>
+                <p class="page-subtitle">Create and manage basic information</p>
+            </div>
+
+            <div class="card">
+                <div class="card-header">User Information</div>
+                <div class="card-body">
+                    <form>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">First Name</label>
+                                <input type="text" class="form-control" placeholder="Enter first name">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Last Name</label>
+                                <input type="text" class="form-control" placeholder="Enter last name">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" class="form-control" placeholder="Enter email address">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" placeholder="Enter phone number">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Role</label>
+                            <select class="form-select">
+                                <option selected>Select role</option>
+                                <option value="1">Administrator</option>
+                                <option value="2">Editor</option>
+                                <option value="3">Viewer</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Message</label>
+                            <textarea class="form-control" rows="4" placeholder="Enter your message"></textarea>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-premium">
+                                <i class="bi bi-check-circle me-2"></i>Submit
+                            </button>
+                            <button type="reset" class="btn btn-elegant">
+                                <i class="bi bi-x-circle me-2"></i>Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Advanced Form Page -->
+        <div id="advanced-form" class="page">
+            <div class="page-header">
+                <h1 class="page-title">Advanced Form</h1>
+                <p class="page-subtitle">Create rich content with images and formatting</p>
+            </div>
+
+            <div class="card">
+                <div class="card-header">Content Creation</div>
+                <div class="card-body">
+                    <form>
+                        <div class="mb-3">
+                            <label class="form-label">Title</label>
+                            <input type="text" class="form-control" placeholder="Enter content title">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Category</label>
+                            <select class="form-select">
+                                <option selected>Select category</option>
+                                <option value="1">Business</option>
+                                <option value="2">Technology</option>
+                                <option value="3">Marketing</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Featured Image</label>
+                            <div class="image-upload-area" onclick="document.getElementById('imageInput').click()">
+                                <i class="bi bi-cloud-upload d-block"></i>
+                                <h5 class="mb-2">Click to upload image</h5>
+                                <p class="text-muted mb-0">PNG, JPG, GIF up to 10MB</p>
+                            </div>
+                            <input type="file" id="imageInput" class="d-none" accept="image/*">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Content</label>
+                            <div id="editor"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Tags</label>
+                            <input type="text" class="form-control" placeholder="Enter tags separated by commas">
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-premium">
+                                <i class="bi bi-check-circle me-2"></i>Publish
+                            </button>
+                            <button type="button" class="btn btn-elegant">
+                                <i class="bi bi-save me-2"></i>Save Draft
+                            </button>
+                            <button type="reset" class="btn btn-elegant">
+                                <i class="bi bi-x-circle me-2"></i>Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Page -->
+        <div id="settings" class="page">
+            <div class="page-header">
+                <h1 class="page-title">Settings</h1>
+                <p class="page-subtitle">Configure your application preferences</p>
+            </div>
+
+            <div class="card">
+                <div class="card-header">General Settings</div>
+                <div class="card-body p-0">
+                    <div class="settings-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">Site Name</h6>
+                                <small class="text-muted">The name of your application</small>
+                            </div>
+                            <input type="text" class="form-control" style="max-width: 300px;" value="Elegant Dashboard">
+                        </div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">Email Notifications</h6>
+                                <small class="text-muted">Receive email updates about activity</small>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" checked>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">Push Notifications</h6>
+                                <small class="text-muted">Receive push notifications on your device</small>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">Dark Mode</h6>
+                                <small class="text-muted">Enable dark theme</small>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">Language</h6>
+                                <small class="text-muted">Select your preferred language</small>
+                            </div>
+                            <select class="form-select" style="max-width: 200px;">
+                                <option selected>English</option>
+                                <option>Spanish</option>
+                                <option>French</option>
+                                <option>German</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">Timezone</h6>
+                                <small class="text-muted">Your local timezone</small>
+                            </div>
+                            <select class="form-select" style="max-width: 250px;">
+                                <option selected>UTC-5 (Eastern Time)</option>
+                                <option>UTC-8 (Pacific Time)</option>
+                                <option>UTC+0 (GMT)</option>
+                                <option>UTC+8 (Singapore)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">Security Settings</div>
+                <div class="card-body p-0">
+                    <div class="settings-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">Two-Factor Authentication</h6>
+                                <small class="text-muted">Add an extra layer of security</small>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" checked>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">Session Timeout</h6>
+                                <small class="text-muted">Automatically logout after inactivity</small>
+                            </div>
+                            <select class="form-select" style="max-width: 200px;">
+                                <option>15 minutes</option>
+                                <option selected>30 minutes</option>
+                                <option>1 hour</option>
+                                <option>Never</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="settings-item">
+                        <div>
+                            <h6 class="mb-3">Change Password</h6>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Current Password</label>
+                                    <input type="password" class="form-control" placeholder="Enter current password">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">New Password</label>
+                                    <input type="password" class="form-control" placeholder="Enter new password">
+                                </div>
+                            </div>
+                            <button class="btn btn-premium">Update Password</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 mt-4">
+                <button class="btn btn-premium">
+                    <i class="bi bi-check-circle me-2"></i>Save Changes
+                </button>
+                <button class="btn btn-elegant">
+                    <i class="bi bi-arrow-clockwise me-2"></i>Reset to Default
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0/dist/quill.js"></script>
+    <script>
+        // Initialize Quill editor
+        const quill = new Quill('#editor', {
+            theme: 'snow',
+            placeholder: 'Write your content here...',
+            modules: {
+                toolbar: [
+                    [{ 'header': [1, 2, 3, false] }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    [{ 'color': [] }, { 'background': [] }],
+                    ['link', 'image'],
+                    ['clean']
+                ]
+            }
+        });
+
+        // Sidebar toggle functionality
+        const toggleBtn = document.getElementById('toggleSidebar');
+        const sidebar = document.getElementById('sidebar');
+        const topbar = document.getElementById('topbar');
+        const mainContent = document.getElementById('mainContent');
+
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
+            topbar.classList.toggle('expanded');
+            mainContent.classList.toggle('expanded');
+        });
+
+        // Page navigation
+        const navLinks = document.querySelectorAll('.nav-link');
+        const pages = document.querySelectorAll('.page');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                // Remove active class from all links and pages
+                navLinks.forEach(l => l.classList.remove('active'));
+                pages.forEach(p => p.classList.remove('active'));
+                
+                // Add active class to clicked link
+                link.classList.add('active');
+                
+                // Show corresponding page
+                const pageName = link.getAttribute('data-page');
+                document.getElementById(pageName).classList.add('active');
+            });
+        });
+
+        // Image upload preview
+        document.getElementById('imageInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const uploadArea = document.querySelector('.image-upload-area');
+                    uploadArea.innerHTML = `
+                        <img src="${e.target.result}" style="max-width: 100%; max-height: 300px; border-radius: 8px;">
+                        <p class="mt-3 mb-0 text-success"><i class="bi bi-check-circle me-2"></i>Image uploaded successfully</p>
+                    `;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Form submission handlers (prevent default for demo)
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                alert('Form submitted successfully! (Demo mode)');
+            });
+        });
+    </script>
+</body>
+</html>
