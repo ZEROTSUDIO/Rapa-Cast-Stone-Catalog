@@ -1,6 +1,6 @@
 <x-front.layout>
     <!-- Hero Section -->
-    <x-carousel :totalSlides="3">
+    <x-front.carousel :totalSlides="3">
         <x-front.hero-slide :index="0" image="https://images.unsplash.com/photo-1615529182904-14819c35db37?w=1600"
             title="TIMELESS STONE DESIGN" subtitle="Architectural Cast Stone Furniture" :tags="['HANDCRAFTED', 'EXPORT QUALITY', 'NATURAL STONE']" />
 
@@ -9,7 +9,7 @@
 
         <x-front.hero-slide :index="2" image="https://images.unsplash.com/photo-1618220179428-22790b461013?w=1600"
             title="SCULPTED ELEGANCE" subtitle="Where Art Meets Function" :tags="['BESPOKE', 'CONTEMPORARY', 'DURABLE']" />
-    </x-carousel>
+    </x-front.carousel>
 
     <!-- Collections -->
     <section class="py-32 px-6">
