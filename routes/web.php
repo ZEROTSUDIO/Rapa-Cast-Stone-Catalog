@@ -58,3 +58,17 @@ Route::get('/catalogs', function () {
 Route::get('/catalogs/{category:slug}/{product:slug}', function (Category $category, Product $product) {
     return view('front.catalog.show', ['catalog' => $product, 'categories' => $category->products]);
 });
+
+use App\Http\Controllers\AdminAuthController;
+
+Route::middleware('guest')->group(function () {
+    Route::get('/admin/login', [AdminAuthController::class, 'index'])->name('login');
+    Route::post('/admin/login', [AdminAuthController::class, 'store']);
+});
+
+Route::middleware('auth')->group(function () {
+    Route::post('/admin/logout', [AdminAuthController::class, 'destroy'])->name('logout');
+    Route::get('/admin/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('admin.dashboard');
+});
