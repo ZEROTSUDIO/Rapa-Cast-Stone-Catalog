@@ -9,7 +9,7 @@
 
         <!-- Navigation -->
         <nav class="space-y-2">
-            <x-admin.navlink href="{{ url('/admin/dashboard') }}" active="{{ request()->routeIs('/admin/dashboard') }}">
+            <x-admin.navlink href="{{ url('/admin') }}" active="{{ request()->routeIs('/admin') }}">
                 <i class="fas fa-tachometer-alt w-5"></i>
                 <span class="sidebar-text">Dashboard</span>
             </x-admin.navlink>

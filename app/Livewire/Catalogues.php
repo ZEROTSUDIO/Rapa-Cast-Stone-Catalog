@@ -8,10 +8,12 @@ use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
+use Livewire\WithoutUrlPagination;
 
 class Catalogues extends Component
 {
     use WithPagination;
+    use WithoutUrlPagination;
     use WithFileUploads;
 
     public $isCreating = false;
@@ -27,6 +29,13 @@ class Catalogues extends Component
 
     #[Validate('required|exists:categories,id')]
     public $category_id;
+
+    public $perPage = 8;
+
+    public function updatedPerPage()
+    {
+        $this->resetPage();
+    }
 
     public function addCatalogue()
     {
@@ -94,7 +103,7 @@ class Catalogues extends Component
     public function render()
     {
         return view('livewire.catalogues', [
-            'catalogues' => Product::latest()->get(),
+            'catalogues' => Product::latest()->paginate($this->perPage),
             'categories' => \App\Models\Category::all()
         ]);
     }

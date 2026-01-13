@@ -77,8 +77,7 @@ Route::middleware('auth')->group(function () {
     Route::get('admin/catalogues', function () {
         return view('admin.catalogue');
     })->name('admin.catalogue');
-
-    Route::get('admin/catalogues/add', function () {
-        return view('admin.add-catalogue');
-    })->name('admin.add-catalogue');
+    // Route::get('admin/catalogues/add', function () {
+    //     return view('admin.add-catalogue');
+    // })->name('admin.add-catalogue');
 });
