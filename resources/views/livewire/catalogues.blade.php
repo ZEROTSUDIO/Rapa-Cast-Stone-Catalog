@@ -1,4 +1,4 @@
-<div id="table" class="page animate-slide-in" x-data>
+<div id="table" class="page animate-slide-in" x-data="{ showDeleteModal: false, deleteId: null }">
     <div class="mb-8">
         <h1 class="text-4xl font-bold text-premium-dark mb-2">
             Catalogue
@@ -20,7 +20,7 @@
                 </h2>
             </div>
             <div class="p-6">
-                <form wire:submit.prevent="store">
+                <form wire:submit.prevent="createCatalogue">
                     <div class="mb-6">
                         <label class="block text-sm font-semibold text-premium-dark mb-2">Nama </label>
                         <input wire:model="name" type="text"
@@ -104,7 +104,7 @@
                 <h2 class="text-lg font-bold text-premium-dark">
                     Catalogue
                 </h2>
-                <button wire:click="create"
+                <button wire:click="addCatalogue"
                     class="gradient-gold text-white px-4 py-2 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105">
                     <i class="fas fa-plus-circle mr-2"></i>Add New
                 </button>
@@ -149,8 +149,8 @@
                                 <td class="px-6 py-4">
                                     <button class="text-blue-600 hover:text-blue-800 mr-3"><i
                                             class="fas fa-edit"></i></button>
-                                    <button class="text-red-600 hover:text-red-800"><i
-                                            class="fas fa-trash"></i></button>
+                                    <button @click="showDeleteModal = true; deleteId = {{ $catalogue->id }}"
+                                        class="text-red-600 hover:text-red-800"><i class="fas fa-trash"></i></button>
                                 </td>
                             </tr>
                         @endforeach
@@ -160,19 +160,24 @@
         </div>
     @endif
 
-    <button data-modal-target="popup-modal" data-modal-toggle="popup-modal"
-        class="text-white bg-brand box-border border border-transparent hover:bg-brand-strong focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none"
-        type="button">
-        Toggle modal
-    </button>
+    {{-- Delete Confirmation Modal --}}
+    <div x-show="showDeleteModal" x-cloak
+        class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto overflow-x-hidden"
+        x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
+        {{-- Backdrop --}}
+        <div class="fixed inset-0 bg-black/50" @click="showDeleteModal = false"></div>
 
-    {{-- <div id="popup-modal" tabindex="-1"
-        class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-        <div class="relative p-4 w-full max-w-md max-h-full">
-            <div class="relative bg-neutral-primary-soft border border-default rounded-base shadow-sm p-4 md:p-6">
+        {{-- Modal Content --}}
+        <div class="relative p-4 w-full max-w-md max-h-full" x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
+            x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 scale-100"
+            x-transition:leave-end="opacity-0 scale-95">
+            <div class="relative bg-white border border-gray-200 rounded-xl shadow-lg p-6">
                 <button type="button"
-                    class="absolute top-3 end-2.5 text-body bg-transparent hover:bg-neutral-tertiary hover:text-heading rounded-base text-sm w-9 h-9 ms-auto inline-flex justify-center items-center"
-                    data-modal-hide="popup-modal">
+                    class="absolute top-3 end-2.5 text-gray-500 bg-transparent hover:bg-gray-100 hover:text-gray-700 rounded-lg text-sm w-9 h-9 ms-auto inline-flex justify-center items-center"
+                    @click="showDeleteModal = false">
                     <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
                         height="24" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -180,26 +185,28 @@
                     </svg>
                     <span class="sr-only">Close modal</span>
                 </button>
-                <div class="p-4 md:p-5 text-center">
-                    <svg class="mx-auto mb-4 text-fg-disabled w-12 h-12" aria-hidden="true"
+                <div class="p-4 text-center">
+                    <svg class="mx-auto mb-4 text-red-400 w-12 h-12" aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                         viewBox="0 0 24 24">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M12 13V8m0 8h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <h3 class="mb-6 text-body">Are you sure you want to delete this product from your account?</h3>
-                    <div class="flex items-center space-x-4 justify-center">
-                        <button data-modal-hide="popup-modal" type="button"
-                            class="text-white bg-danger box-border border border-transparent hover:bg-danger-strong focus:ring-4 focus:ring-danger-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none">
+                    <h3 class="mb-6 text-gray-700 text-lg font-medium">Are you sure you want to delete this product?
+                    </h3>
+                    <div class="flex items-center gap-4 justify-center">
+                        <button @click="$wire.deleteCatalogue(deleteId); showDeleteModal = false" type="button"
+                            class="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none">
                             Yes, I'm sure
                         </button>
-                        <button data-modal-hide="popup-modal" type="button"
-                            class="text-body bg-neutral-secondary-medium box-border border border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading focus:ring-4 focus:ring-neutral-tertiary shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none">No,
-                            cancel</button>
+                        <button @click="showDeleteModal = false" type="button"
+                            class="text-gray-700 bg-gray-100 border border-gray-200 hover:bg-gray-200 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none">
+                            No, cancel
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
-    </div> --}}
+    </div>
 
 </div>

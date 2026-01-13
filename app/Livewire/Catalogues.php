@@ -28,7 +28,7 @@ class Catalogues extends Component
     #[Validate('required|exists:categories,id')]
     public $category_id;
 
-    public function create()
+    public function addCatalogue()
     {
         $this->reset(['name', 'image', 'description', 'category_id']);
         $this->isCreating = true;
@@ -40,7 +40,7 @@ class Catalogues extends Component
         $this->reset(['name', 'image', 'description', 'category_id']);
     }
 
-    public function store()
+    public function createCatalogue()
     {
         $validated = $this->validate([
             'name' => 'required|min:3',
@@ -62,6 +62,33 @@ class Catalogues extends Component
         $this->isCreating = false;
         $this->reset(['name', 'image', 'description', 'category_id']);
         session()->flash('status', 'Product successfully created.');
+    }
+
+    public function editCatalogue($id)
+    {
+        $product = Product::findOrFail($id);
+        $this->isCreating = true;
+        $this->reset(['name', 'image', 'description', 'category_id']);
+        $this->resetValidation();
+        $this->resetErrorBag();
+        $this->resetPage();
+        $this->reset('isCreating');
+        $this->reset('name');
+        $this->reset('image');
+        $this->reset('description');
+        $this->reset('category_id');
+        $this->name = $product->name;
+        $this->image = $product->image;
+        $this->description = $product->description;
+        $this->category_id = $product->category_id;
+    }
+
+
+    public function deleteCatalogue($id)
+    {
+        $product = Product::findOrFail($id);
+        $product->delete();
+        session()->flash('status', 'Product successfully deleted.');
     }
 
     public function render()
