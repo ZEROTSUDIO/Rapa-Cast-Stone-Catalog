@@ -5,7 +5,7 @@
         </h1>
         <p class="text-gray-500">
             @if ($isCreating)
-                Tambah Data Product
+                {{ $catalogueId ? 'Edit Data Product' : 'Tambah Data Product' }}
             @else
                 Data Tabel Product
             @endif
@@ -14,13 +14,18 @@
 
     @if ($isCreating)
         <div class="bg-white rounded-2xl shadow-lg overflow-hidden animate-slide-in">
-            <div class="bg-gradient-to-r from-gray-50 to-gray-100 px-6 py-4 border-b border-gray-200">
+            <div
+                class="bg-gradient-to-r from-gray-50 to-gray-100 px-6 py-4 border-b border-gray-200 justify-between flex">
                 <h2 class="text-lg font-bold text-premium-dark">
                     Informasi Catalog
                 </h2>
+                <button wire:click="cancel"
+                    class="gradient-gold text-white px-4 py-2 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105">
+                    <i class="fas fa-arrow-left mr-2"></i>Kembali
+                </button>
             </div>
             <div class="p-6">
-                <form wire:submit.prevent="createCatalogue">
+                <form wire:submit.prevent="{{ $catalogueId ? 'updateCatalogue' : 'createCatalogue' }}">
                     <div class="mb-6">
                         <label class="block text-sm font-semibold text-premium-dark mb-2">Nama </label>
                         <input wire:model="name" type="text"
@@ -60,6 +65,11 @@
                                     class="max-h-[300px] w-full object-contain rounded-lg shadow-sm" />
                                 <p class="text-xs text-gray-500 mt-2 bg-white/80 px-3 py-1 rounded-full shadow-sm">Click
                                     to change</p>
+                            @elseif($catalogueId && \App\Models\Product::find($catalogueId)->image)
+                                <img src="{{ asset('storage/' . \App\Models\Product::find($catalogueId)->image) }}"
+                                    class="max-h-[300px] w-full object-contain rounded-lg shadow-sm" />
+                                <p class="text-xs text-gray-500 mt-2 bg-white/80 px-3 py-1 rounded-full shadow-sm">Click
+                                    to change</p>
                             @else
                                 <i class="fas fa-cloud-upload-alt text-5xl text-gold-accent mb-4"></i>
                                 <h5 class="text-lg font-semibold text-gray-700 mb-2">
@@ -87,7 +97,7 @@
                     <div class="flex gap-3">
                         <button type="submit"
                             class="gradient-gold text-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                            <i class="fas fa-check-circle mr-2"></i>Save
+                            <i class="fas fa-check-circle mr-2"></i>{{ $catalogueId ? 'Update' : 'Save' }}
                         </button>
                         <button type="button" wire:click="cancel"
                             class="bg-white border-2 border-gray-200 text-ceramic-blue px-8 py-3 rounded-xl font-semibold hover:bg-gray-50 transition-all duration-300">
@@ -149,7 +159,8 @@
                                 <td class="px-6 py-4">
                                     <button class="text-yellow-600 hover:text-yellow-800 mr-3"><i
                                             class="fas fa-eye"></i></button>
-                                    <button class="text-blue-600 hover:text-blue-800 mr-3"><i
+                                    <button wire:click="editCatalogue({{ $catalogue->id }})"
+                                        class="text-blue-600 hover:text-blue-800 mr-3"><i
                                             class="fas fa-edit"></i></button>
                                     <button @click="showDeleteModal = true; deleteId = {{ $catalogue->id }}"
                                         class="text-red-600 hover:text-red-800"><i class="fas fa-trash"></i></button>

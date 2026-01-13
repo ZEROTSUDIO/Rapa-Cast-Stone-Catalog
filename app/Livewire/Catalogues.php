@@ -30,6 +30,8 @@ class Catalogues extends Component
     #[Validate('required|exists:categories,id')]
     public $category_id;
 
+    public $catalogueId;
+
     public $perPage = 8;
 
     public function updatedPerPage()
@@ -39,14 +41,14 @@ class Catalogues extends Component
 
     public function addCatalogue()
     {
-        $this->reset(['name', 'image', 'description', 'category_id']);
+        $this->reset(['name', 'image', 'description', 'category_id', 'catalogueId']);
         $this->isCreating = true;
     }
 
     public function cancel()
     {
         $this->isCreating = false;
-        $this->reset(['name', 'image', 'description', 'category_id']);
+        $this->reset(['name', 'image', 'description', 'category_id', 'catalogueId']);
     }
 
     public function createCatalogue()
@@ -71,23 +73,54 @@ class Catalogues extends Component
         $this->isCreating = false;
         $this->reset(['name', 'image', 'description', 'category_id']);
         session()->flash('status', 'Product successfully created.');
+        session()->flash('status', 'Product successfully created.');
+    }
+
+    public function updateCatalogue()
+    {
+        $this->validate([
+            'name' => 'required|min:3',
+            'image' => 'nullable|image|max:10240',
+            'description' => 'required|min:10',
+            'category_id' => 'required|exists:categories,id',
+        ]);
+
+        $product = Product::findOrFail($this->catalogueId);
+
+        $data = [
+            'name' => $this->name,
+            'slug' => Str::slug($this->name),
+            'category_id' => $this->category_id,
+            'description' => $this->description,
+        ];
+
+        if ($this->image) {
+            // Delete old image
+            if ($product->image) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($product->image);
+            }
+            $data['image'] = $this->image->store('products', 'public');
+        }
+
+        $product->update($data);
+
+        $this->isCreating = false;
+        $this->reset(['name', 'image', 'description', 'category_id', 'catalogueId']);
+        session()->flash('status', 'Product successfully updated.');
     }
 
     public function editCatalogue($id)
     {
         $product = Product::findOrFail($id);
+        $this->catalogueId = $id;
         $this->isCreating = true;
-        $this->reset(['name', 'image', 'description', 'category_id']);
         $this->resetValidation();
         $this->resetErrorBag();
-        $this->resetPage();
-        $this->reset('isCreating');
-        $this->reset('name');
-        $this->reset('image');
-        $this->reset('description');
-        $this->reset('category_id');
+
         $this->name = $product->name;
-        $this->image = $product->image;
+        // Don't set image property as it expects a temporary uploaded file object
+        // We handle displaying the existing image in the view logic
+        $this->reset('image');
         $this->description = $product->description;
         $this->category_id = $product->category_id;
     }
