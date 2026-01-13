@@ -1,5 +1,5 @@
 <x-front.layout>
-    <section class="pt-40 pb-32 px-6" x-data="{ activeImage: '{{ $catalog->image_url }}' }">
+    <section class="pt-40 pb-32 px-6" x-data="{ activeImage: '{{ $catalog->image ? asset('storage/' . $catalog->image) : asset('img/default.jpg') }}' }">
         <div class="max-w-7xl mx-auto">
             <div class="grid md:grid-cols-12 gap-12 lg:gap-24">
                 <!-- Gallery Section -->
@@ -12,9 +12,10 @@
                     <div class="grid grid-cols-4 gap-4">
                         <!-- Main Image thumbnail -->
                         <div class="cursor-pointer overflow-hidden border border-transparent hover:border-blue-500 transition-all"
-                            @click="activeImage = '{{ $catalog->image_url }}'"
-                            :class="{ 'border-blue-500': activeImage === '{{ $catalog->image_url }}' }">
-                            <img src="{{ $catalog->image_url }}" class="w-full h-24 object-cover">
+                            @click="activeImage = '{{ $catalog->image ? asset('storage/' . $catalog->image) : asset('img/default.jpg') }}'"
+                            :class="{ 'border-blue-500': activeImage === '{{ $catalog->image ? asset('storage/' . $catalog->image) : asset('img/default.jpg') }}' }">
+                            <img src="{{ $catalog->image ? asset('storage/' . $catalog->image) : asset('img/default.jpg') }}"
+                                class="w-full h-24 object-cover">
                         </div>
                         <!-- Hardcoded additional thumbnails for demo as in original -->
                         <div class="cursor-pointer overflow-hidden border border-transparent hover:border-[#B5A693] transition-all"

@@ -119,6 +119,42 @@
                     <i class="fas fa-plus-circle mr-2"></i>Add New
                 </button>
             </div>
+            <!-- Filters -->
+            <div class="bg-gray-50 rounded-xl p-6 mb-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
+                    <div class="lg:col-span-2">
+                        <label class="block text-sm font-semibold text-premium-dark mb-2">Search</label>
+                        <input type="text"
+                            class="w-full px-4 py-2.5 rounded-lg border-2 border-gray-200 focus:border-gold-accent focus:ring-2 focus:ring-gold-accent/20 outline-none transition-all"
+                            wire:model.live.debounce.300ms="search" placeholder="Search products..." />
+                    </div>
+                    {{-- <div>
+                        <label class="block text-sm font-semibold text-premium-dark mb-2">Date</label>
+                        <input type="date"
+                            class="w-full px-4 py-2.5 rounded-lg border-2 border-gray-200 focus:border-gold-accent focus:ring-2 focus:ring-gold-accent/20 outline-none transition-all" />
+                    </div> --}}
+                    <div>
+                        <label class="block text-sm font-semibold text-premium-dark mb-2">Category</label>
+                        <select wire:model.live="categoryFilter"
+                            class="w-full px-4 py-2.5 rounded-lg border-2 border-gray-200 focus:border-gold-accent focus:ring-2 focus:ring-gold-accent/20 outline-none transition-all">
+                            <option value="">All Categories</option>
+                            @foreach ($categories as $category)
+                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="flex items-end gap-2">
+                        <button wire:click="$refresh"
+                            class="gradient-gold text-white px-6 py-2.5 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-300">
+                            <i class="fas fa-filter mr-2"></i>Filter
+                        </button>
+                        <button wire:click="resetFilters"
+                            class="bg-white border-2 border-gray-200 text-ceramic-blue px-6 py-2.5 rounded-lg font-semibold hover:bg-gray-50 transition-all duration-300">
+                            <i class="fas fa-redo mr-2"></i>Reset
+                        </button>
+                    </div>
+                </div>
+            </div>
             <div class="overflow-x-auto">
                 <table class="w-full">
                     <thead class="bg-gradient-to-r from-marble-gray to-marble-white">
@@ -151,14 +187,15 @@
                                 <td class="px-6 py-4 text-sm text-gray-600">
                                     {{ $catalogue->category->name ?? 'Uncategorized' }}</td>
                                 <td class="px-6 py-4">
-                                    <img src="{{ $catalogue->image ? asset('storage/' . $catalogue->image) : asset('storage/' . $catalogue->image) }}"
+                                    <img src="{{ $catalogue->image ? asset('storage/' . $catalogue->image) : asset('img/default.jpg') }}"
                                         alt="{{ $catalogue->name }}" class="w-24 h-24 object-cover">
                                 </td>
                                 <td class="px-6 py-4 text-sm text-gray-600 truncate max-w-xs">
                                     {{ $catalogue->description }}</td>
                                 <td class="px-6 py-4">
-                                    <button class="text-yellow-600 hover:text-yellow-800 mr-3"><i
-                                            class="fas fa-eye"></i></button>
+                                    <button class="text-yellow-600 hover:text-yellow-800 mr-3"><a
+                                            href="{{ url('/catalogs/' . $catalogue->category->slug . '/' . $catalogue->slug) }}"><i
+                                                class="fas fa-eye"></i></a></button>
                                     <button wire:click="editCatalogue({{ $catalogue->id }})"
                                         class="text-blue-600 hover:text-blue-800 mr-3"><i
                                             class="fas fa-edit"></i></button>

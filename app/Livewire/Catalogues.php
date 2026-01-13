@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Product;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -29,10 +30,29 @@ class Catalogues extends Component
 
     #[Validate('required|exists:categories,id')]
     public $category_id;
-
     public $catalogueId;
 
+    // Filter Properties
+    public $search = '';
+    public $categoryFilter = '';
+
     public $perPage = 8;
+
+    public function updatedSearch()
+    {
+        $this->resetPage();
+    }
+
+    public function updatedCategoryFilter()
+    {
+        $this->resetPage();
+    }
+
+    public function resetFilters()
+    {
+        $this->reset(['search', 'categoryFilter']);
+        $this->resetPage();
+    }
 
     public function updatedPerPage()
     {
@@ -133,10 +153,32 @@ class Catalogues extends Component
         session()->flash('status', 'Product successfully deleted.');
     }
 
+    // public function scopeFilter(Builder $query): void
+    // {
+    //     if (request('search')) {
+    //         $query->where('name', 'like', '%' . request('search') . '%');
+    //     }
+    //     if (request('category')) {
+    //         $query->whereHas('category', function ($query) {
+    //             $query->where('slug', request('category'));
+    //         });
+    //     }
+    // }
+
     public function render()
     {
+        $query = Product::with('category');
+
+        if ($this->search) {
+            $query->where('name', 'like', '%' . $this->search . '%');
+        }
+
+        if ($this->categoryFilter) {
+            $query->where('category_id', $this->categoryFilter);
+        }
+
         return view('livewire.catalogues', [
-            'catalogues' => Product::latest()->paginate($this->perPage),
+            'catalogues' => $query->latest()->paginate($this->perPage),
             'categories' => \App\Models\Category::all()
         ]);
     }
