@@ -71,10 +71,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/dashboard', function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');
-});
-
-Route::middleware('auth')->group(function () {
-    Route::get('/admin/catalogues', function () {
+    // Route::get('/admin/catalogues', function () {
+    //     return view('admin.catalogue');
+    // })->name('admin.catalogue');
+    Route::get('admin/catalogues', function () {
         return view('admin.catalogue');
     })->name('admin.catalogue');
+
+    Route::get('admin/catalogues/add', function () {
+        return view('admin.add-catalogue');
+    })->name('admin.add-catalogue');
 });

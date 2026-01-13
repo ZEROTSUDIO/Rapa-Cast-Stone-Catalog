@@ -1,5 +1,5 @@
 <x-admin.layout>
-    <div id="table" class="page animate-slide-in">
+    {{-- <div id="table" class="page animate-slide-in">
         <div class="mb-8">
             <h1 class="text-4xl font-bold text-premium-dark mb-2">
                 Catalogue
@@ -134,5 +134,6 @@
                 </table>
             </div>
         </div>
-    </div>
+    </div> --}}
+    <livewire:catalogues />
 </x-admin.layout>

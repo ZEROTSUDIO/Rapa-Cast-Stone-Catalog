@@ -29,11 +29,11 @@
                         class="flex items-center gap-3 cursor-pointer px-4 py-2 rounded-xl hover:bg-gray-100 transition-all duration-300">
                         <div
                             class="w-10 h-10 rounded-full gradient-gold flex items-center justify-center text-white font-semibold">
-                            JD
+                            {{ Auth::user()->name[0] }}
                         </div>
                         <div class="user-details">
                             <div class="text-sm font-semibold text-premium-dark">
-                                John Doe
+                                {{ Auth::user()->name }}
                             </div>
                             <div class="text-xs text-gray-500">
                                 Administrator
@@ -56,11 +56,14 @@
                             <span class="text-sm font-medium text-gray-700">Account Settings</span>
                         </a>
                         <hr class="my-2 border-gray-100" />
-                        <a href="#"
-                            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors duration-200">
-                            <i class="fas fa-sign-out-alt w-5 text-gray-400"></i>
-                            <span class="text-sm font-medium text-gray-700">Logout</span>
-                        </a>
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <button type="submit"
+                                class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors duration-200">
+                                <i class="fas fa-sign-out-alt w-5 text-gray-400"></i>
+                                <span class="text-sm font-medium text-gray-700">Logout</span>
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
