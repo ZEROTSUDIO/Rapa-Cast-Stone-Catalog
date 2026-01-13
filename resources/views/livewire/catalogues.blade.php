@@ -133,7 +133,7 @@
                         <input type="date"
                             class="w-full px-4 py-2.5 rounded-lg border-2 border-gray-200 focus:border-gold-accent focus:ring-2 focus:ring-gold-accent/20 outline-none transition-all" />
                     </div> --}}
-                    <div>
+                    <div class="lg:col-span-2">
                         <label class="block text-sm font-semibold text-premium-dark mb-2">Category</label>
                         <select wire:model.live="categoryFilter"
                             class="w-full px-4 py-2.5 rounded-lg border-2 border-gray-200 focus:border-gold-accent focus:ring-2 focus:ring-gold-accent/20 outline-none transition-all">
@@ -145,11 +145,11 @@
                     </div>
                     <div class="flex items-end gap-2">
                         <button wire:click="$refresh"
-                            class="gradient-gold text-white px-6 py-2.5 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-300">
+                            class="flex items-center gradient-gold text-white px-6 py-2.5 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-300">
                             <i class="fas fa-filter mr-2"></i>Filter
                         </button>
                         <button wire:click="resetFilters"
-                            class="bg-white border-2 border-gray-200 text-ceramic-blue px-6 py-2.5 rounded-lg font-semibold hover:bg-gray-50 transition-all duration-300">
+                            class="flex items-center bg-white border-2 border-gray-200 text-ceramic-blue px-6 py-2.5 rounded-lg font-semibold hover:bg-gray-50 transition-all duration-300">
                             <i class="fas fa-redo mr-2"></i>Reset
                         </button>
                     </div>
