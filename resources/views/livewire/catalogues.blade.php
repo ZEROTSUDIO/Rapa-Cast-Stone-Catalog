@@ -94,6 +94,62 @@
                             <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span>
                         @enderror
                     </div>
+
+                    {{-- Product Specifications Section --}}
+                    <div class="mb-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <label class="block text-sm font-semibold text-premium-dark">Product Specifications</label>
+                            <button type="button" wire:click="addSpecification"
+                                class="text-sm gradient-gold text-white px-4 py-2 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105">
+                                <i class="fas fa-plus-circle mr-1"></i>Add Specification
+                            </button>
+                        </div>
+
+                        <div class="space-y-3">
+                            @foreach ($specifications as $index => $spec)
+                                <div wire:key="spec-{{ $index }}"
+                                    class="flex gap-3 items-start p-4 bg-gray-50 rounded-xl border-2 border-gray-200 hover:border-gold-accent/50 transition-all duration-300">
+                                    <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-3">
+                                        <div>
+                                            <input type="text" wire:model="specifications.{{ $index }}.key"
+                                                placeholder="Specification Name (e.g., Color)"
+                                                class="w-full px-4 py-2.5 rounded-lg border-2 border-gray-200 focus:border-gold-accent focus:ring-2 focus:ring-gold-accent/20 outline-none transition-all text-sm" />
+                                            @error('specifications.' . $index . '.key')
+                                                <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                        <div>
+                                            <input type="text" wire:model="specifications.{{ $index }}.value"
+                                                placeholder="Value (e.g., White, Gray, Black)"
+                                                class="w-full px-4 py-2.5 rounded-lg border-2 border-gray-200 focus:border-gold-accent focus:ring-2 focus:ring-gold-accent/20 outline-none transition-all text-sm" />
+                                            @error('specifications.' . $index . '.value')
+                                                <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <button type="button" wire:click="removeSpecification({{ $index }})"
+                                        class="mt-0.5 text-red-600 hover:text-red-800 hover:bg-red-50 p-2.5 rounded-lg transition-all duration-300"
+                                        title="Remove specification">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            @endforeach
+
+                            @if (empty($specifications))
+                                <div class="text-center py-8 text-gray-400">
+                                    <i class="fas fa-list-ul text-3xl mb-2"></i>
+                                    <p class="text-sm">No specifications added yet. Click "Add Specification" to start.
+                                    </p>
+                                </div>
+                            @endif
+                        </div>
+
+                        <p class="text-xs text-gray-500 mt-3">
+                            <i class="fas fa-info-circle mr-1"></i>Add product specifications like color, weight,
+                            material, or any custom attributes. Empty fields will be ignored.
+                        </p>
+                    </div>
+
                     <div class="flex gap-3">
                         <button type="submit"
                             class="gradient-gold text-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
@@ -194,8 +250,8 @@
                                     {{ $catalogue->description }}</td>
                                 <td class="px-6 py-4">
                                     <button class="text-yellow-600 hover:text-yellow-800 mr-3"><a
-                                            href="{{ url('/catalogs/' . $catalogue->category->slug . '/' . $catalogue->slug) }}"><i
-                                                class="fas fa-eye"></i></a></button>
+                                            href="{{ url('/catalogs/' . $catalogue->category->slug . '/' . $catalogue->slug) }}"
+                                            target="_blank"><i class="fas fa-eye"></i></a></button>
                                     <button wire:click="editCatalogue({{ $catalogue->id }})"
                                         class="text-blue-600 hover:text-blue-800 mr-3"><i
                                             class="fas fa-edit"></i></button>
