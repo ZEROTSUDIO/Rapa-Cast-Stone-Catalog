@@ -1,14 +1,15 @@
 <?php
 
 use App\Models\Article;
-use App\Models\Topic;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Topic;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     $categories = Category::all();
+
     return view('front.home', ['categories' => $categories, 'title' => 'Homepage']);
 });
 
@@ -51,7 +52,7 @@ Route::get('/catalogs', function () {
         'catalogs' => Product::filter(request(['search', 'category']))
             ->latest()
             ->paginate(9)->withQueryString(),
-        'categories' => Category::all()
+        'categories' => Category::all(),
     ]);
 });
 
@@ -61,13 +62,15 @@ Route::get('/catalogs/{category:slug}/{product:slug}', function (Category $categ
 
 use App\Http\Controllers\AdminAuthController;
 
-Route::middleware('guest')->group(function () {
+Route::middleware(['guest', 'throttle:login'])->group(function () {
     Route::get('/admin/login', [AdminAuthController::class, 'index'])->name('login');
     Route::post('/admin/login', [AdminAuthController::class, 'store']);
 });
 
+Route::post('/admin/logout', [AdminAuthController::class, 'destroy'])->name('logout');
+Route::get('/admin/logout', [AdminAuthController::class, 'destroy']);
+
 Route::middleware('auth')->group(function () {
-    Route::post('/admin/logout', [AdminAuthController::class, 'destroy'])->name('logout');
     Route::get('/admin', function () {
         return view('admin.dashboard');
     })->name('admin');
