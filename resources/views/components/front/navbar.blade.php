@@ -3,9 +3,8 @@
     <div class="max-w-7xl mx-auto px-6 py-6">
         <div class="flex items-center justify-between">
             <!-- Brand -->
-            <a href="{{ url('/') }}"
-                class="font-heading text-xl font-medium tracking-[3px] text-[#3A352F] hover:text-[#B5A693] transition-colors duration-400">
-                RAPA CAST STONE
+            <a href="{{ url('/') }}" class="flex items-center hover:opacity-80 transition-opacity duration-400">
+                <img src="{{ asset('img/logo.png') }}" alt="Rapa Cast Stone" class="h-12 w-auto">
             </a>
 
             <!-- Desktop Menu -->
@@ -14,7 +13,8 @@
                 <x-front.navlink href="{{ url('/about') }}" :active="request()->is('about')">About</x-front.navlink>
 
                 <!-- Dropdown for Catalogue -->
-                <div class="relative group" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
+                <div class="relative group" x-data="{ open: false }" @mouseenter="open = true"
+                    @mouseleave="open = false">
                     <button
                         class="nav-link-hover text-[#3A352F] text-xs font-normal tracking-[1.5px] uppercase hover:text-[#B5A693] transition-colors duration-400 flex items-center gap-1">
                         Catalogue
