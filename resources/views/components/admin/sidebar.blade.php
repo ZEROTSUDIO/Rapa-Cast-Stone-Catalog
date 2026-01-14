@@ -9,7 +9,7 @@
 
         <!-- Navigation -->
         <nav class="space-y-2">
-            <x-admin.navlink href="{{ url('/admin') }}" active="{{ request()->routeIs('/admin') }}">
+            <x-admin.navlink href="{{ url('admin') }}" active="{{ request()->routeIs('admin') }}">
                 <i class="fas fa-tachometer-alt w-5"></i>
                 <span class="sidebar-text">Dashboard</span>
             </x-admin.navlink>
@@ -19,13 +19,11 @@
                 <i class="fas fa-table w-5"></i>
                 <span class="sidebar-text">Data Table</span>
             </a> --}}
-            <x-admin.navlink href="{{ url('/admin/catalogues') }}"
-                active="{{ request()->routeIs('/admin/catalogues') }}">
+            <x-admin.navlink href="{{ url('admin/catalogues') }}" active="{{ request()->routeIs('admin.catalogues') }}">
                 <i class="fas fa-table w-5"></i>
                 <span class="sidebar-text">Catalogue</span>
             </x-admin.navlink>
-            <x-admin.navlink href="{{ url('/admin/categories') }}"
-                active="{{ request()->routeIs('/admin/categories') }}">
+            <x-admin.navlink href="{{ url('admin/categories') }}" active="{{ request()->routeIs('admin.categories') }}">
                 <i class="fas fa-th w-5"></i>
                 <span class="sidebar-text">Category</span>
             </x-admin.navlink>
