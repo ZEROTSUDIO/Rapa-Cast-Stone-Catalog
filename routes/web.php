@@ -83,4 +83,7 @@ Route::middleware('auth')->group(function () {
     // Route::get('admin/catalogues/add', function () {
     //     return view('admin.add-catalogue');
     // })->name('admin.add-catalogue');
+    Route::get('admin/categories', function () {
+        return view('admin.categories');
+    })->name('admin.categories');
 });
