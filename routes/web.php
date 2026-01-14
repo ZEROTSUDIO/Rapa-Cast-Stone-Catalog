@@ -24,6 +24,7 @@ Route::get('/about', function () {
 Route::get('/contact', function () {
     return view('front.contact', ['title' => 'Contact Us']);
 });
+Route::post('/contact', [\App\Http\Controllers\ContactController::class, 'store'])->name('contact.store');
 
 // Route::get('/topics/{topic:slug}', function (Topic $topic) {
 //     return view('front.articles.index', ['title' => 'Articles in' . $topic->name, 'articles' => $topic->articles]);
