@@ -1,5 +1,5 @@
-<div id="sidebar"
-    class="fixed top-0 left-0 h-screen w-64 bg-gradient-to-b from-premium-dark to-ceramic-blue shadow-2xl z-50 transition-all duration-300 overflow-y-auto">
+<div id="sidebar" :class="{ 'translate-x-0': sidebarOpen, '-translate-x-full': !sidebarOpen }"
+    class="fixed top-0 left-0 h-screen w-64 bg-gradient-to-b from-premium-dark to-ceramic-blue shadow-2xl z-50 transition-transform duration-300 overflow-y-auto transform -translate-x-full md:translate-x-0">
     <div class="p-6">
         <!-- Logo -->
         <div class="flex items-center gap-3 mb-10 pb-6 border-b border-gold-accent/30">

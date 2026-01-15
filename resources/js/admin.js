@@ -1,3 +1,8 @@
+import Alpine from 'alpinejs';
+
+window.Alpine = Alpine;
+Alpine.start();
+
 import Quill from 'quill';
 // Or if you only need the core build
 // import Quill from 'quill/core';
