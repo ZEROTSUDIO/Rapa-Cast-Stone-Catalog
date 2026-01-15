@@ -220,4 +220,24 @@
             </div>
         </div>
     </section>
+
+    <!-- Location Map -->
+    <section class="py-32 px-6 bg-[#F5F1E8]">
+        <div class="max-w-7xl mx-auto">
+            <p class="text-center text-xs text-[#8B7F6E] tracking-[2px] uppercase mb-4 font-normal">Lokasi Kami
+            </p>
+            <h2 class="font-heading text-5xl md:text-6xl text-center mb-20 tracking-wide font-light">Kunjungi Showroom
+            </h2>
+            <div class="w-full h-[500px] bg-gray-200 shadow-lg overflow-hidden">
+                <!-- Placeholder Map - User to replace iframe src -->
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d506234.1612227825!2d109.66176278906254!3d-7.579944599999994!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a8b007b659857%3A0x4b84313761830625!2sRapa%20Cast%20Stone!5e0!3m2!1sid!2sid!4v1768464646890!5m2!1sid!2sid"
+                    width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+        </div>
+    </section>
+
+
 </x-front.layout>
