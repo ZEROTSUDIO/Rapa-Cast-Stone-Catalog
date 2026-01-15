@@ -104,12 +104,12 @@
         {{-- TABLE VIEW --}}
         <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
             <div
-                class="bg-gradient-to-r from-gray-50 to-gray-100 px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+                class="bg-gradient-to-r from-gray-50 to-gray-100 px-6 py-4 border-b border-gray-200 flex flex-col md:flex-row justify-between items-start md:items-center">
                 <h2 class="text-lg font-bold text-premium-dark">
                     All Categories
                 </h2>
                 <button wire:click="addCategory"
-                    class="gradient-gold text-white px-4 py-2 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105">
+                    class="gradient-gold text-white px-4 py-2 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 w-full md:w-auto">
                     <i class="fas fa-plus-circle mr-2"></i>Add New
                 </button>
             </div>
@@ -123,13 +123,13 @@
                             class="w-full px-4 py-2.5 rounded-lg border-2 border-gray-200 focus:border-gold-accent focus:ring-2 focus:ring-gold-accent/20 outline-none transition-all"
                             wire:model.live.debounce.300ms="search" placeholder="Search categories..." />
                     </div>
-                    <div class="flex items-end gap-2">
+                    <div class="flex flex-wrap items-end gap-2 mt-4 lg:mt-0">
                         <button wire:click="$refresh"
-                            class="flex items-center gradient-gold text-white px-6 py-2.5 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-300">
+                            class="flex-1 md:flex-none flex items-center justify-center gradient-gold text-white px-6 py-2.5 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-300">
                             <i class="fas fa-filter mr-2"></i>Filter
                         </button>
                         <button wire:click="resetFilters"
-                            class="flex items-center bg-white border-2 border-gray-200 text-ceramic-blue px-6 py-2.5 rounded-lg font-semibold hover:bg-gray-50 transition-all duration-300">
+                            class="flex-1 md:flex-none flex items-center justify-center bg-white border-2 border-gray-200 text-ceramic-blue px-6 py-2.5 rounded-lg font-semibold hover:bg-gray-50 transition-all duration-300">
                             <i class="fas fa-redo mr-2"></i>Reset
                         </button>
                     </div>
@@ -138,31 +138,31 @@
 
             {{-- Table --}}
             <div class="overflow-x-auto">
-                <table class="w-full">
+                <table class="w-full whitespace-nowrap">
                     <thead class="bg-gradient-to-r from-marble-gray to-marble-white">
                         <tr>
                             <th
-                                class="px-6 py-4 text-left text-xs font-bold text-premium-dark uppercase tracking-wider w-20">
+                                class="hidden sm:table-cell px-6 py-4 text-left text-xs font-bold text-premium-dark uppercase tracking-wider w-20">
                                 ID
                             </th>
                             <th
-                                class="px-6 py-4 text-left text-xs font-bold text-premium-dark uppercase tracking-wider w-28">
-                                Image
+                                class="px-6 py-4 text-left text-xs font-bold text-premium-dark uppercase tracking-wider">
+                                Thumbnail
                             </th>
                             <th
-                                class="px-6 py-4 text-left text-xs font-bold text-premium-dark uppercase tracking-wider w-1/4">
+                                class="px-6 py-4 text-left text-xs font-bold text-premium-dark uppercase tracking-wider">
                                 Name
                             </th>
                             <th
-                                class="px-6 py-4 text-left text-xs font-bold text-premium-dark uppercase tracking-wider w-1/4">
+                                class="px-6 py-4 text-left text-xs font-bold text-premium-dark uppercase tracking-wider">
                                 Slug
                             </th>
                             <th
-                                class="px-6 py-4 text-left text-xs font-bold text-premium-dark uppercase tracking-wider w-1/3">
+                                class="px-6 py-4 text-left text-xs font-bold text-premium-dark uppercase tracking-wider">
                                 Description
                             </th>
                             <th
-                                class="px-6 py-4 text-left text-xs font-bold text-premium-dark uppercase tracking-wider w-32">
+                                class="px-6 py-4 text-left text-xs font-bold text-premium-dark uppercase tracking-wider">
                                 Actions
                             </th>
                         </tr>
@@ -170,10 +170,11 @@
                     <tbody class="divide-y divide-gray-100">
                         @forelse ($categories as $category)
                             <tr class="hover:bg-gold-accent/5 transition-colors duration-200">
-                                <td class="px-6 py-4 text-sm text-gray-800">{{ $category->id }}</td>
+                                <td class="hidden sm:table-cell px-6 py-4 text-sm text-gray-800">{{ $category->id }}
+                                </td>
                                 <td class="px-6 py-4">
                                     <img src="{{ $category->image ? asset('storage/' . $category->image) : asset('img/default.jpg') }}"
-                                        alt="{{ $category->name }}" class="w-16 h-16 object-cover rounded-lg shadow-sm">
+                                        alt="{{ $category->name }}" class="w-16 h-16 object-cover rounded-md shadow-sm">
                                 </td>
                                 <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ $category->name }}</td>
                                 <td class="px-6 py-4 text-sm text-gray-600">

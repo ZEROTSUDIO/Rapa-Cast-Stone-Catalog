@@ -166,12 +166,12 @@
     @else
         <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
             <div
-                class="bg-gradient-to-r from-gray-50 to-gray-100 px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+                class="bg-gradient-to-r from-gray-50 to-gray-100 px-6 py-4 border-b border-gray-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <h2 class="text-lg font-bold text-premium-dark">
                     Catalogue
                 </h2>
                 <button wire:click="addCatalogue"
-                    class="gradient-gold text-white px-4 py-2 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105">
+                    class="gradient-gold text-white px-4 py-2 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 w-full md:w-auto">
                     <i class="fas fa-plus-circle mr-2"></i>Add New
                 </button>
             </div>
@@ -199,64 +199,70 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="flex items-end gap-2">
+                    <div class="flex flex-wrap items-end gap-2 mt-4 lg:mt-0">
                         <button wire:click="$refresh"
-                            class="flex items-center gradient-gold text-white px-6 py-2.5 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-300">
+                            class="flex-1 md:flex-none flex items-center justify-center gradient-gold text-white px-6 py-2.5 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-300">
                             <i class="fas fa-filter mr-2"></i>Filter
                         </button>
                         <button wire:click="resetFilters"
-                            class="flex items-center bg-white border-2 border-gray-200 text-ceramic-blue px-6 py-2.5 rounded-lg font-semibold hover:bg-gray-50 transition-all duration-300">
+                            class="flex-1 md:flex-none flex items-center justify-center bg-white border-2 border-gray-200 text-ceramic-blue px-6 py-2.5 rounded-lg font-semibold hover:bg-gray-50 transition-all duration-300">
                             <i class="fas fa-redo mr-2"></i>Reset
                         </button>
                     </div>
                 </div>
             </div>
             <div class="overflow-x-auto">
-                <table class="w-full">
+                <table class="w-full whitespace-nowrap">
                     <thead class="bg-gradient-to-r from-marble-gray to-marble-white">
                         <tr>
                             <th
-                                class="px-6 py-4 text-left text-xs font-bold text-premium-dark uppercase tracking-wider w-20">
+                                class="hidden sm:table-cell px-6 py-4 text-left text-xs font-bold text-premium-dark uppercase tracking-wider w-20">
                                 ID</th>
                             <th
-                                class="px-6 py-4 text-left text-xs font-bold text-premium-dark uppercase tracking-wider w-1/5">
+                                class="px-6 py-4 text-left text-xs font-bold text-premium-dark uppercase tracking-wider">
                                 Nama</th>
                             <th
-                                class="px-6 py-4 text-left text-xs font-bold text-premium-dark uppercase tracking-wider w-20">
+                                class="px-6 py-4 text-left text-xs font-bold text-premium-dark uppercase tracking-wider">
                                 Kategori</th>
                             <th
-                                class="px-6 py-4 text-left text-xs font-bold text-premium-dark uppercase tracking-wider w-28">
+                                class="px-6 py-4 text-left text-xs font-bold text-premium-dark uppercase tracking-wider">
                                 Gambar</th>
                             <th
-                                class="px-6 py-4 text-left text-xs font-bold text-premium-dark uppercase tracking-wider w-1/3">
+                                class="hidden md:table-cell px-6 py-4 text-left text-xs font-bold text-premium-dark uppercase tracking-wider w-1/3">
                                 Deskripsi</th>
                             <th
-                                class="px-6 py-4 text-left text-xs font-bold text-premium-dark uppercase tracking-wider w-40">
+                                class="px-6 py-4 text-left text-xs font-bold text-premium-dark uppercase tracking-wider">
                                 Actions</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
                         @foreach ($catalogues as $catalogue)
                             <tr class="hover:bg-gold-accent/5 transition-colors duration-200">
-                                <td class="px-6 py-4 text-sm text-gray-800">{{ $catalogue->id }}</td>
+                                <td class="hidden sm:table-cell px-6 py-4 text-sm text-gray-800">{{ $catalogue->id }}
+                                </td>
                                 <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ $catalogue->name }}</td>
                                 <td class="px-6 py-4 text-sm text-gray-600">
                                     {{ $catalogue->category->name ?? 'Uncategorized' }}</td>
                                 <td class="px-6 py-4">
                                     <img src="{{ $catalogue->image ? asset('storage/' . $catalogue->image) : asset('img/default.jpg') }}"
-                                        alt="{{ $catalogue->name }}" class="w-24 h-24 object-cover">
+                                        alt="{{ $catalogue->name }}"
+                                        class="w-16 h-16 md:w-24 md:h-24 object-cover rounded-md shadow-sm">
                                 </td>
-                                <td class="px-6 py-4 text-sm text-gray-600 truncate max-w-xs">
+                                <td class="hidden md:table-cell px-6 py-4 text-sm text-gray-600 truncate max-w-xs">
                                     {{ $catalogue->description }}</td>
                                 <td class="px-6 py-4">
-                                    <button class="text-yellow-600 hover:text-yellow-800 mr-3"><a
-                                            href="{{ url('/catalogs/' . $catalogue->category->slug . '/' . $catalogue->slug) }}"
-                                            target="_blank"><i class="fas fa-eye"></i></a></button>
-                                    <button wire:click="editCatalogue({{ $catalogue->id }})"
-                                        class="text-blue-600 hover:text-blue-800 mr-3"><i
-                                            class="fas fa-edit"></i></button>
-                                    <button @click="showDeleteModal = true; deleteId = {{ $catalogue->id }}"
-                                        class="text-red-600 hover:text-red-800"><i class="fas fa-trash"></i></button>
+                                    <div class="flex gap-2">
+                                        <button class="text-yellow-600 hover:text-yellow-800 transition-colors"
+                                            title="View"><a
+                                                href="{{ url('/catalogs/' . $catalogue->category->slug . '/' . $catalogue->slug) }}"
+                                                target="_blank"><i class="fas fa-eye"></i></a></button>
+                                        <button wire:click="editCatalogue({{ $catalogue->id }})"
+                                            class="text-blue-600 hover:text-blue-800 transition-colors"
+                                            title="Edit"><i class="fas fa-edit"></i></button>
+                                        <button @click="showDeleteModal = true; deleteId = {{ $catalogue->id }}"
+                                            class="text-red-600 hover:text-red-800 transition-colors"
+                                            title="Delete"><i class="fas fa-trash"></i></button>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach
