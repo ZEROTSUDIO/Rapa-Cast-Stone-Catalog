@@ -1,15 +1,59 @@
 <x-front.layout>
     <!-- Hero Section -->
     <x-front.carousel :totalSlides="3">
-        <x-front.hero-slide :index="0" image="https://images.unsplash.com/photo-1615529182904-14819c35db37?w=1600"
-            title="TIMELESS STONE DESIGN" subtitle="Architectural Cast Stone Furniture" :tags="['HANDCRAFTED', 'EXPORT QUALITY', 'NATURAL STONE']" />
+        <x-front.hero-slide :index="0" image="{{ asset('img/bg-1.png') }}" title="TIMELESS STONE DESIGN"
+            subtitle="Architectural Cast Stone Furniture" :tags="['HANDCRAFTED', 'EXPORT QUALITY', 'NATURAL STONE']" />
 
-        <x-front.hero-slide :index="1" image="https://images.unsplash.com/photo-1567016432779-094069958ea5?w=1600"
-            title="ORGANIC FORMS" subtitle="Bringing Nature Into Your Space" :tags="['SUSTAINABLE', 'MINIMALIST', 'ARTISANAL']" />
+        <x-front.hero-slide :index="1" image="{{ asset('img/bg-2.jpeg') }}" title="ORGANIC FORMS"
+            subtitle="Bringing Nature Into Your Space" :tags="['SUSTAINABLE', 'MINIMALIST', 'ARTISANAL']" />
 
-        <x-front.hero-slide :index="2" image="https://images.unsplash.com/photo-1618220179428-22790b461013?w=1600"
-            title="SCULPTED ELEGANCE" subtitle="Where Art Meets Function" :tags="['BESPOKE', 'CONTEMPORARY', 'DURABLE']" />
+        <x-front.hero-slide :index="2" image="{{ asset('img/bg-3.png') }}" title="SCULPTED ELEGANCE"
+            subtitle="Where Art Meets Function" :tags="['BESPOKE', 'CONTEMPORARY', 'DURABLE']" />
     </x-front.carousel>
+
+    <!-- Value Proposition -->
+    <section class="py-24 px-6 bg-white">
+        <div class="max-w-7xl mx-auto">
+            <p class="text-center text-xs text-[#8B7F6E] tracking-[2px] uppercase mb-4 font-normal">Value Proposition
+            </p>
+            <h2 class="font-heading text-5xl md:text-6xl text-center mb-20 tracking-wide font-light">Why Us
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 text-center">
+                <div>
+                    <p class="text-xs tracking-[2px] uppercase text-[#8B7F6E] mb-4">Craft</p>
+                    <h3 class="font-heading text-2xl mb-3 font-light">Handcrafted</h3>
+                    <p class="text-sm text-[#6B5E52] leading-relaxed">
+                        Each piece is cast and finished by hand, preserving subtle imperfections that define character.
+                    </p>
+                </div>
+
+                <div>
+                    <p class="text-xs tracking-[2px] uppercase text-[#8B7F6E] mb-4">Quality</p>
+                    <h3 class="font-heading text-2xl mb-3 font-light">Export Ready</h3>
+                    <p class="text-sm text-[#6B5E52] leading-relaxed">
+                        Engineered for durability and consistency, trusted for international projects.
+                    </p>
+                </div>
+
+                <div>
+                    <p class="text-xs tracking-[2px] uppercase text-[#8B7F6E] mb-4">Material</p>
+                    <h3 class="font-heading text-2xl mb-3 font-light">Natural Stone</h3>
+                    <p class="text-sm text-[#6B5E52] leading-relaxed">
+                        Cast stone blends mineral strength with refined surface control.
+                    </p>
+                </div>
+
+                <div>
+                    <p class="text-xs tracking-[2px] uppercase text-[#8B7F6E] mb-4">Service</p>
+                    <h3 class="font-heading text-2xl mb-3 font-light">Bespoke</h3>
+                    <p class="text-sm text-[#6B5E52] leading-relaxed">
+                        Custom dimensions, finishes, and specifications available on request.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
 
     <!-- Collections -->
     <section class="py-32 px-6">
@@ -39,8 +83,88 @@
         </div>
     </section>
 
-    <!-- Featured Products -->
+    <!-- Our Process -->
     <section class="py-32 px-6 bg-[#F5F1E8]">
+        <div class="max-w-7xl mx-auto">
+            <p class="text-center text-xs text-[#8B7F6E] tracking-[2px] uppercase mb-4">
+                How It’s Made
+            </p>
+            <h2 class="font-heading text-5xl md:text-6xl text-center mb-24 tracking-wide font-light">
+                The Craft Process
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-24 justify-center mb-16">
+                <!-- 01 Design -->
+                <div class="flex flex-col">
+                    <div class="overflow-hidden mb-8 shadow-lg">
+                        <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=800"
+                            class="w-full h-[320px] object-cover" alt="Design Process">
+                    </div>
+                    <span class="text-xs tracking-[2px] uppercase text-[#8B7F6E]">01</span>
+                    <h4 class="font-heading text-2xl mt-4 mb-3 font-light">Design</h4>
+                    <p class="text-sm text-[#6B5E52] leading-relaxed">
+                        Proportions and forms are refined with architectural intent and spatial balance.
+                    </p>
+                </div>
+
+                <!-- 02 Molding -->
+                <div class="flex flex-col">
+                    <div class="overflow-hidden mb-8 shadow-lg">
+                        <img src="https://images.unsplash.com/photo-1581091870627-3b4c2c1c6f56?w=800"
+                            class="w-full h-[320px] object-cover" alt="Molding Process">
+                    </div>
+                    <span class="text-xs tracking-[2px] uppercase text-[#8B7F6E]">02</span>
+                    <h4 class="font-heading text-2xl mt-4 mb-3 font-light">Molding</h4>
+                    <p class="text-sm text-[#6B5E52] leading-relaxed">
+                        Precision molds are prepared to maintain surface texture and structural accuracy.
+                    </p>
+                </div>
+
+                <!-- 03 Casting -->
+                <div class="flex flex-col">
+                    <div class="overflow-hidden mb-8 shadow-lg">
+                        <img src="https://images.unsplash.com/photo-1581091215367-59ab6c29d6f6?w=800"
+                            class="w-full h-[320px] object-cover" alt="Casting Process">
+                    </div>
+                    <span class="text-xs tracking-[2px] uppercase text-[#8B7F6E]">03</span>
+                    <h4 class="font-heading text-2xl mt-4 mb-3 font-light">Casting</h4>
+                    <p class="text-sm text-[#6B5E52] leading-relaxed">
+                        Mineral-based mixtures are poured, compacted, and left to cure naturally.
+                    </p>
+                </div>
+
+                <!-- 04 Finishing -->
+                <div class="flex flex-col">
+                    <div class="overflow-hidden mb-8 shadow-lg">
+                        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800"
+                            class="w-full h-[320px] object-cover" alt="Finishing Process">
+                    </div>
+                    <span class="text-xs tracking-[2px] uppercase text-[#8B7F6E]">04</span>
+                    <h4 class="font-heading text-2xl mt-4 mb-3 font-light">Finishing</h4>
+                    <p class="text-sm text-[#6B5E52] leading-relaxed">
+                        Surfaces are sanded, polished, or textured entirely by hand.
+                    </p>
+                </div>
+
+                <!-- 05 Delivery -->
+                <div class="flex flex-col">
+                    <div class="overflow-hidden mb-8 shadow-lg">
+                        <img src="https://images.unsplash.com/photo-1604014237800-1c9102c219da?w=800"
+                            class="w-full h-[320px] object-cover" alt="Packaging and Delivery">
+                    </div>
+                    <span class="text-xs tracking-[2px] uppercase text-[#8B7F6E]">05</span>
+                    <h4 class="font-heading text-2xl mt-4 mb-3 font-light">Delivery</h4>
+                    <p class="text-sm text-[#6B5E52] leading-relaxed">
+                        Each piece is carefully packed and prepared for local or export shipment.
+                    </p>
+                </div>
+            </div>
+    </section>
+
+
+
+    <!-- Featured Products -->
+    <section class="py-32 px-6 ">
         <div class="max-w-7xl mx-auto">
             <p class="text-center text-xs text-[#8B7F6E] tracking-[2px] uppercase mb-4 font-normal">Curated Selection
             </p>
@@ -48,35 +172,49 @@
             </h2>
 
             <div class="grid md:grid-cols-3 gap-12 scroll-reveal">
-                <div class="product-card group">
-                    <div class="overflow-hidden mb-8 shadow-lg">
-                        <img src="https://images.unsplash.com/photo-1503602642458-232111445657?w=600" alt="Product"
-                            class="product-image w-full h-[500px] object-cover">
+                @foreach ($featuredProducts as $product)
+                    <div class="product-card group">
+                        <div class="overflow-hidden mb-8 shadow-lg">
+                            <img src="{{ $product->image_url }}" alt="{{ $product->name }}"
+                                class="product-image w-full h-[500px] object-cover">
+                        </div>
+                        <h4 class="font-heading text-3xl mb-3 tracking-wide">{{ $product->name }}</h4>
+                        <p class="text-sm text-[#8B7F6E] mb-5 tracking-wide">
+                            {{ Str::limit(strip_tags($product->description), 50) }}</p>
                     </div>
-                    <h4 class="font-heading text-3xl mb-3 tracking-wide">Monolith Console</h4>
-                    <p class="text-sm text-[#8B7F6E] mb-5 tracking-wide">Cast Stone, Polished Finish</p>
-                    <p class="text-sm text-[#6B5E52] tracking-wide">From $2,400</p>
-                </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
 
-                <div class="product-card group">
-                    <div class="overflow-hidden mb-8 shadow-lg">
-                        <img src="https://images.unsplash.com/photo-1540932239986-30128078f3c5?w=600" alt="Product"
-                            class="product-image w-full h-[500px] object-cover">
-                    </div>
-                    <h4 class="font-heading text-3xl mb-3 tracking-wide">Terra Dining Table</h4>
-                    <p class="text-sm text-[#8B7F6E] mb-5 tracking-wide">Natural Stone Top, Oak Base</p>
-                    <p class="text-sm text-[#6B5E52] tracking-wide">From $3,800</p>
-                </div>
 
-                <div class="product-card group">
-                    <div class="overflow-hidden mb-8 shadow-lg">
-                        <img src="https://images.unsplash.com/photo-1567016432779-094069958ea5?w=600" alt="Product"
-                            class="product-image w-full h-[500px] object-cover">
-                    </div>
-                    <h4 class="font-heading text-3xl mb-3 tracking-wide">Sculptural Pedestal</h4>
-                    <p class="text-sm text-[#8B7F6E] mb-5 tracking-wide">Hand-Carved Limestone</p>
-                    <p class="text-sm text-[#6B5E52] tracking-wide">From $1,600</p>
-                </div>
+
+    <!-- Soft CTA -->
+    <section class="py-32 px-6">
+        <div class="max-w-4xl mx-auto text-center">
+            <p class="text-xs text-[#8B7F6E] tracking-[2px] uppercase mb-6">
+                For Projects & Private Spaces
+            </p>
+
+            <h2 class="font-heading text-4xl md:text-5xl mb-10 font-light tracking-wide">
+                Designed to Live With Architecture
+            </h2>
+
+            <p class="text-sm text-[#6B5E52] max-w-2xl mx-auto mb-14 leading-relaxed">
+                Our collections are created for residential, hospitality, and architectural
+                environments where material honesty and proportion matter.
+            </p>
+
+            <div class="flex justify-center gap-6">
+                <a href="{{ url('catalogs') }}"
+                    class="px-10 py-4 border border-[#3A352F] text-sm tracking-[2px] uppercase hover:bg-[#3A352F] hover:text-white transition">
+                    View Full Catalogue
+                </a>
+
+                <a href="{{ url('contact') }}"
+                    class="px-10 py-4 text-sm tracking-[2px] uppercase text-[#6B5E52] hover:text-[#3A352F] transition">
+                    Request Custom Piece
+                </a>
             </div>
         </div>
     </section>
