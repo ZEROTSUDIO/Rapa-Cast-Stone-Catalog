@@ -1,5 +1,5 @@
-<x-front.layout title="Rapa Cast Stone | Design & Produsen Batu Cor"
-    meta-description="Rapa Cast Stone adalah pabrik cast stone atau batu cor yang memproduksi vas, akuarium, paving, dan elemen arsitektur berkualitas untuk rumah dan proyek.">>
+<x-front.layout title="Rapa Cast Stone | Produsen Cast Stone Berkualitas Indonesia"
+    meta-description="Rapa Cast Stone adalah pabrik batu cor cast stone di Indonesia yang memproduksi roster, vas, air mancur, paving, dan elemen arsitektur berkualitas untuk rumah dan proyek.">>
     <!-- Hero Section -->
     <x-front.carousel :totalSlides="3">
         <x-front.hero-slide :index="0" image="{{ asset('img/bg-1.png') }}" title="DESAIN BATU COR ABADI"

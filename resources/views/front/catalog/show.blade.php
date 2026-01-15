@@ -1,4 +1,7 @@
-<x-front.layout>
+<x-front.layout :title="$catalog->name . ' | Rapa Cast Stone'" :meta-description="'Produk ' .
+    $catalog->name .
+    ' dari Rapa Cast Stone. Cast stone berkualitas untuk kebutuhan arsitektur dan proyek.'">
+
     <section class="pt-40 pb-32 px-6" x-data="{ activeImage: '{{ $catalog->image ? asset('storage/' . $catalog->image) : asset('img/default.jpg') }}' }">
         <div class="max-w-7xl mx-auto">
             <div class="grid md:grid-cols-12 gap-12 lg:gap-24">
@@ -66,7 +69,7 @@
 
                         <button
                             class="w-full bg-[#3A352F] text-white py-4 text-xs tracking-[2.5px] uppercase hover:bg-[#6B5E52] transition-colors duration-300 shadow-lg">
-                            Request Quote
+                            <a href="{{ url('contact') }}">Ajukan Permintaan</a>
                         </button>
                     </div>
                 </div>
