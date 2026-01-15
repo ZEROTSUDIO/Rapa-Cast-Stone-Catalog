@@ -30,17 +30,17 @@
 
                 <div>
                     <p class="text-xs tracking-[2px] uppercase text-[#8B7F6E] mb-4">Quality</p>
-                    <h3 class="font-heading text-2xl mb-3 font-light">Export Ready</h3>
+                    <h3 class="font-heading text-2xl mb-3 font-light">Siap Ekspor</h3>
                     <p class="text-sm text-[#6B5E52] leading-relaxed">
-                        Engineered for durability and consistency, trusted for international projects.
+                        Dirancang untuk daya tahan dan konsistensi, dipercayai untuk proyek lokal maupuninternasional.
                     </p>
                 </div>
 
                 <div>
                     <p class="text-xs tracking-[2px] uppercase text-[#8B7F6E] mb-4">Material</p>
-                    <h3 class="font-heading text-2xl mb-3 font-light">Natural Stone</h3>
+                    <h3 class="font-heading text-2xl mb-3 font-light">Batu Alam</h3>
                     <p class="text-sm text-[#6B5E52] leading-relaxed">
-                        Cast stone blends mineral strength with refined surface control.
+                        Batu Cor menggabungkan kekuatan mineral dengan kontrol permukaan yang terperinci.
                     </p>
                 </div>
 
@@ -48,7 +48,7 @@
                     <p class="text-xs tracking-[2px] uppercase text-[#8B7F6E] mb-4">Service</p>
                     <h3 class="font-heading text-2xl mb-3 font-light">Bespoke</h3>
                     <p class="text-sm text-[#6B5E52] leading-relaxed">
-                        Custom dimensions, finishes, and specifications available on request.
+                        Dimensi, finishing, dan spesifikasi khusus tersedia setelah permintaan.
                     </p>
                 </div>
             </div>
@@ -59,8 +59,8 @@
     <!-- Collections -->
     <section class="py-32 px-6">
         <div class="max-w-7xl mx-auto">
-            <p class="text-center text-xs text-[#8B7F6E] tracking-[2px] uppercase mb-4 font-normal">Explore Our</p>
-            <h2 class="font-heading text-5xl md:text-6xl text-center mb-20 tracking-wide font-light">Collections</h2>
+            <p class="text-center text-xs text-[#8B7F6E] tracking-[2px] uppercase mb-4 font-normal">Jelajahi</p>
+            <h2 class="font-heading text-5xl md:text-6xl text-center mb-20 tracking-wide font-light">Koleksi Kami</h2>
 
             <div class="grid md:grid-cols-3 gap-6 scroll-reveal">
                 @foreach ($categories as $category)
@@ -91,7 +91,7 @@
                 How It’s Made
             </p>
             <h2 class="font-heading text-5xl md:text-6xl text-center mb-24 tracking-wide font-light">
-                The Craft Process
+                Tahapan Produksi
             </h2>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-24 justify-center mb-16">
@@ -104,7 +104,8 @@
                     <span class="text-xs tracking-[2px] uppercase text-[#8B7F6E]">01</span>
                     <h4 class="font-heading text-2xl mt-4 mb-3 font-light">Design</h4>
                     <p class="text-sm text-[#6B5E52] leading-relaxed">
-                        Proportions and forms are refined with architectural intent and spatial balance.
+                        Proporsi dan bentuk dirancang dengan mempertimbangkan fungsi arsitektural dan keseimbangan
+                        ruang.
                     </p>
                 </div>
 
@@ -117,7 +118,7 @@
                     <span class="text-xs tracking-[2px] uppercase text-[#8B7F6E]">02</span>
                     <h4 class="font-heading text-2xl mt-4 mb-3 font-light">Molding</h4>
                     <p class="text-sm text-[#6B5E52] leading-relaxed">
-                        Precision molds are prepared to maintain surface texture and structural accuracy.
+                        Cetakan presisi dibuat untuk menjaga tekstur permukaan dan akurasi struktur.
                     </p>
                 </div>
 
@@ -130,7 +131,7 @@
                     <span class="text-xs tracking-[2px] uppercase text-[#8B7F6E]">03</span>
                     <h4 class="font-heading text-2xl mt-4 mb-3 font-light">Casting</h4>
                     <p class="text-sm text-[#6B5E52] leading-relaxed">
-                        Mineral-based mixtures are poured, compacted, and left to cure naturally.
+                        Campuran berbasis mineral dituangkan, dipadatkan, dan dibiarkan mengeras secara alami.
                     </p>
                 </div>
 
@@ -143,7 +144,7 @@
                     <span class="text-xs tracking-[2px] uppercase text-[#8B7F6E]">04</span>
                     <h4 class="font-heading text-2xl mt-4 mb-3 font-light">Finishing</h4>
                     <p class="text-sm text-[#6B5E52] leading-relaxed">
-                        Surfaces are sanded, polished, or textured entirely by hand.
+                        Permukaan diamplas, dipoles, atau diberi tekstur sepenuhnya secara manual.
                     </p>
                 </div>
 
@@ -156,7 +157,7 @@
                     <span class="text-xs tracking-[2px] uppercase text-[#8B7F6E]">05</span>
                     <h4 class="font-heading text-2xl mt-4 mb-3 font-light">Delivery</h4>
                     <p class="text-sm text-[#6B5E52] leading-relaxed">
-                        Each piece is carefully packed and prepared for local or export shipment.
+                        Setiap produk dikemas dengan aman untuk pengiriman lokal maupun ekspor.
                     </p>
                 </div>
             </div>
@@ -167,9 +168,9 @@
     <!-- Featured Products -->
     <section class="py-32 px-6 ">
         <div class="max-w-7xl mx-auto">
-            <p class="text-center text-xs text-[#8B7F6E] tracking-[2px] uppercase mb-4 font-normal">Curated Selection
+            <p class="text-center text-xs text-[#8B7F6E] tracking-[2px] uppercase mb-4 font-normal">Pilihan Terbaik
             </p>
-            <h2 class="font-heading text-5xl md:text-6xl text-center mb-20 tracking-wide font-light">Featured Pieces
+            <h2 class="font-heading text-5xl md:text-6xl text-center mb-20 tracking-wide font-light">Produk Ungulan
             </h2>
 
             <div class="grid md:grid-cols-3 gap-12 scroll-reveal">
@@ -194,27 +195,27 @@
     <section class="py-32 px-6">
         <div class="max-w-4xl mx-auto text-center">
             <p class="text-xs text-[#8B7F6E] tracking-[2px] uppercase mb-6">
-                For Projects & Private Spaces
+                Untuk Proyek & Ruang Privat
             </p>
 
             <h2 class="font-heading text-4xl md:text-5xl mb-10 font-light tracking-wide">
-                Designed to Live With Architecture
+                Dirancang untuk Menyatu dengan Arsitektur
             </h2>
 
             <p class="text-sm text-[#6B5E52] max-w-2xl mx-auto mb-14 leading-relaxed">
-                Our collections are created for residential, hospitality, and architectural
-                environments where material honesty and proportion matter.
+                Koleksi kami dirancang untuk hunian, hospitality, dan lingkungan arsitektural
+                yang mengutamakan kejujuran material dan proporsi.
             </p>
 
             <div class="flex justify-center gap-6">
                 <a href="{{ url('catalogs') }}"
                     class="px-10 py-4 border border-[#3A352F] text-sm tracking-[2px] uppercase hover:bg-[#3A352F] hover:text-white transition">
-                    View Full Catalogue
+                    Lihat Katalog Lengkap
                 </a>
 
                 <a href="{{ url('contact') }}"
                     class="px-10 py-4 text-sm tracking-[2px] uppercase text-[#6B5E52] hover:text-[#3A352F] transition">
-                    Request Custom Piece
+                    Ajukan Produk Kustom
                 </a>
             </div>
         </div>
