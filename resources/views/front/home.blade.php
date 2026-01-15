@@ -22,8 +22,8 @@
                     <a href="{{ url('/catalogs?category=' . $category->slug) }}" class="block">
                         <div
                             class="category-card group relative h-[550px] overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-600 hover:-translate-y-2">
-                            <img src="{{ $category->image ? asset($category->image) : 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800' }}"
-                                alt="{{ $category->name }}" class="category-image w-full h-full object-cover">
+                            <img src="{{ $category->image ? asset('storage/' . $category->image) : asset('img/default.jpg') }}"
+                                class="category-image w-full h-full object-cover">
                             <div
                                 class="absolute inset-0 bg-gradient-to-t from-[#3A352F]/85 to-transparent flex items-end">
                                 <div class="p-10 text-white">

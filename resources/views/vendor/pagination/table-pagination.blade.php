@@ -17,15 +17,15 @@
         }
     @endphp
 
-    <div class="flex justify-between items-center mt-6">
-        <div class="text-sm text-gray-600">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-4 mt-6">
+        <div class="text-sm text-gray-600 w-full md:w-auto text-center md:text-left">
             Showing
             <span class="font-semibold text-gray-900">{{ $paginator->firstItem() }}-{{ $paginator->lastItem() }}</span>
             of
             <span class="font-semibold text-gray-900">{{ $paginator->total() }}</span>
             results
         </div>
-        <div class="flex gap-2">
+        <div class="flex flex-wrap justify-center gap-2">
             {{-- Previous Button --}}
             @if ($paginator->onFirstPage())
                 <button disabled
@@ -90,7 +90,7 @@
             @endif
         </div>
         <select wire:model.live="perPage"
-            class="px-4 py-2 rounded-lg border-2 border-gray-200 focus:border-gold-accent focus:ring-2 focus:ring-gold-accent/20 outline-none transition-all">
+            class="px-4 py-2 rounded-lg border-2 border-gray-200 focus:border-gold-accent focus:ring-2 focus:ring-gold-accent/20 outline-none transition-all w-full md:w-auto">
             <option value="8">8 per page</option>
             <option value="15">15 per page</option>
             <option value="25">25 per page</option>

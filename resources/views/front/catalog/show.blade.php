@@ -11,9 +11,9 @@
                     </div>
                     <div class="grid grid-cols-4 gap-4">
                         <!-- Main Image thumbnail -->
-                        <div class="cursor-pointer overflow-hidden border border-transparent hover:border-blue-500 transition-all"
+                        <div class="cursor-pointer overflow-hidden border border-transparent hover:border-[#B5A693] transition-all"
                             @click="activeImage = '{{ $catalog->image ? asset('storage/' . $catalog->image) : asset('img/default.jpg') }}'"
-                            :class="{ 'border-blue-500': activeImage === '{{ $catalog->image ? asset('storage/' . $catalog->image) : asset('img/default.jpg') }}' }">
+                            :class="{ 'border-[#B5A693]': activeImage === '{{ $catalog->image ? asset('storage/' . $catalog->image) : asset('img/default.jpg') }}' }">
                             <img src="{{ $catalog->image ? asset('storage/' . $catalog->image) : asset('img/default.jpg') }}"
                                 class="w-full h-24 object-cover">
                         </div>

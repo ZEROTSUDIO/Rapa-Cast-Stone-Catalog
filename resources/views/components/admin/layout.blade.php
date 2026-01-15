@@ -10,7 +10,7 @@
 
 </head>
 
-<body class="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen" x-data="{ sidebarOpen: false }">
+<body class="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen pb-16" x-data="{ sidebarOpen: false }">
     <!-- Sidebar -->
     <x-admin.sidebar></x-admin.sidebar>
 
@@ -95,5 +95,13 @@
 
 
 </body>
+
+<footer>
+    <div class="fixed bottom-0 left-0 right-0 h-16 bg-white border-t border-gray-200">
+        <div class="flex items-center justify-center h-full">
+            <p class="text-sm text-gray-500">© 2026 Rapa Cast Stone. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
 
 </html>

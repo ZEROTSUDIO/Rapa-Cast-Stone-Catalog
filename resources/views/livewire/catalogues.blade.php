@@ -199,7 +199,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="flex flex-wrap items-end gap-2 mt-4 lg:mt-0">
+                    <div class="flex items-end gap-2 mt-4 lg:mt-0">
                         <button wire:click="$refresh"
                             class="flex-1 md:flex-none flex items-center justify-center gradient-gold text-white px-6 py-2.5 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-300">
                             <i class="fas fa-filter mr-2"></i>Filter
@@ -212,7 +212,7 @@
                 </div>
             </div>
             <div class="overflow-x-auto">
-                <table class="w-full whitespace-nowrap">
+                <table class="w-full">
                     <thead class="bg-gradient-to-r from-marble-gray to-marble-white">
                         <tr>
                             <th
@@ -271,7 +271,9 @@
             </div>
         </div>
         {{-- Pagination --}}
-        {{ $catalogues->links('vendor.pagination.table-pagination') }}
+        <div class="mt-6 px-8">
+            {{ $catalogues->links('vendor.pagination.table-pagination') }}
+        </div>
     @endif
 
     {{-- Delete Confirmation Modal --}}
