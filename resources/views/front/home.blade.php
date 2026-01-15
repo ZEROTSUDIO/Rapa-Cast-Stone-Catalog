@@ -1,29 +1,30 @@
-<x-front.layout>
+<x-front.layout title="Rapa Cast Stone | Design & Produsen Batu Cor"
+    meta-description="Rapa Cast Stone adalah pabrik cast stone atau batu cor yang memproduksi vas, akuarium, paving, dan elemen arsitektur berkualitas untuk rumah dan proyek.">>
     <!-- Hero Section -->
     <x-front.carousel :totalSlides="3">
-        <x-front.hero-slide :index="0" image="{{ asset('img/bg-1.png') }}" title="TIMELESS STONE DESIGN"
-            subtitle="Architectural Cast Stone Furniture" :tags="['HANDCRAFTED', 'EXPORT QUALITY', 'NATURAL STONE']" />
+        <x-front.hero-slide :index="0" image="{{ asset('img/bg-1.png') }}" title="DESAIN BATU COR ABADI"
+            subtitle="PRODUK BATU COR UNTUK ARSITEKTUR DAN FURNITURE" :tags="['HANDCRAFTED', 'KUALITAS EKSPOR', 'MATERIAL ALAMI']" />
 
-        <x-front.hero-slide :index="1" image="{{ asset('img/bg-2.jpeg') }}" title="ORGANIC FORMS"
-            subtitle="Bringing Nature Into Your Space" :tags="['SUSTAINABLE', 'MINIMALIST', 'ARTISANAL']" />
+        <x-front.hero-slide :index="1" image="{{ asset('img/bg-2.jpeg') }}" title="DESAIN ORGANIK"
+            subtitle="MENGHASILKAN NUANSA ALAMI KE DALAM RUANGAN" :tags="['SUSTAINABLE', 'MINIMALIS', 'KERAJINAN']" />
 
-        <x-front.hero-slide :index="2" image="{{ asset('img/bg-3.png') }}" title="SCULPTED ELEGANCE"
-            subtitle="Where Art Meets Function" :tags="['BESPOKE', 'CONTEMPORARY', 'DURABLE']" />
+        <x-front.hero-slide :index="2" image="{{ asset('img/bg-3.png') }}" title="KEINDAHAN TERUKIR"
+            subtitle="PERPADUAN ANTARA SENI DAN FUNGSI" :tags="['CUSTOM', 'KONTEMPORER', 'TAHAN LAMA']" />
     </x-front.carousel>
 
     <!-- Value Proposition -->
     <section class="py-24 px-6 bg-white">
         <div class="max-w-7xl mx-auto">
-            <p class="text-center text-xs text-[#8B7F6E] tracking-[2px] uppercase mb-4 font-normal">Value Proposition
+            <p class="text-center text-xs text-[#8B7F6E] tracking-[2px] uppercase mb-4 font-normal">Nilai Utama
             </p>
-            <h2 class="font-heading text-5xl md:text-6xl text-center mb-20 tracking-wide font-light">Why Us
+            <h2 class="font-heading text-5xl md:text-6xl text-center mb-20 tracking-wide font-light">Mengapa Pilih Kami
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-12 text-center">
                 <div>
                     <p class="text-xs tracking-[2px] uppercase text-[#8B7F6E] mb-4">Craft</p>
                     <h3 class="font-heading text-2xl mb-3 font-light">Handcrafted</h3>
                     <p class="text-sm text-[#6B5E52] leading-relaxed">
-                        Each piece is cast and finished by hand, preserving subtle imperfections that define character.
+                        Setiap produk dicetak dan diselesaikan secara manual, menjaga karakter dan detail alami.
                     </p>
                 </div>
 
