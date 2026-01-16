@@ -17,7 +17,7 @@ class ArticleSeeder extends Seeder
         //
         $this->call([
             TopicSeeder::class,
-            UserSeeder::class,
+            AdminUserSeeder::class,
         ]);
         Article::factory(100)->recycle([
             Topic::all(),

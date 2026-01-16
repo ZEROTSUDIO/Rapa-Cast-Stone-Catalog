@@ -10,7 +10,7 @@
 
 </head>
 
-<body class="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen pb-16" x-data="{ sidebarOpen: false }">
+<body class="bg-linear-to-br from-gray-50 to-gray-100 min-h-screen pb-16" x-data="{ sidebarOpen: false }">
     <!-- Sidebar -->
     <x-admin.sidebar></x-admin.sidebar>
 
@@ -19,7 +19,8 @@
         x-transition:enter="transition-opacity ease-linear duration-300" x-transition:enter-start="opacity-0"
         x-transition:enter-end="opacity-100" x-transition:leave="transition-opacity ease-linear duration-300"
         x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-        class="fixed inset-0 bg-black/50 z-40 md:hidden" style="display: none;"></div>
+        class="fixed inset-0 bg-black/50 z-40 md:hidden" style="display: none;">
+    </div>
 
     <!-- Top Navigation Bar -->
     <div id="topbar"
