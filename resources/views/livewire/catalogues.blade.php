@@ -27,6 +27,15 @@
             <div class="p-6">
                 <form wire:submit.prevent="{{ $catalogueId ? 'updateCatalogue' : 'createCatalogue' }}">
                     <div class="mb-6">
+                        <label class="block text-sm font-semibold text-premium-dark mb-2">Kode </label>
+                        <input wire:model="code" type="text"
+                            class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-gold-accent focus:ring-2 focus:ring-gold-accent/20 outline-none transition-all"
+                            placeholder="Kode Product" />
+                        @error('code')
+                            <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <div class="mb-6">
                         <label class="block text-sm font-semibold text-premium-dark mb-2">Nama </label>
                         <input wire:model="name" type="text"
                             class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-gold-accent focus:ring-2 focus:ring-gold-accent/20 outline-none transition-all"
@@ -217,7 +226,7 @@
                         <tr>
                             <th
                                 class="hidden sm:table-cell px-6 py-4 text-left text-xs font-bold text-premium-dark uppercase tracking-wider w-20">
-                                ID</th>
+                                Kode</th>
                             <th
                                 class="px-6 py-4 text-left text-xs font-bold text-premium-dark uppercase tracking-wider">
                                 Nama</th>
@@ -238,7 +247,8 @@
                     <tbody class="divide-y divide-gray-100">
                         @foreach ($catalogues as $catalogue)
                             <tr class="hover:bg-gold-accent/5 transition-colors duration-200">
-                                <td class="hidden sm:table-cell px-6 py-4 text-sm text-gray-800">{{ $catalogue->id }}
+                                <td class="hidden sm:table-cell px-6 py-4 text-sm text-gray-800">
+                                    {{ $catalogue->code }}
                                 </td>
                                 <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ $catalogue->name }}</td>
                                 <td class="px-6 py-4 text-sm text-gray-600">
