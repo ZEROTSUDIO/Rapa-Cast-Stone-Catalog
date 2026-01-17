@@ -72,6 +72,17 @@
                             @enderror
                         </div>
                         <div>
+                            <label for="subject" class="block text-xs tracking-[2px] uppercase text-[#8B7F6E] mb-3">
+                                Subject
+                            </label>
+                            <input type="text" id="subject" name="subject" value="{{ old('subject') }}"
+                                class="w-full bg-[#F5F1E8] border-b border-[#B5A693] px-4 py-3 text-[#6B5E52] focus:outline-none focus:border-[#3A352F] transition-colors duration-400 rounded-none">
+                            @error('subject')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div>
                             <label for="message"
                                 class="block text-xs tracking-[2px] uppercase text-[#8B7F6E] mb-3">Message</label>
                             <textarea id="message" name="message" rows="5"

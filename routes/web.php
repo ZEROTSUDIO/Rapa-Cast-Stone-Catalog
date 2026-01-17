@@ -92,4 +92,7 @@ Route::middleware('auth')->group(function () {
     Route::get('admin/categories', function () {
         return view('admin.categories');
     })->name('admin.categories');
+    Route::get('admin/messages', function () {
+        return view('admin.contact');
+    })->name('admin.messages');
 });

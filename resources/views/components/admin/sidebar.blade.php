@@ -20,12 +20,16 @@
                 <span class="sidebar-text">Data Table</span>
             </a> --}}
             <x-admin.navlink href="{{ url('admin/catalogues') }}" active="{{ request()->routeIs('admin.catalogues') }}">
-                <i class="fas fa-table w-5"></i>
+                <i class="fas fa-box w-5"></i>
                 <span class="sidebar-text">Catalogue</span>
             </x-admin.navlink>
             <x-admin.navlink href="{{ url('admin/categories') }}" active="{{ request()->routeIs('admin.categories') }}">
                 <i class="fas fa-th w-5"></i>
                 <span class="sidebar-text">Category</span>
+            </x-admin.navlink>
+            <x-admin.navlink href="{{ url('admin/messages') }}" active="{{ request()->routeIs('admin.messages') }}">
+                <i class="fas fa-envelope w-5"></i>
+                <span class="sidebar-text">Messages</span>
             </x-admin.navlink>
             {{-- <a href="#"
                 class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-gold-accent/20 hover:text-white transition-all duration-300 group"
