@@ -13,15 +13,16 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+
         $this->call([
             CategorySeeder::class,
         ]);
 
         $fountain = Category::where('slug', 'fountain')->firstOrFail();
-        $pottery  = Category::where('slug', 'pottery')->firstOrFail();
+        $pot  = Category::where('slug', 'pot')->firstOrFail();
 
         Product::create([
+            'code' => 'RL-001',
             'name' => 'Relief Lotus',
             'slug' => 'relief-lotus',
             'category_id' => $fountain->id,
@@ -29,29 +30,46 @@ class ProductSeeder extends Seeder
             'description' => 'Relief Lotus',
             'specification' => [
                 'color' => 'Black',
-                'weight' => '10kg',
-                'dimensions' => '10x10x10cm',
+                'height' => '150cm',
+                'frame width' => '50cm',
                 'material' => 'Stone',
             ],
             'is_featured' => true,
         ]);
         Product::create([
-            'name' => 'Cream Gentong',
-            'slug' => 'cream-gentong',
-            'category_id' => $pottery->id,
+            'code' => 'GC-001',
+            'name' => 'Gentong Cream',
+            'slug' => 'gentong-cream',
+            'category_id' => $pot->id,
             'image' => 'img/100_2588.jpg',
-            'description' => 'Gentong dari cream',
+            'description' => 'Gentong cetakan cream',
             'specification' => [
-                'color' => 'Cream',
-                'weight' => '10kg',
-                'dimensions' => '10x10x10cm',
+                'color' => 'White Cream',
+                'dimensions' => 'D.50 x T.30cm',
+                'stand' => '30 x 30 x 12cm',
                 'material' => 'Cast Stone',
             ],
             'is_featured' => true,
         ]);
 
-        Product::factory(100)->recycle([
-            Category::all()
-        ])->create();
+        Product::create([
+            'code' => 'PKL-001',
+            'name' => 'Pot Kubus Large',
+            'slug' => 'pot-kubus-large',
+            'category_id' => $pot->id,
+            'image' => 'img/100_2588.jpg',
+            'description' => 'Pot kubus tanaman hias besar',
+            'specification' => [
+                'color' => 'black',
+                'dimensions' => '50 x 50 x 50cm',
+                'stand' => '50 x 50 x 12cm',
+                'material' => 'Cast Stone',
+            ],
+            'is_featured' => true,
+        ]);
+
+        // Product::factory(100)->recycle([
+        //     Category::all()
+        // ])->create();
     }
 }

@@ -21,9 +21,9 @@ class CategorySeeder extends Seeder
             'image' => 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800',
         ]);
         Category::create([
-            'name' => 'Pottery',
-            'slug' => 'pottery',
-            'description' => 'Potteries',
+            'name' => 'Pot',
+            'slug' => 'pot',
+            'description' => 'Pots',
             'image' => 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800',
         ]);
         Category::create([
@@ -45,6 +45,6 @@ class CategorySeeder extends Seeder
             'image' => 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800',
         ]);
 
-        Category::factory(3)->create();
+        // Category::factory(3)->create();
     }
 }

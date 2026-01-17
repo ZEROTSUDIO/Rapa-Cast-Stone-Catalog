@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     $categories = Category::all();
-    $featuredProducts = Product::inRandomOrder()->take(3)->get();
+    $featuredProducts = Product::where('is_featured', true)->take(3)->get();
 
     return view('front.home', [
         'categories' => $categories,
