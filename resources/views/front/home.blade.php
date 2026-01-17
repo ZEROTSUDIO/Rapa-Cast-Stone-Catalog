@@ -177,8 +177,8 @@
                 @foreach ($featuredProducts as $product)
                     <div class="product-card group">
                         <div class="overflow-hidden mb-8 shadow-lg">
-                            <img src="{{ $product->image_url }}" alt="{{ $product->name }}"
-                                class="product-image w-full h-[500px] object-cover">
+                            <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('img/default.jpg') }}"
+                                alt="{{ $product->name }}" class="product-image w-full h-[500px] object-cover">
                         </div>
                         <h4 class="font-heading text-3xl mb-3 tracking-wide">{{ $product->name }}</h4>
                         <p class="text-sm text-[#8B7F6E] mb-5 tracking-wide">

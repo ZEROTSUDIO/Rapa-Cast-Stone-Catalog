@@ -240,6 +240,9 @@
                                 class="hidden md:table-cell px-6 py-4 text-left text-xs font-bold text-premium-dark uppercase tracking-wider w-1/3">
                                 Deskripsi</th>
                             <th
+                                class="px-6 py-4 text-center text-xs font-bold text-premium-dark uppercase tracking-wider">
+                                Featured</th>
+                            <th
                                 class="px-6 py-4 text-left text-xs font-bold text-premium-dark uppercase tracking-wider">
                                 Actions</th>
                         </tr>
@@ -260,6 +263,14 @@
                                 </td>
                                 <td class="hidden md:table-cell px-6 py-4 text-sm text-gray-600 truncate max-w-xs">
                                     {{ $catalogue->description }}</td>
+                                <td class="px-6 py-4 text-center">
+                                    <button wire:click="toggleFeatured({{ $catalogue->id }})"
+                                        class="transition-all duration-300 hover:scale-125"
+                                        title="{{ $catalogue->is_featured ? 'Remove from featured' : 'Mark as featured' }}">
+                                        <i
+                                            class="fas fa-star {{ $catalogue->is_featured ? 'text-yellow-500' : 'text-gray-300' }} text-xl"></i>
+                                    </button>
+                                </td>
                                 <td class="px-6 py-4">
                                     <div class="flex gap-2">
                                         <button class="text-yellow-600 hover:text-yellow-800 transition-colors"

@@ -36,6 +36,8 @@ class Catalogues extends Component
     // Specifications as array of key-value pairs
     public $specifications = [];
 
+    public $isFeatured = false;
+
     // Filter Properties
     public $search = '';
 
@@ -120,6 +122,7 @@ class Catalogues extends Component
             'image' => $imagePath,
             'description' => $validated['description'],
             'specification' => $specs,
+            'is_featured' => $this->isFeatured,
         ]);
 
         $this->isCreating = false;
@@ -152,6 +155,7 @@ class Catalogues extends Component
             'category_id' => $this->category_id,
             'description' => $this->description,
             'specification' => $specs,
+            'is_featured' => $this->isFeatured,
         ];
 
         if ($this->image) {
@@ -183,6 +187,7 @@ class Catalogues extends Component
         $this->reset('image');
         $this->description = $product->description;
         $this->category_id = $product->category_id;
+        $this->isFeatured = $product->is_featured;
 
         // Load specifications - convert from associative array to indexed array with key-value pairs
         if ($product->specification && is_array($product->specification)) {
@@ -206,6 +211,13 @@ class Catalogues extends Component
         $product = Product::findOrFail($id);
         $product->delete();
         session()->flash('status', 'Product successfully deleted.');
+    }
+
+    public function toggleFeatured($id)
+    {
+        $product = Product::findOrFail($id);
+        $product->update(['is_featured' => ! $product->is_featured]);
+        session()->flash('status', 'Product featured status updated.');
     }
 
     // public function scopeFilter(Builder $query): void
