@@ -19,6 +19,9 @@ class Catalogues extends Component
 
     public $isCreating = false;
 
+    #[Validate('required')]
+    public $code;
+
     #[Validate('required|min:3')]
     public $name;
 
@@ -68,7 +71,7 @@ class Catalogues extends Component
 
     public function addCatalogue()
     {
-        $this->reset(['name', 'image', 'description', 'category_id', 'catalogueId']);
+        $this->reset(['code', 'name', 'image', 'description', 'category_id', 'catalogueId']);
         // Initialize with default specifications
         $this->specifications = [
             ['key' => 'Color', 'value' => ''],
@@ -82,7 +85,7 @@ class Catalogues extends Component
     public function cancel()
     {
         $this->isCreating = false;
-        $this->reset(['name', 'image', 'description', 'category_id', 'catalogueId', 'specifications']);
+        $this->reset(['code', 'name', 'image', 'description', 'category_id', 'catalogueId', 'specifications']);
     }
 
     public function addSpecification()
@@ -99,6 +102,7 @@ class Catalogues extends Component
     public function createCatalogue()
     {
         $validated = $this->validate([
+            'code' => 'required',
             'name' => 'required|min:3',
             'image' => 'required|image|max:10240',
             'description' => 'required|min:10',
@@ -107,15 +111,20 @@ class Catalogues extends Component
             'specifications.*.value' => 'nullable|string|max:500',
         ]);
 
-        $imagePath = $this->image->store('products', 'public');
+        // Generate filename based on product name
+        $slug = Str::slug($validated['name']);
+        $extension = $this->image->getClientOriginalExtension();
+        $filename = $slug . '.' . $extension;
+        $imagePath = $this->image->storeAs('products', $filename, 'public');
 
         // Convert specifications array to associative array, filtering empty entries
         $specs = collect($this->specifications)
-            ->filter(fn ($spec) => ! empty($spec['key']) && ! empty($spec['value']))
-            ->mapWithKeys(fn ($spec) => [$spec['key'] => $spec['value']])
+            ->filter(fn($spec) => ! empty($spec['key']) && ! empty($spec['value']))
+            ->mapWithKeys(fn($spec) => [$spec['key'] => $spec['value']])
             ->toArray();
 
         Product::create([
+            'code' => $validated['code'],
             'name' => $validated['name'],
             'slug' => Str::slug($validated['name']),
             'category_id' => $validated['category_id'],
@@ -126,13 +135,14 @@ class Catalogues extends Component
         ]);
 
         $this->isCreating = false;
-        $this->reset(['name', 'image', 'description', 'category_id', 'specifications']);
+        $this->reset(['code', 'name', 'image', 'description', 'category_id', 'specifications']);
         session()->flash('status', 'Product successfully created.');
     }
 
     public function updateCatalogue()
     {
         $this->validate([
+            'code' => 'required',
             'name' => 'required|min:3',
             'image' => 'nullable|image|max:10240',
             'description' => 'required|min:10',
@@ -145,11 +155,12 @@ class Catalogues extends Component
 
         // Convert specifications array to associative array, filtering empty entries
         $specs = collect($this->specifications)
-            ->filter(fn ($spec) => ! empty($spec['key']) && ! empty($spec['value']))
-            ->mapWithKeys(fn ($spec) => [$spec['key'] => $spec['value']])
+            ->filter(fn($spec) => ! empty($spec['key']) && ! empty($spec['value']))
+            ->mapWithKeys(fn($spec) => [$spec['key'] => $spec['value']])
             ->toArray();
 
         $data = [
+            'code' => $this->code,
             'name' => $this->name,
             'slug' => Str::slug($this->name),
             'category_id' => $this->category_id,
@@ -163,13 +174,17 @@ class Catalogues extends Component
             if ($product->image) {
                 \Illuminate\Support\Facades\Storage::disk('public')->delete($product->image);
             }
-            $data['image'] = $this->image->store('products', 'public');
+            // Generate filename based on product name
+            $slug = Str::slug($this->name);
+            $extension = $this->image->getClientOriginalExtension();
+            $filename = $slug . '.' . $extension;
+            $data['image'] = $this->image->storeAs('products', $filename, 'public');
         }
 
         $product->update($data);
 
         $this->isCreating = false;
-        $this->reset(['name', 'image', 'description', 'category_id', 'catalogueId', 'specifications']);
+        $this->reset(['code', 'name', 'image', 'description', 'category_id', 'catalogueId', 'specifications']);
         session()->flash('status', 'Product successfully updated.');
     }
 
@@ -181,6 +196,7 @@ class Catalogues extends Component
         $this->resetValidation();
         $this->resetErrorBag();
 
+        $this->code = $product->code;
         $this->name = $product->name;
         // Don't set image property as it expects a temporary uploaded file object
         // We handle displaying the existing image in the view logic
@@ -192,7 +208,7 @@ class Catalogues extends Component
         // Load specifications - convert from associative array to indexed array with key-value pairs
         if ($product->specification && is_array($product->specification)) {
             $this->specifications = collect($product->specification)
-                ->map(fn ($value, $key) => ['key' => $key, 'value' => $value])
+                ->map(fn($value, $key) => ['key' => $key, 'value' => $value])
                 ->values()
                 ->toArray();
         } else {
@@ -237,7 +253,7 @@ class Catalogues extends Component
         $query = Product::with('category');
 
         if ($this->search) {
-            $query->where('name', 'like', '%'.$this->search.'%');
+            $query->where('name', 'like', '%' . $this->search . '%');
         }
 
         if ($this->categoryFilter) {

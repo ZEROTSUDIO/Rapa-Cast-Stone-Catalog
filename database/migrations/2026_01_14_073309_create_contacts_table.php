@@ -15,7 +15,16 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email');
+            $table->string('subject');
             $table->text('message');
+            $table->enum('status', [
+                'new',
+                'read',
+                'replied',
+                'archived'
+            ])->default('new');
+            $table->string('ip_address')->nullable();
+            $table->string('user_agent')->nullable();
             $table->timestamps();
         });
     }
