@@ -1,6 +1,4 @@
 <x-mail::message>
-    # Reply to your message
-
     {{ $replyMessage }}
 
     Thanks,<br>

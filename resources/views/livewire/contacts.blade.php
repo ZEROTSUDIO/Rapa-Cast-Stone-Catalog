@@ -129,7 +129,7 @@
                 <div>
                     <h2 class="text-xl font-bold text-premium-dark">Message Details</h2>
                     <p class="text-sm text-gray-500">ID: #{{ $viewingContact->id }} | Received:
-                        {{ $viewingContact->created_at->format('M d, Y H:i') }}</p>
+                        {{ $viewingContact->created_at->format('M d, Y H:i') }} </p>
                 </div>
                 <button wire:click="closeDetails"
                     class="bg-white border-2 border-gray-200 text-gray-600 px-4 py-2 rounded-lg font-semibold hover:bg-gray-50 transition-all">
@@ -160,6 +160,17 @@
                             <div
                                 class="prose max-w-none text-gray-700 bg-white p-4 rounded-lg border border-gray-100 min-h-[150px]">
                                 {!! nl2br(e($viewingContact->message)) !!}
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 px-6">
+                            <div>
+                                <p class="text-xs font-semibold text-gray-500 uppercase">IP Address</p>
+                                <p class="text-premium-dark font-bold">{{ $viewingContact->ip_address }}</p>
+                            </div>
+                            <div>
+                                <p class="text-xs font-semibold text-gray-500 uppercase">User Agent</p>
+                                <p class="text-premium-dark font-bold">{{ $viewingContact->user_agent }}</p>
                             </div>
                         </div>
 
