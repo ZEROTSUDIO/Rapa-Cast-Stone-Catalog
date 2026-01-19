@@ -4,7 +4,9 @@ namespace App\Livewire;
 
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Intervention\Image\Laravel\Facades\Image;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -114,8 +116,16 @@ class Catalogues extends Component
         // Generate filename based on product name
         $slug = Str::slug($validated['name']);
         $extension = strtolower($this->image->getClientOriginalExtension());
-        $filename = $slug . '.' . $extension;
-        $imagePath = $this->image->storeAs('products', $filename, ['disk' => 'public_direct']);
+        $filename = $slug . '-' . substr(md5(uniqid()), 0, 6) . '.' . $extension;
+        $image = Image::read($this->image->getRealPath())
+            ->scaleDown(1200, 1800)
+            ->toJpeg(85); // quality 85 is perfect
+
+        $path = 'products/' . $filename;
+
+        Storage::disk('public_direct')->put($path, (string) $image);
+
+        $imagePath = $path;
 
         // Convert specifications array to associative array, filtering empty entries
         $specs = collect($this->specifications)
@@ -170,15 +180,24 @@ class Catalogues extends Component
         ];
 
         if ($this->image) {
-            // Delete old image
-            if ($product->image) {
-                \Illuminate\Support\Facades\Storage::disk('public_direct')->delete($product->image);
+
+            if ($product->image && Storage::disk('public_direct')->exists($product->image)) {
+                Storage::disk('public_direct')->delete($product->image);
             }
-            // Generate filename based on product name
+
             $slug = Str::slug($this->name);
-            $extension = strtolower($this->image->getClientOriginalExtension());
-            $filename = $slug . '.' . $extension;
-            $data['image'] = $this->image->storeAs('products', $filename, ['disk' => 'public_direct']);
+            $extension = $this->image->getClientOriginalExtension();
+            $filename = $slug . '-' . substr(md5(uniqid()), 0, 6) . '.' . $extension;
+
+            $image = Image::read($this->image->getRealPath())
+                ->scaleDown(1200, 1800)
+                ->toJpeg(85);
+
+            $path = 'products/' . $filename;
+
+            Storage::disk('public_direct')->put($path, (string) $image);
+
+            $data['image'] = $path;
         }
 
         $product->update($data);
