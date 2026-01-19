@@ -172,13 +172,13 @@ class Catalogues extends Component
         if ($this->image) {
             // Delete old image
             if ($product->image) {
-                \Illuminate\Support\Facades\Storage::disk('public')->delete($product->image);
+                \Illuminate\Support\Facades\Storage::disk('public_direct')->delete($product->image);
             }
             // Generate filename based on product name
             $slug = Str::slug($this->name);
             $extension = strtolower($this->image->getClientOriginalExtension());
             $filename = $slug . '.' . $extension;
-            $data['image'] = $this->image->storeAs('products', $filename, 'public');
+            $data['image'] = $this->image->storeAs('products', $filename, ['disk' => 'public_direct']);
         }
 
         $product->update($data);
