@@ -99,10 +99,24 @@ Route::middleware('auth')->group(function () {
 
 // Temporary diagnostic route for Hostinger storage link
 Route::get('/link-storage', function () {
+    $target = storage_path('app/public');
+    $shortcut = public_path('storage');
+
+    // Hostinger often uses public_html instead of public
+    // Let's check where we actually are
+    $basePath = base_path();
+
     try {
-        \Illuminate\Support\Facades\Artisan::call('storage:link');
-        return 'The [public/storage] directory has been linked.';
+        if (file_exists($shortcut)) {
+            return "The 'storage' link already exists at: $shortcut. If images still 404, check if it points to: $target";
+        }
+
+        if (symlink($target, $shortcut)) {
+            return "Success! The [public/storage] directory has been linked to [$target].";
+        }
+
+        return "Failed to create symlink using native function.";
     } catch (\Exception $e) {
-        return 'Error: ' . $e->getMessage();
+        return "Error: " . $e->getMessage() . "<br>Target: $target<br>Shortcut: $shortcut";
     }
 });
