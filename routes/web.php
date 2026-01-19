@@ -96,3 +96,13 @@ Route::middleware('auth')->group(function () {
         return view('admin.contact');
     })->name('admin.messages');
 });
+
+// Temporary diagnostic route for Hostinger storage link
+Route::get('/link-storage', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('storage:link');
+        return 'The [public/storage] directory has been linked.';
+    } catch (\Exception $e) {
+        return 'Error: ' . $e->getMessage();
+    }
+});

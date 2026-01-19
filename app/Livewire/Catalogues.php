@@ -113,7 +113,7 @@ class Catalogues extends Component
 
         // Generate filename based on product name
         $slug = Str::slug($validated['name']);
-        $extension = $this->image->getClientOriginalExtension();
+        $extension = strtolower($this->image->getClientOriginalExtension());
         $filename = $slug . '.' . $extension;
         $imagePath = $this->image->storeAs('products', $filename, 'public');
 
@@ -176,7 +176,7 @@ class Catalogues extends Component
             }
             // Generate filename based on product name
             $slug = Str::slug($this->name);
-            $extension = $this->image->getClientOriginalExtension();
+            $extension = strtolower($this->image->getClientOriginalExtension());
             $filename = $slug . '.' . $extension;
             $data['image'] = $this->image->storeAs('products', $filename, 'public');
         }
