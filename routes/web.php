@@ -97,26 +97,17 @@ Route::middleware('auth')->group(function () {
     })->name('admin.messages');
 });
 
-// Temporary diagnostic route for Hostinger storage link
-Route::get('/link-storage', function () {
+// Utility route to move storage files to public folder (since symlink is disabled)
+// use Illuminate\Support\Facades\File;
+
+Route::get('/__link-storage', function () {
     $target = storage_path('app/public');
-    $shortcut = public_path('storage');
+    $link = public_path('storage');
 
-    // Hostinger often uses public_html instead of public
-    // Let's check where we actually are
-    $basePath = base_path();
-
-    try {
-        if (file_exists($shortcut)) {
-            return "The 'storage' link already exists at: $shortcut. If images still 404, check if it points to: $target";
-        }
-
-        if (symlink($target, $shortcut)) {
-            return "Success! The [public/storage] directory has been linked to [$target].";
-        }
-
-        return "Failed to create symlink using native function.";
-    } catch (\Exception $e) {
-        return "Error: " . $e->getMessage() . "<br>Target: $target<br>Shortcut: $shortcut";
+    if (file_exists($link)) {
+        return 'storage link already exists';
     }
+
+    symlink($target, $link);
+    return 'storage link created';
 });
