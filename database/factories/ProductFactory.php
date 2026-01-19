@@ -20,6 +20,7 @@ class ProductFactory extends Factory
     {
         $name = fake()->sentence();
         return [
+            'code' => fake()->unique()->numerify('P-####'),
             'name' => $name,
             'slug' => Str::slug($name),
             'description' => fake()->text(300),

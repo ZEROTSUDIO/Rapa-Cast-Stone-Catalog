@@ -26,7 +26,6 @@ class ProductSeeder extends Seeder
             'name' => 'Relief Lotus',
             'slug' => 'relief-lotus',
             'category_id' => $fountain->id,
-            'image' => null,
             'description' => 'Relief Lotus',
             'specification' => [
                 'color' => 'Black',
@@ -41,7 +40,6 @@ class ProductSeeder extends Seeder
             'name' => 'Gentong Cream',
             'slug' => 'gentong-cream',
             'category_id' => $pot->id,
-            'image' => 'img/100_2588.jpg',
             'description' => 'Gentong cetakan cream',
             'specification' => [
                 'color' => 'White Cream',
@@ -57,7 +55,6 @@ class ProductSeeder extends Seeder
             'name' => 'Pot Kubus Large',
             'slug' => 'pot-kubus-large',
             'category_id' => $pot->id,
-            'image' => 'img/100_2588.jpg',
             'description' => 'Pot kubus tanaman hias besar',
             'specification' => [
                 'color' => 'black',

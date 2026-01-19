@@ -58,43 +58,88 @@
                         @enderror
                     </div>
                     <div class="mb-6">
-                        <label for="image" class="block text-sm font-semibold text-premium-dark mb-2">Featured
-                            Image</label>
-                        <div id="imageUpload" @click="$refs.image.click()"
-                            class="relative border-2 border-dashed border-gray-300 rounded-xl p-12 text-center cursor-pointer hover:border-gold-accent hover:bg-gray-50 transition-all duration-300 flex flex-col justify-center items-center overflow-hidden min-h-[250px]">
+                        <label class="block text-sm font-semibold text-premium-dark mb-2">
+                            Product Images
+                            <span class="text-xs text-gray-500">(First image will be featured)</span>
+                        </label>
 
-                            <div wire:loading wire:target="image"
+                        {{-- Upload Box --}}
+                        <div @click="$refs.images.click()"
+                            class="relative border-2 border-dashed border-gray-300 rounded-xl p-8 text-center cursor-pointer hover:border-gold-accent hover:bg-gray-50 transition-all duration-300">
+
+                            <div wire:loading wire:target="images"
                                 class="absolute inset-0 bg-white/90 flex flex-col justify-center items-center z-10 backdrop-blur-sm">
                                 <i class="fas fa-circle-notch fa-spin text-4xl text-gold-accent mb-3"></i>
-                                <p class="text-gray-600 font-semibold animate-pulse">Uploading Image...</p>
+                                <p class="text-gray-600 font-semibold animate-pulse">Uploading Images...</p>
                             </div>
 
-                            @if ($image)
-                                <img src="{{ $image->temporaryUrl() }}"
-                                    class="max-h-[300px] w-full object-contain rounded-lg shadow-sm" />
-                                <p class="text-xs text-gray-500 mt-2 bg-white/80 px-3 py-1 rounded-full shadow-sm">Click
-                                    to change</p>
-                            @elseif($catalogueId && \App\Models\Product::find($catalogueId)->image)
-                                <img src="{{ asset('storage/' . \App\Models\Product::find($catalogueId)->image) }}"
-                                    class="max-h-[300px] w-full object-contain rounded-lg shadow-sm" />
-                                <p class="text-xs text-gray-500 mt-2 bg-white/80 px-3 py-1 rounded-full shadow-sm">Click
-                                    to change</p>
-                            @else
-                                <i class="fas fa-cloud-upload-alt text-5xl text-gold-accent mb-4"></i>
-                                <h5 class="text-lg font-semibold text-gray-700 mb-2">
-                                    Click to upload image
-                                </h5>
-                                <p class="text-sm text-gray-500">
-                                    PNG, JPG, GIF up to 10MB
-                                </p>
-                            @endif
+                            <i class="fas fa-images text-5xl text-gold-accent mb-4"></i>
+                            <h5 class="text-lg font-semibold text-gray-700 mb-2">
+                                Click to upload images
+                            </h5>
+                            <p class="text-sm text-gray-500">
+                                Multiple images allowed (PNG, JPG up to 10MB each)
+                            </p>
                         </div>
-                        <input wire:model.live="image" x-ref="image" type="file" id="image" class="hidden"
-                            accept="image/*" />
-                        @error('image')
-                            <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span>
+
+                        <input type="file" wire:model="images" multiple accept="image/*" class="hidden"
+                            x-ref="images" />
+
+                        @error('images.*')
+                            <span class="text-red-500 text-sm mt-2 block">{{ $message }}</span>
                         @enderror
+
+                        {{-- Preview --}}
+                        {{-- Existing Images (Edit Mode) --}}
+                        @if ($catalogueId && !empty($existingImages))
+                            <div class="mb-2">
+                                <p class="text-sm font-semibold text-gray-700">Existing Images:</p>
+                            </div>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                                @foreach ($existingImages as $img)
+                                    <div class="relative group">
+                                        <img src="{{ asset('storage/' . $img->image_path) }}"
+                                            class="h-40 w-full object-cover rounded-xl border shadow-sm">
+                                        <button type="button" wire:click="deleteImage({{ $img->id }})"
+                                            wire:confirm="Are you sure you want to delete this image?"
+                                            class="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white p-1.5 rounded-full shadow-md transition-all">
+                                            <i class="fas fa-trash text-xs"></i>
+                                        </button>
+                                        @if ($loop->first)
+                                            <span
+                                                class="absolute top-2 left-2 bg-gold-accent/90 text-white text-[10px] uppercase font-bold px-2 py-1 rounded shadow-sm">
+                                                Featured
+                                            </span>
+                                        @endif
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endif
+
+                        {{-- New Uploads Preview --}}
+                        @if ($images)
+                            <div class="mb-2 mt-4">
+                                <p class="text-sm font-semibold text-gray-700">New Uploads:</p>
+                            </div>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                @foreach ($images as $index => $image)
+                                    <div class="relative group animate-fade-in-up"
+                                        style="animation-delay: {{ $index * 100 }}ms">
+                                        <img src="{{ $image->temporaryUrl() }}"
+                                            class="h-40 w-full object-cover rounded-xl border-2 border-gold-accent/30 shadow-sm">
+
+                                        @if ($index === 0 && !$catalogueId)
+                                            <span
+                                                class="absolute top-2 left-2 bg-gold-accent/90 text-white text-[10px] uppercase font-bold px-2 py-1 rounded shadow-sm">
+                                                Featured
+                                            </span>
+                                        @endif
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endif
                     </div>
+
                     <div class="mb-6">
                         <label class="block text-sm font-semibold text-premium-dark mb-2">Deskripsi</label>
                         <textarea wire:model="description" cols="30" rows="10"

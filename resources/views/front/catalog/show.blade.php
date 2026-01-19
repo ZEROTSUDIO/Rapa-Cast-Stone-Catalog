@@ -20,7 +20,15 @@
                             <img src="{{ $catalog->image ? asset('storage/' . $catalog->image) : asset('img/default.jpg') }}"
                                 class="w-full h-24 object-cover">
                         </div>
-                        <!-- Hardcoded additional thumbnails for demo as in original -->
+                        @foreach ($catalog->images as $image)
+                            <div class="cursor-pointer overflow-hidden border border-transparent hover:border-[#B5A693] transition-all"
+                                @click="activeImage = '{{ asset('storage/' . $image->image_path) }}'"
+                                :class="{ 'border-[#B5A693]': activeImage === '{{ asset('storage/' . $image->image_path) }}' }">
+                                <img src="{{ asset('storage/' . $image->image_path) }}"
+                                    class="w-full h-24 object-cover">
+                            </div>
+                        @endforeach
+                        {{-- <!-- Hardcoded additional thumbnails for demo as in original -->
                         <div class="cursor-pointer overflow-hidden border border-transparent hover:border-[#B5A693] transition-all"
                             @click="activeImage = 'https://images.unsplash.com/photo-1540932239986-30128078f3c5?w=800'"
                             :class="{ 'border-[#B5A693]': activeImage === 'https://images.unsplash.com/photo-1540932239986-30128078f3c5?w=800' }">
@@ -38,7 +46,7 @@
                             :class="{ 'border-[#B5A693]': activeImage === 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800' }">
                             <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=200"
                                 class="w-full h-24 object-cover">
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
 

@@ -12,6 +12,7 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithoutUrlPagination;
 use Livewire\WithPagination;
+use App\Models\ProductImage;
 
 class Catalogues extends Component
 {
@@ -27,8 +28,18 @@ class Catalogues extends Component
     #[Validate('required|min:3')]
     public $name;
 
-    #[Validate('image|max:10240')] // Removed required to allow editing later if needed, but for create it acts as required if handled in store
-    public $image;
+    #[Validate(['nullable', 'array'])]
+    #[Validate('max:5', attribute: 'images')] // Limit max files if needed, or remove
+    public $images = [];
+
+    // For managing existing images in edit mode
+    public $existingImages = [];
+
+    // We keep $image for backward compatibility/single upload logic if needed,
+    // but the main input is now $images.
+    // Actually, let's effectively rely on $images for new uploads.
+    // We can remove the single $image validation or keep it nullable.
+    public $image; // Kept for internal logic if needed, but we mostly use $images now.
 
     #[Validate('required|min:10')]
     public $description;
@@ -106,26 +117,38 @@ class Catalogues extends Component
         $validated = $this->validate([
             'code' => 'required',
             'name' => 'required|min:3',
-            'image' => 'required|image|max:10240',
+            'images.*' => 'image|max:10240', // Validate each image
             'description' => 'required|min:10',
             'category_id' => 'required|exists:categories,id',
             'specifications.*.key' => 'nullable|string|max:100',
             'specifications.*.value' => 'nullable|string|max:500',
         ]);
 
-        // Generate filename based on product name
-        $slug = Str::slug($validated['name']);
-        $extension = strtolower($this->image->getClientOriginalExtension());
-        $filename = $slug . '-' . substr(md5(uniqid()), 0, 6) . '.' . $extension;
-        $image = Image::read($this->image->getRealPath())
-            ->scaleDown(1200, 1800)
-            ->toJpeg(85); // quality 85 is perfect
+        // Process Images
+        $mainImagePath = null;
+        $savedImages = [];
 
-        $path = 'products/' . $filename;
+        if ($this->images) {
+            foreach ($this->images as $index => $img) {
+                $slug = Str::slug($validated['name']);
+                $extension = strtolower($img->getClientOriginalExtension());
+                $filename = $slug . '-' . substr(md5(uniqid()), 0, 6) . '.' . $extension;
 
-        Storage::disk('public_direct')->put($path, (string) $image);
+                $processedImage = Image::read($img->getRealPath())
+                    ->scaleDown(1200, 1800)
+                    ->toJpeg(85);
 
-        $imagePath = $path;
+                $path = 'products/' . $filename;
+                Storage::disk('public_direct')->put($path, (string) $processedImage);
+
+                $savedImages[] = ['path' => $path, 'order' => $index];
+
+                // Set the first image as the main featured image
+                if ($index === 0) {
+                    $mainImagePath = $path;
+                }
+            }
+        }
 
         // Convert specifications array to associative array, filtering empty entries
         $specs = collect($this->specifications)
@@ -133,16 +156,27 @@ class Catalogues extends Component
             ->mapWithKeys(fn($spec) => [$spec['key'] => $spec['value']])
             ->toArray();
 
-        Product::create([
+        $product = Product::create([
             'code' => $validated['code'],
             'name' => $validated['name'],
             'slug' => Str::slug($validated['name']),
             'category_id' => $validated['category_id'],
-            'image' => $imagePath,
+            'image' => $mainImagePath,
             'description' => $validated['description'],
             'specification' => $specs,
             'is_featured' => $this->isFeatured,
         ]);
+
+        // Save related images
+        if ($savedImages) {
+            foreach ($savedImages as $imgData) {
+                ProductImage::create([
+                    'product_id' => $product->id,
+                    'image_path' => $imgData['path'],
+                    'sort_order' => $imgData['order'],
+                ]);
+            }
+        }
 
         $this->isCreating = false;
         $this->reset(['code', 'name', 'image', 'description', 'category_id', 'specifications']);
@@ -154,7 +188,7 @@ class Catalogues extends Component
         $this->validate([
             'code' => 'required',
             'name' => 'required|min:3',
-            'image' => 'nullable|image|max:10240',
+            'images.*' => 'nullable|image|max:10240',
             'description' => 'required|min:10',
             'category_id' => 'required|exists:categories,id',
             'specifications.*.key' => 'nullable|string|max:100',
@@ -179,31 +213,40 @@ class Catalogues extends Component
             'is_featured' => $this->isFeatured,
         ];
 
-        if ($this->image) {
+        if ($this->images) {
+            // Get current max sort order
+            $maxOrder = $product->images()->max('sort_order') ?? -1;
 
-            if ($product->image && Storage::disk('public_direct')->exists($product->image)) {
-                Storage::disk('public_direct')->delete($product->image);
+            foreach ($this->images as $index => $img) {
+                $slug = Str::slug($this->name);
+                $extension = $img->getClientOriginalExtension();
+                $filename = $slug . '-' . substr(md5(uniqid()), 0, 6) . '.' . $extension;
+
+                $processedImage = Image::read($img->getRealPath())
+                    ->scaleDown(1200, 1800)
+                    ->toJpeg(85);
+
+                $path = 'products/' . $filename;
+                Storage::disk('public_direct')->put($path, (string) $processedImage);
+
+                // Add to product_images
+                ProductImage::create([
+                    'product_id' => $product->id,
+                    'image_path' => $path,
+                    'sort_order' => $maxOrder + 1 + $index,
+                ]);
+
+                // If product has no main image, set this as main
+                if (!$product->image && $index === 0) {
+                    $data['image'] = $path;
+                }
             }
-
-            $slug = Str::slug($this->name);
-            $extension = $this->image->getClientOriginalExtension();
-            $filename = $slug . '-' . substr(md5(uniqid()), 0, 6) . '.' . $extension;
-
-            $image = Image::read($this->image->getRealPath())
-                ->scaleDown(1200, 1800)
-                ->toJpeg(85);
-
-            $path = 'products/' . $filename;
-
-            Storage::disk('public_direct')->put($path, (string) $image);
-
-            $data['image'] = $path;
         }
 
         $product->update($data);
 
         $this->isCreating = false;
-        $this->reset(['code', 'name', 'image', 'description', 'category_id', 'catalogueId', 'specifications']);
+        $this->reset(['code', 'name', 'images', 'existingImages', 'image', 'description', 'category_id', 'catalogueId', 'specifications']);
         session()->flash('status', 'Product successfully updated.');
     }
 
@@ -219,7 +262,8 @@ class Catalogues extends Component
         $this->name = $product->name;
         // Don't set image property as it expects a temporary uploaded file object
         // We handle displaying the existing image in the view logic
-        $this->reset('image');
+        $this->reset(['images', 'image']);
+        $this->existingImages = $product->images()->orderBy('sort_order')->get();
         $this->description = $product->description;
         $this->category_id = $product->category_id;
         $this->isFeatured = $product->is_featured;
@@ -253,6 +297,33 @@ class Catalogues extends Component
         $product = Product::findOrFail($id);
         $product->update(['is_featured' => ! $product->is_featured]);
         session()->flash('status', 'Product featured status updated.');
+    }
+
+    public function deleteImage($imageId)
+    {
+        $image = ProductImage::findOrFail($imageId);
+
+        // Delete file
+        if (Storage::disk('public_direct')->exists($image->image_path)) {
+            Storage::disk('public_direct')->delete($image->image_path);
+        }
+
+        // If this was the main image (check by path matching), clear it
+        $product = $image->product;
+        if ($product->image === $image->image_path) {
+            $product->update(['image' => null]);
+            // Try to set next available image as main
+            $nextImage = $product->images()->where('id', '!=', $imageId)->orderBy('sort_order')->first();
+            if ($nextImage) {
+                $product->update(['image' => $nextImage->image_path]);
+            }
+        }
+
+        $image->delete();
+
+        // Refresh existing images
+        $this->existingImages = $product->images()->orderBy('sort_order')->get();
+        session()->flash('status', 'Image deleted.');
     }
 
     // public function scopeFilter(Builder $query): void
