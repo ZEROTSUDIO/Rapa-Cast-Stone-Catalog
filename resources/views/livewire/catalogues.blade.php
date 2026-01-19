@@ -57,20 +57,22 @@
                             <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span>
                         @enderror
                     </div>
+                    {{-- Product Images Section --}}
                     <div class="mb-6">
                         <label class="block text-sm font-semibold text-premium-dark mb-2">
                             Product Images
-                            <span class="text-xs text-gray-500">(First image will be featured)</span>
+                            <span class="text-xs text-gray-500">(First image will be featured - drag to reorder)</span>
                         </label>
 
                         {{-- Upload Box --}}
                         <div @click="$refs.images.click()"
                             class="relative border-2 border-dashed border-gray-300 rounded-xl p-8 text-center cursor-pointer hover:border-gold-accent hover:bg-gray-50 transition-all duration-300">
 
+                            {{-- Loading Indicator --}}
                             <div wire:loading wire:target="images"
-                                class="absolute inset-0 bg-white/90 flex flex-col justify-center items-center z-10 backdrop-blur-sm">
+                                class="absolute inset-0 bg-white/90 flex flex-col justify-center items-center z-10 backdrop-blur-sm rounded-xl">
                                 <i class="fas fa-circle-notch fa-spin text-4xl text-gold-accent mb-3"></i>
-                                <p class="text-gray-600 font-semibold animate-pulse">Uploading Images...</p>
+                                <p class="text-gray-600 font-semibold animate-pulse">Processing Images...</p>
                             </div>
 
                             <i class="fas fa-images text-5xl text-gold-accent mb-4"></i>
@@ -82,60 +84,118 @@
                             </p>
                         </div>
 
+                        {{-- Hidden File Input --}}
                         <input type="file" wire:model="images" multiple accept="image/*" class="hidden"
                             x-ref="images" />
 
+                        {{-- Validation Errors --}}
                         @error('images.*')
                             <span class="text-red-500 text-sm mt-2 block">{{ $message }}</span>
                         @enderror
 
-                        {{-- Preview --}}
-                        {{-- Existing Images (Edit Mode) --}}
-                        @if ($catalogueId && !empty($existingImages))
-                            <div class="mb-2">
-                                <p class="text-sm font-semibold text-gray-700">Existing Images:</p>
-                            </div>
-                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-                                @foreach ($existingImages as $img)
-                                    <div class="relative group">
-                                        <img src="{{ asset('storage/' . $img->image_path) }}"
-                                            class="h-40 w-full object-cover rounded-xl border shadow-sm">
-                                        <button type="button" wire:click="deleteImage({{ $img->id }})"
-                                            wire:confirm="Are you sure you want to delete this image?"
-                                            class="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white p-1.5 rounded-full shadow-md transition-all">
-                                            <i class="fas fa-trash text-xs"></i>
-                                        </button>
-                                        @if ($loop->first)
+                        {{-- Display Images (Existing + New Uploads) --}}
+                        @if (($catalogueId && $existingImages && $existingImages->isNotEmpty()) || !empty($newImages))
+                            <div class="mt-6" x-data="imageSorter()">
+                                <div class="flex justify-between items-center mb-3">
+                                    <p class="text-sm font-semibold text-gray-700">
+                                        Images ({{ ($existingImages->count() ?? 0) + count($newImages) }})
+                                    </p>
+                                    <p class="text-xs text-gray-500">
+                                        <i class="fas fa-grip-vertical mr-1"></i>Drag to reorder
+                                    </p>
+                                </div>
+
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-4" @dragover.prevent @drop.prevent>
+
+                                    {{-- Existing Images (Edit Mode) --}}
+                                    @if ($catalogueId && $existingImages->isNotEmpty())
+                                        @foreach ($existingImages as $index => $img)
+                                            <div class="relative group cursor-move" draggable="true"
+                                                data-id="existing-{{ $img->id }}"
+                                                @dragstart="dragStart($event, 'existing-{{ $img->id }}')"
+                                                @dragend="dragEnd($event)" @dragover="dragOver($event)"
+                                                @drop="drop($event, 'existing-{{ $img->id }}')">
+
+                                                {{-- Image Preview --}}
+                                                <img src="{{ asset('storage/' . $img->image_path) }}"
+                                                    class="h-40 w-full object-cover rounded-xl border-2 shadow-sm transition-all duration-200"
+                                                    :class="dragging ? 'border-gold-accent' : 'border-gray-200'">
+
+                                                {{-- Delete Button --}}
+                                                <button type="button" wire:click="deleteImage({{ $img->id }})"
+                                                    wire:confirm="Are you sure you want to delete this image?"
+                                                    class="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white p-2 rounded-full shadow-md transition-all opacity-0 group-hover:opacity-100">
+                                                    <i class="fas fa-trash text-xs"></i>
+                                                </button>
+
+                                                {{-- Featured Badge --}}
+                                                @if ($index === 0)
+                                                    <span
+                                                        class="absolute top-2 left-2 bg-gold-accent/90 text-white text-[10px] uppercase font-bold px-2 py-1 rounded shadow-sm">
+                                                        Featured
+                                                    </span>
+                                                @endif
+
+                                                {{-- Drag Handle --}}
+                                                <div
+                                                    class="absolute bottom-2 right-2 bg-white/90 text-gray-600 p-1.5 rounded shadow opacity-0 group-hover:opacity-100 transition-opacity">
+                                                    <i class="fas fa-grip-vertical text-xs"></i>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    @endif
+
+                                    {{-- New Uploaded Images (Before Submission) --}}
+                                    @foreach ($newImages as $index => $imgData)
+                                        <div class="relative group cursor-move animate-fade-in-up"
+                                            style="animation-delay: {{ $index * 50 }}ms" draggable="true"
+                                            data-id="new-{{ $imgData['id'] }}"
+                                            @dragstart="dragStart($event, 'new-{{ $imgData['id'] }}')"
+                                            @dragend="dragEnd($event)" @dragover="dragOver($event)"
+                                            @drop="drop($event, 'new-{{ $imgData['id'] }}')">
+
+                                            {{-- Image Preview --}}
+                                            <img src="{{ $imgData['temp_url'] }}"
+                                                class="h-40 w-full object-cover rounded-xl border-2 shadow-sm transition-all duration-200"
+                                                :class="dragging ? 'border-gold-accent' : 'border-gold-accent/30'">
+
+                                            {{-- Remove Button --}}
+                                            <button type="button" wire:click="removeNewImage('{{ $imgData['id'] }}')"
+                                                class="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white p-2 rounded-full shadow-md transition-all opacity-0 group-hover:opacity-100">
+                                                <i class="fas fa-times text-xs"></i>
+                                            </button>
+
+                                            {{-- Featured Badge (if first image overall) --}}
+                                            @if (!$catalogueId && $index === 0 && (!isset($existingImages) || $existingImages->isEmpty()))
+                                                <span
+                                                    class="absolute top-2 left-2 bg-gold-accent/90 text-white text-[10px] uppercase font-bold px-2 py-1 rounded shadow-sm">
+                                                    Featured
+                                                </span>
+                                            @endif
+
+                                            {{-- New Badge --}}
                                             <span
-                                                class="absolute top-2 left-2 bg-gold-accent/90 text-white text-[10px] uppercase font-bold px-2 py-1 rounded shadow-sm">
-                                                Featured
+                                                class="absolute bottom-2 left-2 bg-blue-500/90 text-white text-[10px] uppercase font-bold px-2 py-1 rounded shadow-sm">
+                                                New
                                             </span>
-                                        @endif
-                                    </div>
-                                @endforeach
+
+                                            {{-- Drag Handle --}}
+                                            <div
+                                                class="absolute bottom-2 right-2 bg-white/90 text-gray-600 p-1.5 rounded shadow opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <i class="fas fa-grip-vertical text-xs"></i>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
                             </div>
                         @endif
 
-                        {{-- New Uploads Preview --}}
-                        @if ($images)
-                            <div class="mb-2 mt-4">
-                                <p class="text-sm font-semibold text-gray-700">New Uploads:</p>
-                            </div>
-                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                @foreach ($images as $index => $image)
-                                    <div class="relative group animate-fade-in-up"
-                                        style="animation-delay: {{ $index * 100 }}ms">
-                                        <img src="{{ $image->temporaryUrl() }}"
-                                            class="h-40 w-full object-cover rounded-xl border-2 border-gold-accent/30 shadow-sm">
-
-                                        @if ($index === 0 && !$catalogueId)
-                                            <span
-                                                class="absolute top-2 left-2 bg-gold-accent/90 text-white text-[10px] uppercase font-bold px-2 py-1 rounded shadow-sm">
-                                                Featured
-                                            </span>
-                                        @endif
-                                    </div>
-                                @endforeach
+                        {{-- Empty State --}}
+                        @if (empty($newImages) && (!$catalogueId || !$existingImages || $existingImages->isEmpty()))
+                            <div
+                                class="mt-4 text-center py-6 text-gray-400 border-2 border-dashed border-gray-200 rounded-xl">
+                                <i class="fas fa-image text-3xl mb-2"></i>
+                                <p class="text-sm">No images uploaded yet</p>
                             </div>
                         @endif
                     </div>
@@ -173,7 +233,8 @@
                                             @enderror
                                         </div>
                                         <div>
-                                            <input type="text" wire:model="specifications.{{ $index }}.value"
+                                            <input type="text"
+                                                wire:model="specifications.{{ $index }}.value"
                                                 placeholder="Value (e.g., White, Gray, Black)"
                                                 class="w-full px-4 py-2.5 rounded-lg border-2 border-gray-200 focus:border-gold-accent focus:ring-2 focus:ring-gold-accent/20 outline-none transition-all text-sm" />
                                             @error('specifications.' . $index . '.value')
