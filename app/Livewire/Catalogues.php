@@ -115,7 +115,7 @@ class Catalogues extends Component
         $slug = Str::slug($validated['name']);
         $extension = strtolower($this->image->getClientOriginalExtension());
         $filename = $slug . '.' . $extension;
-        $imagePath = $this->image->storeAs('products', $filename, 'public');
+        $imagePath = $this->image->storeAs('products', $filename, ['disk' => 'public_direct']);
 
         // Convert specifications array to associative array, filtering empty entries
         $specs = collect($this->specifications)
