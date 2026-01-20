@@ -229,8 +229,7 @@ class Catalogues extends Component
 
                 // Process image with Intervention
                 $processedImage = Image::read($img->getRealPath())
-                    ->scaleDown(1200, 1800)
-                    ->toJpeg(85);
+                    ->toWebp(85);
 
                 $path = 'products/' . $filename;
                 Storage::disk('public_direct')->put($path, (string) $processedImage);
@@ -331,8 +330,7 @@ class Catalogues extends Component
 
                 // Process image
                 $processedImage = Image::read($img->getRealPath())
-                    ->scaleDown(1200, 1800)
-                    ->toJpeg(85);
+                    ->toWebp(85);
 
                 $path = 'products/' . $filename;
                 Storage::disk('public_direct')->put($path, (string) $processedImage);

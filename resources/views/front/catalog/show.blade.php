@@ -2,24 +2,24 @@
     $catalog->name .
     ' dari Rapa Cast Stone. Cast stone berkualitas untuk kebutuhan arsitektur dan proyek.'">
 
-    <section class="pt-40 pb-32 px-6" x-data="{ activeImage: '{{ $catalog->image ? asset('storage/' . $catalog->image) : asset('img/default.jpg') }}' }">
+    <section class="pt-40 pb-32 px-6" x-data="{ activeImage: '{{ $catalog->image ? asset('storage/' . $catalog->image) : asset('img/default.jpg') }}', lightboxOpen: false }">
         <div class="max-w-7xl mx-auto">
             <div class="grid md:grid-cols-12 gap-12 lg:gap-24">
                 <!-- Gallery Section -->
                 <div class="md:col-span-7">
 
                     <div class="mb-6 overflow-hidden shadow-lg">
-                        <img :src="activeImage" alt="{{ $catalog->name }}"
+                        <img :src="activeImage" alt="{{ $catalog->name }}" @click="lightboxOpen = true"
                             class="w-full h-[600px] object-cover transition-opacity duration-300">
                     </div>
                     <div class="grid grid-cols-4 gap-4">
                         <!-- Main Image thumbnail -->
-                        <div class="cursor-pointer overflow-hidden border border-transparent hover:border-[#B5A693] transition-all"
+                        {{-- <div class="cursor-pointer overflow-hidden border border-transparent hover:border-[#B5A693] transition-all"
                             @click="activeImage = '{{ $catalog->image ? asset('storage/' . $catalog->image) : asset('img/default.jpg') }}'"
                             :class="{ 'border-[#B5A693]': activeImage === '{{ $catalog->image ? asset('storage/' . $catalog->image) : asset('img/default.jpg') }}' }">
                             <img src="{{ $catalog->image ? asset('storage/' . $catalog->image) : asset('img/default.jpg') }}"
                                 class="w-full h-24 object-cover">
-                        </div>
+                        </div> --}}
                         @foreach ($catalog->images as $image)
                             <div class="cursor-pointer overflow-hidden border border-transparent hover:border-[#B5A693] transition-all"
                                 @click="activeImage = '{{ asset('storage/' . $image->image_path) }}'"
@@ -28,25 +28,6 @@
                                     class="w-full h-24 object-cover">
                             </div>
                         @endforeach
-                        {{-- <!-- Hardcoded additional thumbnails for demo as in original -->
-                        <div class="cursor-pointer overflow-hidden border border-transparent hover:border-[#B5A693] transition-all"
-                            @click="activeImage = 'https://images.unsplash.com/photo-1540932239986-30128078f3c5?w=800'"
-                            :class="{ 'border-[#B5A693]': activeImage === 'https://images.unsplash.com/photo-1540932239986-30128078f3c5?w=800' }">
-                            <img src="https://images.unsplash.com/photo-1540932239986-30128078f3c5?w=200"
-                                class="w-full h-24 object-cover">
-                        </div>
-                        <div class="cursor-pointer overflow-hidden border border-transparent hover:border-[#B5A693] transition-all"
-                            @click="activeImage = 'https://images.unsplash.com/photo-1567016432779-094069958ea5?w=800'"
-                            :class="{ 'border-[#B5A693]': activeImage === 'https://images.unsplash.com/photo-1567016432779-094069958ea5?w=800' }">
-                            <img src="https://images.unsplash.com/photo-1567016432779-094069958ea5?w=200"
-                                class="w-full h-24 object-cover">
-                        </div>
-                        <div class="cursor-pointer overflow-hidden border border-transparent hover:border-[#B5A693] transition-all"
-                            @click="activeImage = 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800'"
-                            :class="{ 'border-[#B5A693]': activeImage === 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800' }">
-                            <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=200"
-                                class="w-full h-24 object-cover">
-                        </div> --}}
                     </div>
                 </div>
 
@@ -83,5 +64,20 @@
                 </div>
             </div>
         </div>
+        <div x-show="lightboxOpen" x-transition.opacity @keydown.escape.window="lightboxOpen = false"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-black/80">
+            <!-- Click outside to close -->
+            <div class="absolute inset-0" @click="lightboxOpen = false"></div>
+
+            <!-- Image -->
+            <img :src="activeImage" class="relative max-w-[90vw] max-h-[90vh] object-contain shadow-2xl"
+                alt="{{ $catalog->name }}">
+
+            <!-- Close button -->
+            <button @click="lightboxOpen = false" class="absolute top-6 right-6 text-white text-3xl leading-none">
+                &times;
+            </button>
+        </div>
+
     </section>
 </x-front.layout>
