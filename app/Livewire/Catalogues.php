@@ -3,7 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Product;
-use Illuminate\Database\Eloquent\Builder;
+use App\Models\ProductImage;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\Laravel\Facades\Image;
@@ -12,7 +12,6 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithoutUrlPagination;
 use Livewire\WithPagination;
-use App\Models\ProductImage;
 
 class Catalogues extends Component
 {
@@ -49,11 +48,14 @@ class Catalogues extends Component
     public $catalogueId;
 
     public $specifications = [];
+
     public $isFeatured = false;
 
     // Filter Properties
     public $search = '';
+
     public $categoryFilter = '';
+
     public $perPage = 8;
 
     public function updatedSearch()
@@ -91,6 +93,7 @@ class Catalogues extends Component
                 'id' => uniqid('img_', true), // Unique ID for tracking
                 'file' => $image,
                 'temp_url' => $image->temporaryUrl(),
+                'sort_order' => count($this->newImages) + ($this->existingImages ? count($this->existingImages) : 0),
             ];
         }
 
@@ -102,7 +105,7 @@ class Catalogues extends Component
     public function removeNewImage($imageId)
     {
         $this->newImages = array_values(
-            array_filter($this->newImages, fn($img) => $img['id'] !== $imageId)
+            array_filter($this->newImages, fn ($img) => $img['id'] !== $imageId)
         );
     }
 
@@ -110,30 +113,24 @@ class Catalogues extends Component
     public function deleteImage($imageId)
     {
         $this->removedImageIds[] = $imageId;
-        $this->existingImages = $this->existingImages->reject(fn($img) => $img->id === $imageId);
+        $this->existingImages = $this->existingImages->reject(fn ($img) => $img->id === $imageId);
     }
 
     // NEW: Handle drag-and-drop reordering
     public function reorderImages($orderedIds)
     {
-        // Reorder new images
-        $newOrdered = [];
-        foreach ($orderedIds as $index => $id) {
-            if (strpos($id, 'new-') === 0) {
-                $actualId = str_replace('new-', '', $id);
-                foreach ($this->newImages as $img) {
-                    if ($img['id'] === $actualId) {
-                        $newOrdered[] = $img;
-                        break;
-                    }
-                }
+        // Update new images with their absolute sort order from the UI
+        foreach ($this->newImages as &$img) {
+            $order = array_search('new-'.$img['id'], $orderedIds);
+            if ($order !== false) {
+                $img['sort_order'] = $order;
             }
         }
-        if (!empty($newOrdered)) {
-            $this->newImages = $newOrdered;
-        }
 
-        // Reorder existing images in database
+        // Sort newImages by their new sort_order
+        usort($this->newImages, fn ($a, $b) => ($a['sort_order'] ?? 0) <=> ($b['sort_order'] ?? 0));
+
+        // Reorder existing images in database immediately
         foreach ($orderedIds as $index => $id) {
             if (strpos($id, 'existing-') === 0) {
                 $actualId = str_replace('existing-', '', $id);
@@ -161,7 +158,7 @@ class Catalogues extends Component
             'newImages',
             'existingImages',
             'removedImageIds',
-            'images'
+            'images',
         ]);
 
         // Initialize default specifications
@@ -190,7 +187,7 @@ class Catalogues extends Component
             'newImages',
             'existingImages',
             'removedImageIds',
-            'images'
+            'images',
         ]);
     }
 
@@ -220,33 +217,31 @@ class Catalogues extends Component
         $mainImagePath = null;
         $savedImages = [];
 
-        if (!empty($this->newImages)) {
-            foreach ($this->newImages as $index => $imgData) {
+        if (! empty($this->newImages)) {
+            foreach ($this->newImages as $imgData) {
                 $img = $imgData['file'];
                 $slug = Str::slug($validated['name']);
                 $extension = strtolower($img->getClientOriginalExtension());
-                $filename = $slug . '-' . substr(md5(uniqid()), 0, 6) . '.' . $extension;
+                $filename = $slug.'-'.substr(md5(uniqid()), 0, 6).'.'.$extension;
 
                 // Process image with Intervention
                 $processedImage = Image::read($img->getRealPath())
                     ->toWebp(85);
 
-                $path = 'products/' . $filename;
+                $path = 'products/'.$filename;
                 Storage::disk('public_direct')->put($path, (string) $processedImage);
 
-                $savedImages[] = ['path' => $path, 'order' => $index];
-
-                // First image becomes the main/featured image
-                if ($index === 0) {
-                    $mainImagePath = $path;
-                }
+                $savedImages[] = [
+                    'path' => $path,
+                    'order' => $imgData['sort_order'] ?? count($savedImages),
+                ];
             }
         }
 
         // Process specifications
         $specs = collect($this->specifications)
-            ->filter(fn($spec) => !empty($spec['key']) && !empty($spec['value']))
-            ->mapWithKeys(fn($spec) => [$spec['key'] => $spec['value']])
+            ->filter(fn ($spec) => ! empty($spec['key']) && ! empty($spec['value']))
+            ->mapWithKeys(fn ($spec) => [$spec['key'] => $spec['value']])
             ->toArray();
 
         // Create product
@@ -255,20 +250,29 @@ class Catalogues extends Component
             'name' => $validated['name'],
             'slug' => Str::slug($validated['name']),
             'category_id' => $validated['category_id'],
-            'image' => $mainImagePath, // Main featured image
+            'image' => null, // Will be set after images are saved
             'description' => $validated['description'],
             'specification' => $specs,
             'is_featured' => $this->isFeatured,
         ]);
 
         // Save all images to product_images table
-        if (!empty($savedImages)) {
+        if (! empty($savedImages)) {
             foreach ($savedImages as $imgData) {
                 ProductImage::create([
                     'product_id' => $product->id,
                     'image_path' => $imgData['path'],
                     'sort_order' => $imgData['order'],
                 ]);
+            }
+
+            // Set the first image (lowest sort_order) as the main product image
+            $firstImage = ProductImage::where('product_id', $product->id)
+                ->orderBy('sort_order')
+                ->first();
+
+            if ($firstImage) {
+                $product->update(['image' => $firstImage->image_path]);
             }
         }
 
@@ -282,7 +286,7 @@ class Catalogues extends Component
             'category_id',
             'specifications',
             'newImages',
-            'images'
+            'images',
         ]);
 
         session()->flash('status', 'Product successfully created.');
@@ -302,7 +306,7 @@ class Catalogues extends Component
         $product = Product::findOrFail($this->catalogueId);
 
         // NEW: Delete removed images from storage and database
-        if (!empty($this->removedImageIds)) {
+        if (! empty($this->removedImageIds)) {
             foreach ($this->removedImageIds as $imgId) {
                 $image = ProductImage::find($imgId);
                 if ($image) {
@@ -321,38 +325,37 @@ class Catalogues extends Component
         $newMainImage = null;
         $currentMaxOrder = ProductImage::where('product_id', $this->catalogueId)->max('sort_order') ?? -1;
 
-        if (!empty($this->newImages)) {
-            foreach ($this->newImages as $index => $imgData) {
+        if (! empty($this->newImages)) {
+            foreach ($this->newImages as $imgData) {
                 $img = $imgData['file'];
                 $slug = Str::slug($validated['name']);
                 $extension = strtolower($img->getClientOriginalExtension());
-                $filename = $slug . '-' . substr(md5(uniqid()), 0, 6) . '.' . $extension;
+                $filename = $slug.'-'.substr(md5(uniqid()), 0, 6).'.'.$extension;
 
                 // Process image
                 $processedImage = Image::read($img->getRealPath())
                     ->toWebp(85);
 
-                $path = 'products/' . $filename;
+                $path = 'products/'.$filename;
                 Storage::disk('public_direct')->put($path, (string) $processedImage);
 
                 // Save to database
                 ProductImage::create([
                     'product_id' => $this->catalogueId,
                     'image_path' => $path,
-                    'sort_order' => $currentMaxOrder + 1 + $index,
+                    'sort_order' => $imgData['sort_order'] ?? ($currentMaxOrder + 1),
                 ]);
 
-                // If no existing images, set first new image as main
-                if ($index === 0 && $this->existingImages->isEmpty()) {
-                    $newMainImage = $path;
+                if (! isset($imgData['sort_order'])) {
+                    $currentMaxOrder++;
                 }
             }
         }
 
         // Process specifications
         $specs = collect($this->specifications)
-            ->filter(fn($spec) => !empty($spec['key']) && !empty($spec['value']))
-            ->mapWithKeys(fn($spec) => [$spec['key'] => $spec['value']])
+            ->filter(fn ($spec) => ! empty($spec['key']) && ! empty($spec['value']))
+            ->mapWithKeys(fn ($spec) => [$spec['key'] => $spec['value']])
             ->toArray();
 
         // Prepare update data
@@ -366,18 +369,18 @@ class Catalogues extends Component
             'is_featured' => $this->isFeatured,
         ];
 
-        // Update main image if needed
-        if ($newMainImage) {
-            $updateData['image'] = $newMainImage;
-        } elseif ($this->existingImages->isNotEmpty()) {
-            // Set first existing image as main
-            $updateData['image'] = $this->existingImages->first()->image_path;
-        } else {
-            // No images at all
-            $updateData['image'] = null;
-        }
-
         $product->update($updateData);
+
+        // Update main product image to the first one in the sort order
+        $firstImage = ProductImage::where('product_id', $product->id)
+            ->orderBy('sort_order')
+            ->first();
+
+        if ($firstImage) {
+            $product->update(['image' => $firstImage->image_path]);
+        } else {
+            $product->update(['image' => null]);
+        }
 
         $this->isCreating = false;
 
@@ -392,7 +395,7 @@ class Catalogues extends Component
             'newImages',
             'existingImages',
             'removedImageIds',
-            'images'
+            'images',
         ]);
 
         session()->flash('status', 'Product successfully updated.');
@@ -423,7 +426,7 @@ class Catalogues extends Component
         // Load specifications
         if ($product->specification && is_array($product->specification)) {
             $this->specifications = collect($product->specification)
-                ->map(fn($value, $key) => ['key' => $key, 'value' => $value])
+                ->map(fn ($value, $key) => ['key' => $key, 'value' => $value])
                 ->values()
                 ->toArray();
         } else {
@@ -459,7 +462,7 @@ class Catalogues extends Component
     public function toggleFeatured($id)
     {
         $product = Product::findOrFail($id);
-        $product->update(['is_featured' => !$product->is_featured]);
+        $product->update(['is_featured' => ! $product->is_featured]);
         session()->flash('status', 'Product featured status updated.');
     }
 
@@ -468,7 +471,7 @@ class Catalogues extends Component
         $query = Product::with('category');
 
         if ($this->search) {
-            $query->where('name', 'like', '%' . $this->search . '%');
+            $query->where('name', 'like', '%'.$this->search.'%');
         }
 
         if ($this->categoryFilter) {

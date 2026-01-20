@@ -406,4 +406,57 @@
     {{-- Delete Confirmation Modal --}}
     <x-admin.delete-modal method="deleteCatalogue" message="Are you sure you want to delete this product?" />
 
+    @script
+        <script>
+            Alpine.data('imageSorter', () => ({
+                draggedId: null,
+                dragging: false,
+
+                dragStart(event, id) {
+                    this.draggedId = id;
+                    this.dragging = true;
+                    event.dataTransfer.effectAllowed = 'move';
+                    event.target.classList.add('opacity-50');
+                },
+
+                dragEnd(event) {
+                    this.dragging = false;
+                    event.target.classList.remove('opacity-50');
+                },
+
+                dragOver(event) {
+                    event.preventDefault();
+                    event.dataTransfer.dropEffect = 'move';
+                },
+
+                drop(event, targetId) {
+                    event.preventDefault();
+                    if (this.draggedId === targetId) return;
+
+                    const container = event.target.closest('[x-data]');
+                    const items = Array.from(container.querySelectorAll('[data-id]'));
+
+                    const draggedIndex = items.findIndex(el => el.getAttribute('data-id') === this.draggedId);
+                    const targetIndex = items.findIndex(el => el.getAttribute('data-id') === targetId);
+
+                    if (draggedIndex !== -1 && targetIndex !== -1) {
+                        const draggedEl = items[draggedIndex];
+                        const targetEl = items[targetIndex];
+
+                        if (draggedIndex < targetIndex) {
+                            targetEl.parentNode.insertBefore(draggedEl, targetEl.nextSibling);
+                        } else {
+                            targetEl.parentNode.insertBefore(draggedEl, targetEl);
+                        }
+
+                        // Get new order
+                        const newOrder = Array.from(container.querySelectorAll('[data-id]'))
+                            .map(el => el.getAttribute('data-id'));
+
+                        $wire.reorderImages(newOrder);
+                    }
+                }
+            }));
+        </script>
+    @endscript
 </div>
