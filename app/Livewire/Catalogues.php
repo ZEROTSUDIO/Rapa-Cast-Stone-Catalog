@@ -225,11 +225,22 @@ class Catalogues extends Component
                 $filename = $slug.'-'.substr(md5(uniqid()), 0, 6).'.'.$extension;
 
                 // Process image with Intervention
-                $processedImage = Image::read($img->getRealPath())
-                    ->toWebp(85);
+                $extension = strtolower($img->getClientOriginalExtension());
+                $processedImage = Image::read($img->getRealPath());
+
+                // Encode based on format but keep optimization
+                if ($extension === 'png') {
+                    $encoded = $processedImage->toPng();
+                } elseif (in_array($extension, ['jpg', 'jpeg'])) {
+                    $encoded = $processedImage->toJpeg(85);
+                } elseif ($extension === 'webp') {
+                    $encoded = $processedImage->toWebp(85);
+                } else {
+                    $encoded = $processedImage->encode();
+                }
 
                 $path = 'products/'.$filename;
-                Storage::disk('public_direct')->put($path, (string) $processedImage);
+                Storage::disk('public_direct')->put($path, (string) $encoded);
 
                 $savedImages[] = [
                     'path' => $path,
@@ -333,11 +344,22 @@ class Catalogues extends Component
                 $filename = $slug.'-'.substr(md5(uniqid()), 0, 6).'.'.$extension;
 
                 // Process image
-                $processedImage = Image::read($img->getRealPath())
-                    ->toWebp(85);
+                $extension = strtolower($img->getClientOriginalExtension());
+                $processedImage = Image::read($img->getRealPath());
+
+                // Encode based on format but keep optimization
+                if ($extension === 'png') {
+                    $encoded = $processedImage->toPng();
+                } elseif (in_array($extension, ['jpg', 'jpeg'])) {
+                    $encoded = $processedImage->toJpeg(85);
+                } elseif ($extension === 'webp') {
+                    $encoded = $processedImage->toWebp(85);
+                } else {
+                    $encoded = $processedImage->encode();
+                }
 
                 $path = 'products/'.$filename;
-                Storage::disk('public_direct')->put($path, (string) $processedImage);
+                Storage::disk('public_direct')->put($path, (string) $encoded);
 
                 // Save to database
                 ProductImage::create([
