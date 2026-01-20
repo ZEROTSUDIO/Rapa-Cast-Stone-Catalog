@@ -94,11 +94,11 @@
                         @enderror
 
                         {{-- Display Images (Existing + New Uploads) --}}
-                        @if (($catalogueId && $existingImages && $existingImages->isNotEmpty()) || !empty($newImages))
+                        @if (($catalogueId && !empty($existingImages) && count($existingImages) > 0) || !empty($newImages))
                             <div class="mt-6" x-data="imageSorter()">
                                 <div class="flex justify-between items-center mb-3">
                                     <p class="text-sm font-semibold text-gray-700">
-                                        Images ({{ ($existingImages->count() ?? 0) + count($newImages) }})
+                                        Images ({{ count($existingImages) + count($newImages) }})
                                     </p>
                                     <p class="text-xs text-gray-500">
                                         <i class="fas fa-grip-vertical mr-1"></i>Drag to reorder
@@ -108,13 +108,14 @@
                                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4" @dragover.prevent @drop.prevent>
 
                                     {{-- Existing Images (Edit Mode) --}}
-                                    @if ($catalogueId && $existingImages->isNotEmpty())
+                                    @if ($catalogueId && count($existingImages) > 0)
                                         @foreach ($existingImages as $index => $img)
                                             <div class="relative group cursor-move" draggable="true"
                                                 data-id="existing-{{ $img->id }}"
                                                 @dragstart="dragStart($event, 'existing-{{ $img->id }}')"
                                                 @dragend="dragEnd($event)" @dragover="dragOver($event)"
-                                                @drop="drop($event, 'existing-{{ $img->id }}')">
+                                                @drop="drop($event, 'existing-{{ $img->id }}')"
+                                                wire:key="existing-{{ $img->id }}">
 
                                                 {{-- Image Preview --}}
                                                 <img src="{{ asset('storage/' . $img->image_path) }}"
@@ -146,52 +147,52 @@
                                     @endif
 
                                     {{-- New Uploaded Images (Before Submission) --}}
-                                    @foreach ($newImages as $index => $imgData)
-                                        <div class="relative group cursor-move animate-fade-in-up"
-                                            style="animation-delay: {{ $index * 50 }}ms" draggable="true"
-                                            data-id="new-{{ $imgData['id'] }}"
-                                            @dragstart="dragStart($event, 'new-{{ $imgData['id'] }}')"
+                                    @foreach ($newImages as $index => $img)
+                                        <div class="relative group cursor-move animate-fade-in-up" draggable="true"
+                                            data-id="new-{{ $img['id'] }}"
+                                            @dragstart="dragStart($event, 'new-{{ $img['id'] }}')"
                                             @dragend="dragEnd($event)" @dragover="dragOver($event)"
-                                            @drop="drop($event, 'new-{{ $imgData['id'] }}')">
+                                            @drop="drop($event, 'new-{{ $img['id'] }}')"
+                                            wire:key="new-{{ $img['id'] }}">
 
-                                            {{-- Image Preview --}}
-                                            <img src="{{ $imgData['temp_url'] }}"
+                                            <img src="{{ $img['temp_url'] }}"
                                                 class="h-40 w-full object-cover rounded-xl border-2 shadow-sm transition-all duration-200"
-                                                :class="dragging ? 'border-gold-accent' : 'border-gold-accent/30'">
+                                                :class="dragging ? 'border-gold-accent' : 'border-gray-200'">
 
-                                            {{-- Remove Button --}}
-                                            <button type="button" wire:click="removeNewImage('{{ $imgData['id'] }}')"
+                                            <!-- Remove Button -->
+                                            <button type="button" wire:click="removeNewImage('{{ $img['id'] }}')"
                                                 class="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white p-2 rounded-full shadow-md transition-all opacity-0 group-hover:opacity-100">
                                                 <i class="fas fa-times text-xs"></i>
                                             </button>
 
-                                            {{-- Featured Badge (if first image overall) --}}
-                                            @if (!$catalogueId && $index === 0 && (!isset($existingImages) || $existingImages->isEmpty()))
+                                            <!-- Featured badge -->
+                                            @if ($index === 0 && (!$existingImages || count($existingImages) === 0))
                                                 <span
                                                     class="absolute top-2 left-2 bg-gold-accent/90 text-white text-[10px] uppercase font-bold px-2 py-1 rounded shadow-sm">
                                                     Featured
                                                 </span>
                                             @endif
 
-                                            {{-- New Badge --}}
+                                            <!-- New badge -->
                                             <span
                                                 class="absolute bottom-2 left-2 bg-blue-500/90 text-white text-[10px] uppercase font-bold px-2 py-1 rounded shadow-sm">
                                                 New
                                             </span>
 
-                                            {{-- Drag Handle --}}
+                                            <!-- Drag handle -->
                                             <div
                                                 class="absolute bottom-2 right-2 bg-white/90 text-gray-600 p-1.5 rounded shadow opacity-0 group-hover:opacity-100 transition-opacity">
                                                 <i class="fas fa-grip-vertical text-xs"></i>
                                             </div>
                                         </div>
                                     @endforeach
+
                                 </div>
                             </div>
                         @endif
 
                         {{-- Empty State --}}
-                        @if (empty($newImages) && (!$catalogueId || !$existingImages || $existingImages->isEmpty()))
+                        @if (empty($newImages) && (!$catalogueId || empty($existingImages) || count($existingImages) === 0))
                             <div
                                 class="mt-4 text-center py-6 text-gray-400 border-2 border-dashed border-gray-200 rounded-xl">
                                 <i class="fas fa-image text-3xl mb-2"></i>
