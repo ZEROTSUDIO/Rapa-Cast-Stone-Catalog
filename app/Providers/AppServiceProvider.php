@@ -24,7 +24,6 @@ class AppServiceProvider extends ServiceProvider
     {
         if (config('app.env') === 'production') {
             \Illuminate\Support\Facades\URL::forceScheme('https');
-            $_SERVER['HTTPS'] = 'on';
         }
 
         \Illuminate\Support\Facades\View::composer('components.front.navbar', function ($view) {
