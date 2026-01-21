@@ -24,15 +24,7 @@ class AppServiceProvider extends ServiceProvider
     {
         if (config('app.env') === 'production') {
             \Illuminate\Support\Facades\URL::forceScheme('https');
-
-            if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
-                $_SERVER['HTTPS'] = 'on';
-                $_SERVER['SERVER_PORT'] = 443;
-            }
-
-            if (isset($_SERVER['HTTP_X_FORWARDED_PORT']) && $_SERVER['HTTP_X_FORWARDED_PORT'] == 443) {
-                $_SERVER['SERVER_PORT'] = 443;
-            }
+            $_SERVER['HTTPS'] = 'on';
         }
 
         \Illuminate\Support\Facades\View::composer('components.front.navbar', function ($view) {
@@ -40,7 +32,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         RateLimiter::for('login', function (Request $request) {
-            return Limit::perMinute(5)->by($request->email.$request->ip());
+            return Limit::perMinute(5)->by($request->email . $request->ip());
         });
     }
 }
