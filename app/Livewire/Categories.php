@@ -3,7 +3,9 @@
 namespace App\Livewire;
 
 use App\Models\Category;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Intervention\Image\Laravel\Facades\Image;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithoutUrlPagination;
@@ -61,7 +63,26 @@ class Categories extends Component
 
         $imagePath = null;
         if ($this->image) {
-            $imagePath = $this->image->store('categories', 'public');
+            $slug = Str::slug($validated['name']);
+            $extension = strtolower($this->image->getClientOriginalExtension());
+            $filename = $slug . '-' . substr(md5(uniqid()), 0, 6) . '.' . $extension;
+
+            // Process image
+            $processedImage = Image::read($this->image->getRealPath());
+
+            // Encode based on format
+            if ($extension === 'png') {
+                $encoded = $processedImage->toPng();
+            } elseif (in_array($extension, ['jpg', 'jpeg'])) {
+                $encoded = $processedImage->toJpeg(85);
+            } elseif ($extension === 'webp') {
+                $encoded = $processedImage->toWebp(85);
+            } else {
+                $encoded = $processedImage->encode();
+            }
+
+            $imagePath = 'categories/' . $filename;
+            Storage::disk('public_direct')->put($imagePath, (string) $encoded);
         }
 
         Category::create([
@@ -94,10 +115,32 @@ class Categories extends Component
 
         if ($this->image) {
             // Delete old image
-            if ($category->image) {
-                \Illuminate\Support\Facades\Storage::disk('public')->delete($category->image);
+            if ($category->image && Storage::disk('public_direct')->exists($category->image)) {
+                Storage::disk('public_direct')->delete($category->image);
             }
-            $data['image'] = $this->image->store('categories', 'public');
+
+            $slug = Str::slug($this->name);
+            $extension = strtolower($this->image->getClientOriginalExtension());
+            $filename = $slug . '-' . substr(md5(uniqid()), 0, 6) . '.' . $extension;
+
+            // Process image
+            $processedImage = Image::read($this->image->getRealPath());
+
+            // Encode based on format
+            if ($extension === 'png') {
+                $encoded = $processedImage->toPng();
+            } elseif (in_array($extension, ['jpg', 'jpeg'])) {
+                $encoded = $processedImage->toJpeg(85);
+            } elseif ($extension === 'webp') {
+                $encoded = $processedImage->toWebp(85);
+            } else {
+                $encoded = $processedImage->encode();
+            }
+
+            $path = 'categories/' . $filename;
+            Storage::disk('public_direct')->put($path, (string) $encoded);
+
+            $data['image'] = $path;
         }
 
         $category->update($data);
@@ -126,8 +169,8 @@ class Categories extends Component
     {
         $category = Category::findOrFail($id);
 
-        if ($category->image) {
-            \Illuminate\Support\Facades\Storage::disk('public')->delete($category->image);
+        if ($category->image && Storage::disk('public_direct')->exists($category->image)) {
+            Storage::disk('public_direct')->delete($category->image);
         }
 
         $category->delete();
@@ -139,8 +182,8 @@ class Categories extends Component
         $query = Category::query();
 
         if ($this->search) {
-            $query->where('name', 'like', '%'.$this->search.'%')
-                ->orWhere('description', 'like', '%'.$this->search.'%');
+            $query->where('name', 'like', '%' . $this->search . '%')
+                ->orWhere('description', 'like', '%' . $this->search . '%');
         }
 
         return view('livewire.categories', [

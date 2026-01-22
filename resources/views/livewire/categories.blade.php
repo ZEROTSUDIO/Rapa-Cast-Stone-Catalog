@@ -49,40 +49,52 @@
                             Category Image
                         </label>
                         <div id="imageUpload" @click="$refs.image.click()"
-                            class="relative border-2 border-dashed border-gray-300 rounded-xl p-12 text-center cursor-pointer hover:border-gold-accent hover:bg-gray-50 transition-all duration-300 flex flex-col justify-center items-center overflow-hidden min-h-[250px]">
+                            class="relative border-2 border-dashed border-gray-300 rounded-xl p-8 text-center cursor-pointer hover:border-gold-accent hover:bg-gray-50 transition-all duration-300 flex flex-col justify-center items-center overflow-hidden min-h-[250px] group">
 
                             <div wire:loading wire:target="image"
                                 class="absolute inset-0 bg-white/90 flex flex-col justify-center items-center z-10 backdrop-blur-sm">
                                 <i class="fas fa-circle-notch fa-spin text-4xl text-gold-accent mb-3"></i>
-                                <p class="text-gray-600 font-semibold animate-pulse">Uploading Image...</p>
+                                <p class="text-gray-600 font-semibold animate-pulse">Processing Image...</p>
                             </div>
 
                             @if ($image)
-                                <img src="{{ $image->temporaryUrl() }}"
-                                    class="max-h-[300px] w-full object-contain rounded-lg shadow-sm" />
-                                <p class="text-xs text-gray-500 mt-2 bg-white/80 px-3 py-1 rounded-full shadow-sm">
-                                    Click to change
-                                </p>
+                                <div class="relative w-full h-full flex justify-center items-center">
+                                    <img src="{{ $image->temporaryUrl() }}"
+                                        class="max-h-[230px] w-full object-contain rounded-lg shadow-sm" />
+                                    <div
+                                        class="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-lg">
+                                        <p
+                                            class="text-white font-semibold bg-black/50 px-4 py-2 rounded-full backdrop-blur-sm">
+                                            <i class="fas fa-pen mr-2"></i>Change Image
+                                        </p>
+                                    </div>
+                                </div>
                             @elseif($categoryId && \App\Models\Category::find($categoryId)->image)
-                                <img src="{{ asset('storage/' . \App\Models\Category::find($categoryId)->image) }}"
-                                    class="max-h-[300px] w-full object-contain rounded-lg shadow-sm" />
-                                <p class="text-xs text-gray-500 mt-2 bg-white/80 px-3 py-1 rounded-full shadow-sm">
-                                    Click to change
-                                </p>
+                                <div class="relative w-full h-full flex justify-center items-center">
+                                    <img src="{{ asset('storage/' . \App\Models\Category::find($categoryId)->image) }}"
+                                        class="max-h-[230px] w-full object-contain rounded-lg shadow-sm" />
+                                    <div
+                                        class="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-lg">
+                                        <p
+                                            class="text-white font-semibold bg-black/50 px-4 py-2 rounded-full backdrop-blur-sm">
+                                            <i class="fas fa-pen mr-2"></i>Change Image
+                                        </p>
+                                    </div>
+                                </div>
                             @else
                                 <i class="fas fa-cloud-upload-alt text-5xl text-gold-accent mb-4"></i>
                                 <h5 class="text-lg font-semibold text-gray-700 mb-2">
                                     Click to upload image
                                 </h5>
                                 <p class="text-sm text-gray-500">
-                                    PNG, JPG, GIF up to 10MB
+                                    PNG, JPG, WebP up to 10MB
                                 </p>
                             @endif
                         </div>
                         <input wire:model.live="image" x-ref="image" type="file" id="image" class="hidden"
                             accept="image/*" />
                         @error('image')
-                            <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span>
+                            <span class="text-red-500 text-sm mt-2 block">{{ $message }}</span>
                         @enderror
                     </div>
 
@@ -174,7 +186,8 @@
                                 </td>
                                 <td class="px-6 py-4">
                                     <img src="{{ $category->image ? asset('storage/' . $category->image) : asset('img/default.jpg') }}"
-                                        alt="{{ $category->name }}" class="w-16 h-16 object-cover rounded-md shadow-sm">
+                                        alt="{{ $category->name }}"
+                                        class="w-16 h-16 object-cover rounded-md shadow-sm">
                                 </td>
                                 <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ $category->name }}</td>
                                 <td class="px-6 py-4 text-sm text-gray-600">
