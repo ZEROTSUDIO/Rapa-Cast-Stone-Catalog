@@ -82,7 +82,7 @@
                             <small class="text-gray-400">{{ $contact->created_at->diffForHumans() }}</small>
                         </div>
                         <div>
-                            <a wire:navigate href="{{ route('admin.contacts') }}"
+                            <a wire:navigate href="{{ url('admin/messages') }}"
                                 class="text-xs font-medium text-blue-600 hover:text-blue-800">
                                 View
                             </a>
