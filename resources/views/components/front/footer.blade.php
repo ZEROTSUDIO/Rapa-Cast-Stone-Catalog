@@ -49,7 +49,7 @@
                         title="Whatsapp">
                         <i class="fa-brands fa-whatsapp text-xl"></i>
                     </a>
-                    <a href="#" target="_blank"
+                    <a href="https://www.tiktok.com/@rapacaststone33" target="_blank"
                         class="text-white/65 hover:text-[#B5A693] transition-all duration-300 hover:-translate-y-1"
                         title="Tiktok">
                         <i class="fa-brands fa-tiktok text-xl"></i>
