@@ -27,7 +27,7 @@ class AppServiceProvider extends ServiceProvider
         }
 
         \Illuminate\Support\Facades\View::composer('components.front.navbar', function ($view) {
-            $view->with('categories', \App\Models\Category::all());
+            $view->with('categories', \App\Models\Category::has('products')->get());
         });
 
         RateLimiter::for('login', function (Request $request) {

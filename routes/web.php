@@ -8,7 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    $categories = Category::all();
+    $categories = Category::has('products')->get();
     $featuredProducts = Product::where('is_featured', true)->take(3)->get();
 
     return view('front.home', [
@@ -58,7 +58,7 @@ Route::get('/catalogs', function () {
         'catalogs' => Product::filter(request(['search', 'category']))
             ->latest()
             ->paginate(9)->withQueryString(),
-        'categories' => Category::all(),
+        'categories' => Category::has('products')->get(),
     ]);
 });
 

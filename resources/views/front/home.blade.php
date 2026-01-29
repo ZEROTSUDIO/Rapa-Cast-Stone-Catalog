@@ -19,7 +19,7 @@
             </p>
             <h2 class="font-heading text-5xl md:text-6xl text-center mb-20 tracking-wide font-light">Mengapa Pilih Kami
             </h2>
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 text-center">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
                 <div>
                     <p class="text-xs tracking-[2px] uppercase text-[#8B7F6E] mb-4">Craft</p>
                     <h3 class="font-heading text-2xl mb-3 font-light">Handcrafted</h3>
@@ -36,13 +36,13 @@
                     </p>
                 </div>
 
-                <div>
+                {{-- <div>
                     <p class="text-xs tracking-[2px] uppercase text-[#8B7F6E] mb-4">Material</p>
                     <h3 class="font-heading text-2xl mb-3 font-light">Batu Alam</h3>
                     <p class="text-sm text-[#6B5E52] leading-relaxed">
                         Batu Cor menggabungkan kekuatan mineral dengan kontrol permukaan yang terperinci.
                     </p>
-                </div>
+                </div> --}}
 
                 <div>
                     <p class="text-xs tracking-[2px] uppercase text-[#8B7F6E] mb-4">Service</p>
@@ -62,7 +62,7 @@
             <p class="text-center text-xs text-[#8B7F6E] tracking-[2px] uppercase mb-4 font-normal">Jelajahi</p>
             <h2 class="font-heading text-5xl md:text-6xl text-center mb-20 tracking-wide font-light">Koleksi Kami</h2>
 
-            <div class="grid md:grid-cols-3 gap-6 scroll-reveal">
+            <div class="grid md:grid-cols-3 place-items-center gap-6 scroll-reveal">
                 @foreach ($categories as $category)
                     <a href="{{ url('/catalogs?category=' . $category->slug) }}" class="block">
                         <div
