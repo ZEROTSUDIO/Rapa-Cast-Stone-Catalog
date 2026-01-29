@@ -25,10 +25,14 @@
                         <h6 class="text-xs tracking-[2px] uppercase text-[#8B7F6E] mb-4">Contact</h6>
                         <div class="space-y-2">
                             <a href="mailto:rapastone33@gmail.com"
-                                class="block text-[#6B5E52] hover:text-[#B5A693] transition-colors font-light">rapastone33@gmail.com</a>
+                                class="block text-[#6B5E52] hover:text-[#B5A693] transition-colors font-light">
+                                <i class="fa-solid fa-envelope mr-3"></i> rapastone33@gmail.com</a>
                             <a href="tel:+628112959125"
-                                class="block text-[#6B5E52] hover:text-[#B5A693] transition-colors font-light">+62 811
-                                295 9125</a>
+                                class="block text-[#6B5E52] hover:text-[#B5A693] transition-colors font-light">
+                                <i class="fa-brands fa-whatsapp mr-3"></i> +62 811 295 9125</a>
+                            <a href="https://www.instagram.com/rapacastone/"
+                                class="block text-[#6B5E52] hover:text-[#B5A693] transition-colors font-light">
+                                <i class="fa-brands fa-instagram mr-3"></i> @rapacastone</a>
                         </div>
                     </div>
 

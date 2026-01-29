@@ -37,14 +37,23 @@
                 </div>
             </div>
             <div>
-                <h5 class="font-heading text-lg mb-8 tracking-wider text-white">Follow</h5>
-                <div class="space-y-3">
-                    <a href="#"
-                        class="block text-sm text-white/65 hover:text-[#B5A693] transition-colors tracking-wide">Instagram</a>
-                    <a href="#"
-                        class="block text-sm text-white/65 hover:text-[#B5A693] transition-colors tracking-wide">Pinterest</a>
-                    <a href="#"
-                        class="block text-sm text-white/65 hover:text-[#B5A693] transition-colors tracking-wide">LinkedIn</a>
+                <h5 class="font-heading text-lg mb-8 tracking-wider text-white">Follow Us</h5>
+                <div class="flex gap-6">
+                    <a href="https://www.instagram.com/rapacastone/" target="_blank"
+                        class="text-white/65 hover:text-[#B5A693] transition-all duration-300 hover:-translate-y-1"
+                        title="Instagram">
+                        <i class="fa-brands fa-instagram text-xl"></i>
+                    </a>
+                    <a href="https://wa.me/628112959125" target="_blank"
+                        class="text-white/65 hover:text-[#B5A693] transition-all duration-300 hover:-translate-y-1"
+                        title="Whatsapp">
+                        <i class="fa-brands fa-whatsapp text-xl"></i>
+                    </a>
+                    <a href="#" target="_blank"
+                        class="text-white/65 hover:text-[#B5A693] transition-all duration-300 hover:-translate-y-1"
+                        title="Tiktok">
+                        <i class="fa-brands fa-tiktok text-xl"></i>
+                    </a>
                 </div>
             </div>
         </div>

@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "@fortawesome/fontawesome-free/css/all.min.css";
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -7,9 +8,9 @@
 
 @theme {
     --font-heading: "Cormorant", serif;
-    --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
-        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
-        "Noto Color Emoji";
+    --font-sans:
+        "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+        "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
 /* Custom Styles from Reference */
@@ -48,14 +49,17 @@
     width: 100%;
 }
 .hero-bg {
-    background: linear-gradient(rgba(58, 53, 47, 0.15), rgba(58, 53, 47, 0.25)),
+    background:
+        linear-gradient(rgba(58, 53, 47, 0.15), rgba(58, 53, 47, 0.25)),
         url("https://images.unsplash.com/photo-1615529182904-14819c35db37?w=1600");
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
 }
 .category-image {
-    transition: transform 0.8s ease, filter 0.6s ease;
+    transition:
+        transform 0.8s ease,
+        filter 0.6s ease;
     filter: brightness(0.95) saturate(0.9);
 }
 .category-card:hover .category-image {
@@ -63,7 +67,9 @@
     filter: brightness(1) saturate(1);
 }
 .product-image {
-    transition: transform 0.7s ease, filter 0.5s ease;
+    transition:
+        transform 0.7s ease,
+        filter 0.5s ease;
     filter: brightness(0.96) saturate(0.95);
 }
 .product-card:hover .product-image {
@@ -71,7 +77,9 @@
     filter: brightness(1) saturate(1);
 }
 .thumbnail {
-    transition: opacity 0.4s ease, transform 0.4s ease;
+    transition:
+        opacity 0.4s ease,
+        transform 0.4s ease;
     filter: brightness(0.95);
 }
 .thumbnail:hover,
@@ -81,7 +89,9 @@
     filter: brightness(1);
 }
 .article-image {
-    transition: transform 0.7s ease, filter 0.5s ease;
+    transition:
+        transform 0.7s ease,
+        filter 0.5s ease;
     filter: brightness(0.96) saturate(0.9);
 }
 .article-card:hover .article-image {
@@ -91,7 +101,9 @@
 .scroll-reveal {
     opacity: 0;
     transform: translateY(30px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
+    transition:
+        opacity 0.8s ease,
+        transform 0.8s ease;
 }
 .scroll-reveal.revealed {
     opacity: 1;
