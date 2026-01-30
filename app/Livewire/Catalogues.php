@@ -259,7 +259,7 @@ class Catalogues extends Component
         $product = Product::create([
             'code' => $validated['code'],
             'name' => $validated['name'],
-            'slug' => Str::slug($validated['name']),
+            'slug' => $this->generateUniqueSlug($validated['name']),
             'category_id' => $validated['category_id'],
             'image' => null, // Will be set after images are saved
             'description' => $validated['description'],
@@ -384,7 +384,7 @@ class Catalogues extends Component
         $updateData = [
             'code' => $validated['code'],
             'name' => $validated['name'],
-            'slug' => Str::slug($validated['name']),
+            'slug' => $this->generateUniqueSlug($validated['name'], $this->catalogueId),
             'category_id' => $validated['category_id'],
             'description' => $validated['description'],
             'specification' => $specs,
@@ -486,6 +486,22 @@ class Catalogues extends Component
         $product = Product::findOrFail($id);
         $product->update(['is_featured' => ! $product->is_featured]);
         session()->flash('status', 'Product featured status updated.');
+    }
+
+    private function generateUniqueSlug(string $name, ?int $currentId = null): string
+    {
+        $slug = Str::slug($name);
+        $originalSlug = $slug;
+        $count = 2;
+
+        while (Product::where('slug', $slug)
+            ->when($currentId, fn ($query) => $query->where('id', '!=', $currentId))
+            ->exists()
+        ) {
+            $slug = $originalSlug.'-'.$count++;
+        }
+
+        return $slug;
     }
 
     public function render()
