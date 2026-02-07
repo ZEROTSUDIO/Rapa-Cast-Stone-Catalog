@@ -452,10 +452,9 @@ class Catalogues extends Component
                 ->toArray();
         } else {
             $this->specifications = [
-                ['key' => 'Color', 'value' => ''],
-                ['key' => 'Weight', 'value' => ''],
-                ['key' => 'Material', 'value' => ''],
-                ['key' => 'Size/Dimensions', 'value' => ''],
+                ['key' => 'Color', 'value' => 'Gray/Black'],
+                ['key' => 'Material', 'value' => 'Stone'],
+                ['key' => 'Size', 'value' => ''],
             ];
         }
     }

@@ -3,8 +3,9 @@
     <div class="p-6">
         <!-- Logo -->
         <div class="flex items-center gap-3 mb-10 pb-6 border-b border-gold-accent/30">
-            <i class="fas fa-gem text-gold-accent text-2xl"></i>
-            <span class="text-white text-2xl font-bold sidebar-text">ELEGANT</span>
+            {{-- <i class="fas fa-gem text-gold-accent text-2xl"></i>
+            <span class="text-white text-xl font-bold sidebar-text">RAPA CAST STONE</span> --}}
+            <img src="{{ asset('img/logo2.png') }}" alt="Logo">
         </div>
 
         <!-- Navigation -->
