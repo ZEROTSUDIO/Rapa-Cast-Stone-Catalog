@@ -221,68 +221,78 @@
                         </div>
 
                         <div class="space-y-3">
-                            @foreach ($specifications as $index => $spec)
-                                <div wire:key="spec-{{ $index }}"
-                                    class="flex gap-3 items-start p-4 bg-gray-50 rounded-xl border-2 border-gray-200 hover:border-gold-accent/50 transition-all duration-300">
-                                    <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-3">
-                                        <div>
-                                            <input type="text" wire:model="specifications.{{ $index }}.key"
-                                                placeholder="Specification Name (e.g., Color)"
-                                                class="w-full px-4 py-2.5 rounded-lg border-2 border-gray-200 focus:border-gold-accent focus:ring-2 focus:ring-gold-accent/20 outline-none transition-all text-sm" />
-                                            @error('specifications.' . $index . '.key')
-                                                <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span>
-                                            @enderror
+                            <div class="space-y-3" x-data="specSorter()">
+                                @foreach ($specifications as $index => $spec)
+                                    <div wire:key="spec-{{ $index }}" data-index="{{ $index }}"
+                                        draggable="true" @dragstart="dragStart($event, {{ $index }})"
+                                        @dragend="dragEnd($event)" @dragover="dragOver($event)"
+                                        @drop="drop($event, {{ $index }})"
+                                        class="flex gap-3 items-start p-4 bg-gray-50 rounded-xl border-2 border-gray-200 hover:border-gold-accent/50 transition-all duration-300 cursor-move">
+                                        <div class="mt-2 text-gray-400">
+                                            <i class="fas fa-grip-vertical"></i>
                                         </div>
-                                        <div>
-                                            <input type="text"
-                                                wire:model="specifications.{{ $index }}.value"
-                                                placeholder="Value (e.g., White, Gray, Black)"
-                                                class="w-full px-4 py-2.5 rounded-lg border-2 border-gray-200 focus:border-gold-accent focus:ring-2 focus:ring-gold-accent/20 outline-none transition-all text-sm" />
-                                            @error('specifications.' . $index . '.value')
-                                                <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span>
-                                            @enderror
+                                        <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-3">
+                                            <div>
+                                                <input type="text"
+                                                    wire:model="specifications.{{ $index }}.key"
+                                                    placeholder="Specification Name (e.g., Color, size, etc.)"
+                                                    class="w-full px-4 py-2.5 rounded-lg border-2 border-gray-200 focus:border-gold-accent focus:ring-2 focus:ring-gold-accent/20 outline-none transition-all text-sm" />
+                                                @error('specifications.' . $index . '.key')
+                                                    <span
+                                                        class="text-red-500 text-xs mt-1 block">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+                                            <div>
+                                                <input type="text"
+                                                    wire:model="specifications.{{ $index }}.value"
+                                                    placeholder="Values"
+                                                    class="w-full px-4 py-2.5 rounded-lg border-2 border-gray-200 focus:border-gold-accent focus:ring-2 focus:ring-gold-accent/20 outline-none transition-all text-sm" />
+                                                @error('specifications.' . $index . '.value')
+                                                    <span
+                                                        class="text-red-500 text-xs mt-1 block">{{ $message }}</span>
+                                                @enderror
+                                            </div>
                                         </div>
+                                        <button type="button" wire:click="removeSpecification({{ $index }})"
+                                            class="mt-0.5 text-red-600 hover:text-red-800 hover:bg-red-50 p-2.5 rounded-lg transition-all duration-300"
+                                            title="Remove specification">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
                                     </div>
-                                    <button type="button" wire:click="removeSpecification({{ $index }})"
-                                        class="mt-0.5 text-red-600 hover:text-red-800 hover:bg-red-50 p-2.5 rounded-lg transition-all duration-300"
-                                        title="Remove specification">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            @endforeach
+                                @endforeach
 
-                            @if (empty($specifications))
-                                <div class="text-center py-8 text-gray-400">
-                                    <i class="fas fa-list-ul text-3xl mb-2"></i>
-                                    <p class="text-sm">No specifications added yet. Click "Add Specification" to start.
-                                    </p>
-                                </div>
-                            @endif
+                                @if (empty($specifications))
+                                    <div class="text-center py-8 text-gray-400">
+                                        <i class="fas fa-list-ul text-3xl mb-2"></i>
+                                        <p class="text-sm">No specifications added yet. Click "Add Specification" to
+                                            start.
+                                        </p>
+                                    </div>
+                                @endif
+                            </div>
+
+                            <p class="text-xs text-gray-500 mt-3">
+                                <i class="fas fa-grip-vertical mr-1"></i>Drag the specification row to reorder.
+                            </p>
                         </div>
 
-                        <p class="text-xs text-gray-500 mt-3">
-                            <i class="fas fa-info-circle mr-1"></i>Add product specifications like color, weight,
-                            material, or any custom attributes. Empty fields will be ignored.
-                        </p>
-                    </div>
-
-                    <div class="flex gap-3">
-                        <button type="submit"
-                            class="gradient-gold text-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                            <i class="fas fa-check-circle mr-2"></i>{{ $catalogueId ? 'Update' : 'Save' }}
-                        </button>
-                        <button type="button" wire:click="cancel"
-                            class="bg-white border-2 border-gray-200 text-ceramic-blue px-8 py-3 rounded-xl font-semibold hover:bg-gray-50 transition-all duration-300">
-                            <i class="fas fa-times-circle mr-2"></i>Cancel
-                        </button>
-                    </div>
+                        <div class="flex gap-3">
+                            <button type="submit"
+                                class="gradient-gold text-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+                                <i class="fas fa-check-circle mr-2"></i>{{ $catalogueId ? 'Update' : 'Save' }}
+                            </button>
+                            <button type="button" wire:click="cancel"
+                                class="bg-white border-2 border-gray-200 text-ceramic-blue px-8 py-3 rounded-xl font-semibold hover:bg-gray-50 transition-all duration-300">
+                                <i class="fas fa-times-circle mr-2"></i>Cancel
+                            </button>
+                        </div>
                 </form>
             </div>
         </div>
     @else
         <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
             <div
-                class="bg-gradient-to-r from-gray-50 to-gray-100 px-6 py-4 border-b border-gray-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                class="bg-gradient-to-r from-marble-gray to-marble-white px-6 py-4 border-b border-gray-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <h2 class="text-lg font-bold text-premium-dark">
                     Catalogue
                 </h2>
@@ -455,6 +465,52 @@
                             .map(el => el.getAttribute('data-id'));
 
                         $wire.reorderImages(newOrder);
+                    }
+                }
+            }));
+
+            Alpine.data('specSorter', () => ({
+                draggedIndex: null,
+                dragging: false,
+
+                dragStart(event, index) {
+                    this.draggedIndex = index;
+                    this.dragging = true;
+                    event.dataTransfer.effectAllowed = 'move';
+                    event.target.classList.add('opacity-40');
+                },
+
+                dragEnd(event) {
+                    this.dragging = false;
+                    event.target.classList.remove('opacity-40');
+                },
+
+                dragOver(event) {
+                    event.preventDefault();
+                    event.dataTransfer.dropEffect = 'move';
+                },
+
+                drop(event, targetIndex) {
+                    event.preventDefault();
+                    if (this.draggedIndex === targetIndex) return;
+
+                    const container = event.target.closest('[x-data]');
+                    const items = Array.from(container.querySelectorAll('[data-index]'));
+
+                    const draggedEl = items.find(el => el.getAttribute('data-index') == this.draggedIndex);
+                    const targetEl = items.find(el => el.getAttribute('data-index') == targetIndex);
+
+                    if (draggedEl && targetEl) {
+                        if (parseInt(this.draggedIndex) < parseInt(targetIndex)) {
+                            targetEl.parentNode.insertBefore(draggedEl, targetEl.nextSibling);
+                        } else {
+                            targetEl.parentNode.insertBefore(draggedEl, targetEl);
+                        }
+
+                        const newOrder = Array.from(container.querySelectorAll('[data-index]'))
+                            .map(el => parseInt(el.getAttribute('data-index')));
+
+                        $wire.reorderSpecifications(newOrder);
                     }
                 }
             }));

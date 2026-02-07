@@ -105,7 +105,7 @@ class Catalogues extends Component
     public function removeNewImage($imageId)
     {
         $this->newImages = array_values(
-            array_filter($this->newImages, fn($img) => $img['id'] !== $imageId)
+            array_filter($this->newImages, fn ($img) => $img['id'] !== $imageId)
         );
     }
 
@@ -113,7 +113,7 @@ class Catalogues extends Component
     public function deleteImage($imageId)
     {
         $this->removedImageIds[] = $imageId;
-        $this->existingImages = $this->existingImages->reject(fn($img) => $img->id === $imageId);
+        $this->existingImages = $this->existingImages->reject(fn ($img) => $img->id === $imageId);
     }
 
     // NEW: Handle drag-and-drop reordering
@@ -121,14 +121,14 @@ class Catalogues extends Component
     {
         // Update new images with their absolute sort order from the UI
         foreach ($this->newImages as &$img) {
-            $order = array_search('new-' . $img['id'], $orderedIds);
+            $order = array_search('new-'.$img['id'], $orderedIds);
             if ($order !== false) {
                 $img['sort_order'] = $order;
             }
         }
 
         // Sort newImages by their new sort_order
-        usort($this->newImages, fn($a, $b) => ($a['sort_order'] ?? 0) <=> ($b['sort_order'] ?? 0));
+        usort($this->newImages, fn ($a, $b) => ($a['sort_order'] ?? 0) <=> ($b['sort_order'] ?? 0));
 
         // Reorder existing images in database immediately
         foreach ($orderedIds as $index => $id) {
@@ -201,6 +201,17 @@ class Catalogues extends Component
         $this->specifications = array_values($this->specifications);
     }
 
+    public function reorderSpecifications($orderedIndices)
+    {
+        $newSpecifications = [];
+        foreach ($orderedIndices as $index) {
+            if (isset($this->specifications[$index])) {
+                $newSpecifications[] = $this->specifications[$index];
+            }
+        }
+        $this->specifications = $newSpecifications;
+    }
+
     public function createCatalogue()
     {
         $validated = $this->validate([
@@ -221,7 +232,7 @@ class Catalogues extends Component
                 $img = $imgData['file'];
                 $slug = Str::slug($validated['name']);
                 $extension = strtolower($img->getClientOriginalExtension());
-                $filename = $slug . '-' . substr(md5(uniqid()), 0, 6) . '.' . $extension;
+                $filename = $slug.'-'.substr(md5(uniqid()), 0, 6).'.'.$extension;
 
                 // Process image with Intervention
                 $extension = strtolower($img->getClientOriginalExtension());
@@ -238,7 +249,7 @@ class Catalogues extends Component
                     $encoded = $processedImage->encode();
                 }
 
-                $path = 'products/' . $filename;
+                $path = 'products/'.$filename;
                 Storage::disk('public_direct')->put($path, (string) $encoded);
 
                 $savedImages[] = [
@@ -250,8 +261,8 @@ class Catalogues extends Component
 
         // Process specifications
         $specs = collect($this->specifications)
-            ->filter(fn($spec) => ! empty($spec['key']) && ! empty($spec['value']))
-            ->mapWithKeys(fn($spec) => [$spec['key'] => $spec['value']])
+            ->filter(fn ($spec) => ! empty($spec['key']) && ! empty($spec['value']))
+            ->mapWithKeys(fn ($spec) => [$spec['key'] => $spec['value']])
             ->toArray();
 
         // Create product
@@ -340,7 +351,7 @@ class Catalogues extends Component
                 $img = $imgData['file'];
                 $slug = Str::slug($validated['name']);
                 $extension = strtolower($img->getClientOriginalExtension());
-                $filename = $slug . '-' . substr(md5(uniqid()), 0, 6) . '.' . $extension;
+                $filename = $slug.'-'.substr(md5(uniqid()), 0, 6).'.'.$extension;
 
                 // Process image
                 $extension = strtolower($img->getClientOriginalExtension());
@@ -357,7 +368,7 @@ class Catalogues extends Component
                     $encoded = $processedImage->encode();
                 }
 
-                $path = 'products/' . $filename;
+                $path = 'products/'.$filename;
                 Storage::disk('public_direct')->put($path, (string) $encoded);
 
                 // Save to database
@@ -375,8 +386,8 @@ class Catalogues extends Component
 
         // Process specifications
         $specs = collect($this->specifications)
-            ->filter(fn($spec) => ! empty($spec['key']) && ! empty($spec['value']))
-            ->mapWithKeys(fn($spec) => [$spec['key'] => $spec['value']])
+            ->filter(fn ($spec) => ! empty($spec['key']) && ! empty($spec['value']))
+            ->mapWithKeys(fn ($spec) => [$spec['key'] => $spec['value']])
             ->toArray();
 
         // Prepare update data
@@ -447,7 +458,7 @@ class Catalogues extends Component
         // Load specifications
         if ($product->specification && is_array($product->specification)) {
             $this->specifications = collect($product->specification)
-                ->map(fn($value, $key) => ['key' => $key, 'value' => $value])
+                ->map(fn ($value, $key) => ['key' => $key, 'value' => $value])
                 ->values()
                 ->toArray();
         } else {
@@ -493,10 +504,10 @@ class Catalogues extends Component
         $count = 2;
 
         while (Product::where('slug', $slug)
-            ->when($currentId, fn($query) => $query->where('id', '!=', $currentId))
+            ->when($currentId, fn ($query) => $query->where('id', '!=', $currentId))
             ->exists()
         ) {
-            $slug = $originalSlug . '-' . $count++;
+            $slug = $originalSlug.'-'.$count++;
         }
 
         return $slug;
@@ -507,7 +518,7 @@ class Catalogues extends Component
         $query = Product::with('category');
 
         if ($this->search) {
-            $query->where('name', 'like', '%' . $this->search . '%');
+            $query->where('name', 'like', '%'.$this->search.'%');
         }
 
         if ($this->categoryFilter) {
