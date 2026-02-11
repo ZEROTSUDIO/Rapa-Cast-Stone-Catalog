@@ -271,7 +271,7 @@
                                 @endif
                             </div>
 
-                            <p class="text-xs text-gray-500 mt-3">
+                            <p class="text-xs text-gray-500 mt-3 mb-3">
                                 <i class="fas fa-grip-vertical mr-1"></i>Drag the specification row to reorder.
                             </p>
                         </div>
