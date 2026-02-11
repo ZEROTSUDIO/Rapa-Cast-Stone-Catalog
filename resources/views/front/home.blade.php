@@ -254,22 +254,23 @@
             "url": "{{ url('/') }}",
             "logo": "{{ asset('img/logo.png') }}",
             "sameAs": [
-                "https://www.instagram.com/rapacaststone/",
-                "https://www.facebook.com/rapacaststone/"
+                "https://instagram.com/rapacastone",
+                "https://www.facebook.com/rapacaststone/",
+                "https://www.tiktok.com/@rapacaststone33"
             ],
             "contactPoint": {
                 "@@type": "ContactPoint",
-                "telephone": "+6281234567890",
+                "telephone": "+628112959125",
                 "contactType": "customer service",
                 "areaServed": "ID",
                 "availableLanguage": "Indonesian"
             },
             "address": {
                 "@@type": "PostalAddress",
-                "streetAddress": "Jl. Raya Kasongan No. 123",
-                "addressLocality": "Bantul",
-                "addressRegion": "DI Yogyakarta",
-                "postalCode": "55184",
+                "streetAddress": "Jl. Ngadiretno No 33",
+                "addressLocality": "Muntilan",
+                "addressRegion": "Jawa Tengah",
+                "postalCode": "56413",
                 "addressCountry": "ID"
             }
         }
