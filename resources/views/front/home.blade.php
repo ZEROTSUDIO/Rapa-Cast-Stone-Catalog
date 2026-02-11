@@ -1,5 +1,36 @@
 <x-front.layout title="Rapa Cast Stone | Produsen Cast Stone Berkualitas Indonesia"
-    meta-description="Rapa Cast Stone adalah pabrik batu cor cast stone di Indonesia yang memproduksi roster, vas, air mancur, paving, dan elemen arsitektur berkualitas untuk rumah dan proyek.">>
+    meta-description="Rapa Cast Stone adalah pabrik batu cor cast stone di Indonesia yang memproduksi roster, vas, air mancur, paving, dan elemen arsitektur berkualitas untuk rumah dan proyek.">
+
+    @push('schema')
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "Rapa Cast Stone",
+            "url": "{{ url('/') }}",
+            "logo": "{{ asset('img/logo.png') }}",
+            "sameAs": [
+                "https://www.instagram.com/rapacaststone/",
+                "https://www.facebook.com/rapacaststone/"
+            ],
+            "contactPoint": {
+                "@type": "ContactPoint",
+                "telephone": "+6281234567890",
+                "contactType": "customer service",
+                "areaServed": "ID",
+                "availableLanguage": "Indonesian"
+            },
+            "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Jl. Raya Kasongan No. 123",
+                "addressLocality": "Bantul",
+                "addressRegion": "DI Yogyakarta",
+                "postalCode": "55184",
+                "addressCountry": "ID"
+            }
+        }
+        </script>
+    @endpush>
     <!-- Hero Section -->
     <x-front.carousel :totalSlides="3">
         <x-front.hero-slide :index="0" image="{{ asset('img/bg-1.png') }}" title="DESAIN BATU COR ABADI"

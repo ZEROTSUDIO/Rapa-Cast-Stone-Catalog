@@ -5,11 +5,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
-        content="{{ $metaDescription ?? 'Rapa Cast Stone adalah pabrik dan produsen cast stone berkualitas.' }}">
+        content="{{ $metaDescription ?? 'Rapa Cast Stone adalah pabrik batu cor cast stone di Indonesia yang memproduksi roster, vas, air mancur, paving, dan elemen arsitektur berkualitas untuk rumah dan proyek.' }}">
     <meta name="author" content="{{ $metaAuthor ?? 'Rapa Cast Stone' }}">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="{{ $canonical ?? url()->current() }}">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ $ogUrl ?? url()->current() }}">
+    <meta property="og:title" content="{{ $title ?? 'Rapa Cast Stone - Architectural Stone Furniture' }}">
+    <meta property="og:description"
+        content="{{ $metaDescription ?? 'Rapa Cast Stone adalah pabrik batu cor cast stone di Indonesia yang memproduksi roster, vas, air mancur, paving, dan elemen arsitektur berkualitas untuk rumah dan proyek.' }}">
+    <meta property="og:image" content="{{ $ogImage ?? asset('img/bg-1.png') }}">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ $ogUrl ?? url()->current() }}">
+    <meta property="twitter:title" content="{{ $title ?? 'Rapa Cast Stone - Architectural Stone Furniture' }}">
+    <meta property="twitter:description"
+        content="{{ $metaDescription ?? 'Rapa Cast Stone adalah pabrik batu cor cast stone di Indonesia yang memproduksi roster, vas, air mancur, paving, dan elemen arsitektur berkualitas untuk rumah dan proyek.' }}">
+    <meta property="twitter:image" content="{{ $ogImage ?? asset('img/bg-1.png') }}">
+
     <title>{{ $title ?? 'Rapa Cast Stone - Architectural Stone Furniture' }}</title>
 
     <link rel="icon" type="image/png" href="{{ asset('img/logo.png') }}">
+
+    @stack('seo')
+    @stack('schema')
 
     <link
         href="https://fonts.googleapis.com/css2?family=Cormorant:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap"
