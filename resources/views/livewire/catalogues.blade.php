@@ -397,6 +397,10 @@
                                         <button wire:click="editCatalogue({{ $catalogue->id }})"
                                             class="text-blue-600 hover:text-blue-800 transition-colors"
                                             title="Edit"><i class="fas fa-edit"></i></button>
+                                        <button wire:click="duplicateCatalogue({{ $catalogue->id }})"
+                                            wire:confirm="Duplicate this product?"
+                                            class="text-green-600 hover:text-green-800 transition-colors"
+                                            title="Duplicate"><i class="fas fa-copy"></i></button>
                                         <button @click="showDeleteModal = true; deleteId = {{ $catalogue->id }}"
                                             class="text-red-600 hover:text-red-800 transition-colors"
                                             title="Delete"><i class="fas fa-trash"></i></button>

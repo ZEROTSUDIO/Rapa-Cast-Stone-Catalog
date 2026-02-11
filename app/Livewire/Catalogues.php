@@ -490,6 +490,43 @@ class Catalogues extends Component
         session()->flash('status', 'Product successfully deleted.');
     }
 
+    public function duplicateCatalogue(int $id): void
+    {
+        $original = Product::with('images')->findOrFail($id);
+
+        // Generate unique code with -COPY suffix
+        $baseCode = $original->code.'-COPY';
+        $code = $baseCode;
+        $count = 2;
+
+        while (Product::where('code', $code)->exists()) {
+            $code = $baseCode.'-'.$count++;
+        }
+
+        // Create the duplicate product
+        $duplicate = Product::create([
+            'code' => $code,
+            'name' => $original->name,
+            'slug' => $this->generateUniqueSlug($original->name),
+            'category_id' => $original->category_id,
+            'image' => $original->image,
+            'description' => $original->description,
+            'specification' => $original->specification,
+            'is_featured' => false,
+        ]);
+
+        // Duplicate image records (referencing the same files)
+        foreach ($original->images()->orderBy('sort_order')->get() as $image) {
+            ProductImage::create([
+                'product_id' => $duplicate->id,
+                'image_path' => $image->image_path,
+                'sort_order' => $image->sort_order,
+            ]);
+        }
+
+        session()->flash('status', 'Product successfully duplicated.');
+    }
+
     public function toggleFeatured($id)
     {
         $product = Product::findOrFail($id);
