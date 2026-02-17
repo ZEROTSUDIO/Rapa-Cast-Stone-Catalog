@@ -57,34 +57,32 @@
         </div>
     </section>
 
-
-    <!-- Collections -->
-    <section class="py-32 px-6">
+    <!-- Featured Products -->
+    <section class="py-32 px-6 ">
         <div class="max-w-7xl mx-auto">
-            <p class="text-center text-xs text-[#8B7F6E] tracking-[2px] uppercase mb-4 font-normal">Jelajahi</p>
-            <h2 class="font-heading text-5xl md:text-6xl text-center mb-20 tracking-wide font-light">Koleksi Kami</h2>
+            <p class="text-center text-xs text-[#8B7F6E] tracking-[2px] uppercase mb-4 font-normal">Pilihan Terbaik
+            </p>
+            <h2 class="font-heading text-5xl md:text-6xl text-center mb-20 tracking-wide font-light">Produk Unggulan
+            </h2>
 
-            <div class="grid md:grid-cols-3 place-items-center gap-6 scroll-reveal">
-                @foreach ($categories as $category)
-                    <a href="{{ url('/catalogs?category=' . $category->slug) }}" class="block">
-                        <div
-                            class="category-card group relative h-[550px] overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-600 hover:-translate-y-2">
-                            <img src="{{ $category->image ? asset('storage/' . $category->image) : asset('img/default.jpg') }}"
-                                class="category-image w-full h-full object-cover">
-                            <div
-                                class="absolute inset-0 bg-gradient-to-t from-[#3A352F]/85 to-transparent flex items-end">
-                                <div class="p-10 text-white">
-                                    <h3 class="font-heading text-4xl mb-2">{{ $category->name }}</h3>
-                                    <p class="text-xs tracking-[1.5px] uppercase opacity-90">
-                                        {{ Str::limit($category->description, 30) }}</p>
-                                </div>
+            <div class="grid md:grid-cols-3 gap-12 scroll-reveal">
+                @foreach ($featuredProducts as $product)
+                    <div class="product-card group">
+                        <a href="{{ url('/catalogs/' . $product->category->slug . '/' . $product->slug) }}">
+                            <div class="overflow-hidden mb-8 shadow-lg">
+                                <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('img/default.jpg') }}"
+                                    alt="{{ $product->name }}" class="product-image w-full h-[500px] object-cover">
                             </div>
-                        </div>
-                    </a>
+                        </a>
+                        <h4 class="font-heading text-3xl mb-3 tracking-wide">{{ $product->name }}</h4>
+                        <p class="text-sm text-[#8B7F6E] mb-5 tracking-wide">
+                            {{ Str::limit(strip_tags($product->description), 50) }}</p>
+                    </div>
                 @endforeach
             </div>
         </div>
     </section>
+
 
     <!-- Our Process -->
     <section class="py-32 px-6 bg-[#F5F1E8]">
@@ -166,35 +164,33 @@
         </div>
     </section>
 
-
-
-    <!-- Featured Products -->
-    <section class="py-32 px-6 ">
+    <!-- Collections -->
+    <section class="py-32 px-6">
         <div class="max-w-7xl mx-auto">
-            <p class="text-center text-xs text-[#8B7F6E] tracking-[2px] uppercase mb-4 font-normal">Pilihan Terbaik
-            </p>
-            <h2 class="font-heading text-5xl md:text-6xl text-center mb-20 tracking-wide font-light">Produk Unggulan
-            </h2>
+            <p class="text-center text-xs text-[#8B7F6E] tracking-[2px] uppercase mb-4 font-normal">Jelajahi</p>
+            <h2 class="font-heading text-5xl md:text-6xl text-center mb-20 tracking-wide font-light">Koleksi Kami</h2>
 
-            <div class="grid md:grid-cols-3 gap-12 scroll-reveal">
-                @foreach ($featuredProducts as $product)
-                    <div class="product-card group">
-                        <a href="{{ url('/catalogs/' . $product->category->slug . '/' . $product->slug) }}">
-                            <div class="overflow-hidden mb-8 shadow-lg">
-                                <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('img/default.jpg') }}"
-                                    alt="{{ $product->name }}" class="product-image w-full h-[500px] object-cover">
+            <div class="grid md:grid-cols-3 place-items-center gap-6 scroll-reveal">
+                @foreach ($categories as $category)
+                    <a href="{{ url('/catalogs?category=' . $category->slug) }}" class="block">
+                        <div
+                            class="category-card group relative h-[550px] overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-600 hover:-translate-y-2">
+                            <img src="{{ $category->image ? asset('storage/' . $category->image) : asset('img/default.jpg') }}"
+                                class="category-image w-full h-full object-cover">
+                            <div
+                                class="absolute inset-0 bg-gradient-to-t from-[#3A352F]/85 to-transparent flex items-end">
+                                <div class="p-10 text-white">
+                                    <h3 class="font-heading text-4xl mb-2">{{ $category->name }}</h3>
+                                    <p class="text-xs tracking-[1.5px] uppercase opacity-90">
+                                        {{ Str::limit($category->description, 30) }}</p>
+                                </div>
                             </div>
-                        </a>
-                        <h4 class="font-heading text-3xl mb-3 tracking-wide">{{ $product->name }}</h4>
-                        <p class="text-sm text-[#8B7F6E] mb-5 tracking-wide">
-                            {{ Str::limit(strip_tags($product->description), 50) }}</p>
-                    </div>
+                        </div>
+                    </a>
                 @endforeach
             </div>
         </div>
     </section>
-
-
 
     <!-- Soft CTA -->
     <section class="py-32 px-6">
