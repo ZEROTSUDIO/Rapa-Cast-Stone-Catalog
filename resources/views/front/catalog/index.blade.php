@@ -20,7 +20,19 @@
                             </h4>
                             <p class="text-xs text-[#8B7F6E] tracking-[1.5px] uppercase mb-1">
                                 {{ $catalog->category->name }}</p>
-                            {{-- <p class="text-sm text-[#6B5E52] tracking-wide">{{ $catalog->price }}</p> --}}
+                            @if ($catalog->specification)
+                                @php
+                                    $price =
+                                        $catalog->specification['Price'] ?? ($catalog->specification['price'] ?? null);
+                                @endphp
+                                @if ($price && is_numeric($price))
+                                    <p class="text-sm text-[#3A352F] tracking-wide">
+                                        {{ Number::currency($price, 'IDR', 'id') }}</p>
+                                @elseif ($price)
+                                    <p class="text-sm text-[#3A352F] tracking-wide">{{ $price }}</p>
+                                @endif
+                            @endif
+
                         </a>
                     </div>
                 @endforeach

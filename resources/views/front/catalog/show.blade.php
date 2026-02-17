@@ -50,7 +50,13 @@
                                         class="flex justify-between items-center text-sm border-b border-[#E8E3D8] pb-2 last:border-0">
                                         <span
                                             class="text-[#8B7F6E] uppercase tracking-wide">{{ Str::title(str_replace('_', ' ', $key)) }}</span>
-                                        <span class="text-[#3A352F] font-medium">{{ $value }}</span>
+                                        <span class="text-[#3A352F] font-medium">
+                                            @if (Str::lower($key) === 'price' && is_numeric($value))
+                                                {{ Number::currency($value, 'IDR', 'id') }}
+                                            @else
+                                                {{ $value }}
+                                            @endif
+                                        </span>
                                     </div>
                                 @endforeach
                             @endif
