@@ -411,10 +411,10 @@
                     </tbody>
                 </table>
             </div>
-        </div>
-        {{-- Pagination --}}
-        <div class="mt-6 px-8">
-            {{ $catalogues->links('vendor.pagination.table-pagination') }}
+            {{-- Pagination --}}
+            <div class="mt-6 px-6 pb-6">
+                {{ $catalogues->links('vendor.pagination.table-pagination') }}
+            </div>
         </div>
     @endif
 
