@@ -8,7 +8,7 @@
         content="{{ $metaDescription ?? 'Rapa Cast Stone adalah pabrik batu cor cast stone di Indonesia yang memproduksi roster, vas, air mancur, paving, dan elemen arsitektur berkualitas untuk rumah dan proyek.' }}">
     <meta name="author" content="{{ $metaAuthor ?? 'Rapa Cast Stone' }}">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="{{ $canonical ?? url()->current() }}">
+    <link rel="canonical" href="{{ $canonical ?? url(request()->path()) }}">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">

@@ -1,6 +1,8 @@
 <x-front.layout :title="$catalog->name . ' | Rapa Cast Stone'" :meta-description="'Produk ' .
     $catalog->name .
-    ' dari Rapa Cast Stone. Cast stone berkualitas untuk kebutuhan arsitektur dan proyek.'">
+    ' dari Rapa Cast Stone. Cast stone berkualitas untuk kebutuhan arsitektur dan proyek.'" :canonical="route('catalog.show', [$catalog->category->slug, $catalog->slug])" :og-image="$catalog->images->first()
+    ? asset('storage/' . $catalog->images->first()->image_path)
+    : asset('img/bg-1.png')">
 
     <section class="pt-40 pb-32 px-6" x-data="{ activeImage: '{{ $catalog->image ? asset('storage/' . $catalog->image) : asset('img/default.jpg') }}', lightboxOpen: false }">
         <div class="max-w-7xl mx-auto">

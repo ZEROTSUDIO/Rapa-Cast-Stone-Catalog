@@ -14,7 +14,7 @@ Route::get('/', function () {
     return view('front.home', [
         'categories' => $categories,
         'featuredProducts' => $featuredProducts,
-        'title' => 'Homepage'
+        'title' => 'Homepage',
     ]);
 });
 
@@ -64,7 +64,16 @@ Route::get('/catalogs', function () {
 
 Route::get('/catalogs/{category:slug}/{product:slug}', function (Category $category, Product $product) {
     return view('front.catalog.show', ['catalog' => $product, 'categories' => $category->products]);
-});
+})->name('catalog.show');
+
+Route::get('/sitemap.xml', function () {
+    $products = Product::with('category')->get();
+    $articles = Article::all();
+
+    return response()
+        ->view('front.sitemap', compact('products', 'articles'))
+        ->header('Content-Type', 'application/xml');
+})->name('sitemap');
 
 use App\Http\Controllers\AdminAuthController;
 
@@ -109,5 +118,6 @@ Route::get('/__link-storage', function () {
     }
 
     symlink($target, $link);
+
     return 'storage link created';
 });
