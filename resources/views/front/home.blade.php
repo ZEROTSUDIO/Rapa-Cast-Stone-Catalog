@@ -77,6 +77,17 @@
                         <h4 class="font-heading text-3xl mb-3 tracking-wide">{{ $product->name }}</h4>
                         <p class="text-sm text-[#8B7F6E] mb-5 tracking-wide">
                             {{ Str::limit(strip_tags($product->description), 50) }}</p>
+                        @if ($product->specification)
+                            @php
+                                $price = $product->specification['Price'] ?? ($product->specification['price'] ?? null);
+                            @endphp
+                            @if ($price && is_numeric($price))
+                                <p class="text-sm text-[#3A352F] tracking-wide">
+                                    {{ Number::currency($price, 'IDR', 'id') }}</p>
+                            @elseif ($price)
+                                <p class="text-sm text-[#3A352F] tracking-wide">{{ $price }}</p>
+                            @endif
+                        @endif
                     </div>
                 @endforeach
             </div>
