@@ -32,6 +32,14 @@
                 <i class="fas fa-envelope w-5"></i>
                 <span class="sidebar-text">Messages</span>
             </x-admin.navlink>
+            <x-admin.navlink href="{{ url('admin/articles') }}" active="{{ request()->routeIs('admin.articles') }}">
+                <i class="fas fa-file-alt w-5"></i>
+                <span class="sidebar-text">Article</span>
+            </x-admin.navlink>
+            <x-admin.navlink href="{{ url('admin/topics') }}" active="{{ request()->routeIs('admin.topics') }}">
+                <i class="fas fa-file-code w-5"></i>
+                <span class="sidebar-text">Topic</span>
+            </x-admin.navlink>
             {{-- <a href="#"
                 class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-gold-accent/20 hover:text-white transition-all duration-300 group"
                 data-page="simple-form">

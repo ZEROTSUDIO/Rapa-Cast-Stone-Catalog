@@ -104,6 +104,12 @@ Route::middleware('auth')->group(function () {
     Route::get('admin/messages', function () {
         return view('admin.contact');
     })->name('admin.messages');
+    Route::get('admin/articles', function () {
+        return view('admin.article');
+    })->name('admin.articles');
+    Route::get('admin/topics', function () {
+        return view('admin.topic');
+    })->name('admin.topics');
 });
 
 // Utility route to move storage files to public folder (since symlink is disabled)
