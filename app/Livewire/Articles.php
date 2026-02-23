@@ -4,6 +4,10 @@ namespace App\Livewire;
 
 use App\Models\Article;
 use App\Models\Topic;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Intervention\Image\Laravel\Facades\Image;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -12,14 +16,186 @@ class Articles extends Component
     use WithFileUploads;
 
     public $isCreating = false;
+
+    #[Validate('required|min:3')]
+    public $title;
+
+    #[Validate('required|min:10')]
+    public $content;
+
+    #[Validate('required|exists:topics,id')]
+    public $topic_id;
+
     public $articleId = null;
 
-    public $title;
-    public $topic_id;
-    public $content;
     public $image;
+
     public $imagePreview;
+
     public $existingImage;
+
+    // search
+    public $search = '';
+
+    public $topicFilter = '';
+
+    public $perPage = 8;
+
+    public function updatedSearch()
+    {
+        $this->resetPage();
+    }
+
+    public function updatedTopicFilter()
+    {
+        $this->resetPage();
+    }
+
+    public function resetFilters()
+    {
+        $this->reset(['search', 'topicFilter']);
+        $this->resetPage();
+    }
+
+    public function updatedPerPage()
+    {
+        $this->resetPage();
+    }
+
+    public function addArticle()
+    {
+        $this->reset(['title', 'topic_id', 'content', 'image']);
+        $this->isCreating = true;
+    }
+
+    public function cancel()
+    {
+        $this->isCreating = false;
+        $this->reset(['title', 'topic_id', 'content', 'image', 'articleId']);
+        $this->dispatch('article-form-closed');
+    }
+
+    public function createArticle()
+    {
+        $validated = $this->validate([
+            'title' => 'required|min:3',
+            'content' => 'required|min:10',
+            'topic_id' => 'required|exists:topics,id',
+            'image' => 'nullable|image|max:5120',
+        ]);
+        $imagePath = null;
+        if ($this->image) {
+            $slug = Str::slug($validated['title']);
+            $extension = strtolower($this->image->getClientOriginalExtension());
+            $filename = $slug.'.'.$extension;
+
+            // Process image
+            $processedImage = Image::read($this->image->getRealPath());
+
+            // Encode based on format
+            if ($extension === 'png') {
+                $encoded = $processedImage->toPng();
+            } elseif (in_array($extension, ['jpg', 'jpeg'])) {
+                $encoded = $processedImage->toJpeg(85);
+            } elseif ($extension === 'webp') {
+                $encoded = $processedImage->toWebp(85);
+            } else {
+                $encoded = $processedImage->encode();
+            }
+
+            $imagePath = 'articles/'.$filename;
+            Storage::disk('public_direct')->put($imagePath, (string) $encoded);
+        }
+        Article::create([
+            'title' => $validated['title'],
+            'slug' => Str::slug($validated['title']),
+            'body' => $validated['content'],
+            'topic_id' => $validated['topic_id'],
+            'author_id' => auth()->id(),
+            'image' => $imagePath,
+        ]);
+
+        $this->isCreating = false;
+        $this->reset(['title', 'topic_id', 'content', 'image']);
+        $this->dispatch('article-form-closed');
+        session()->flash('status', 'Article successfully created.');
+    }
+
+    public function updateArticle()
+    {
+        $validated = $this->validate([
+            'title' => 'required|min:3',
+            'content' => 'required|min:10',
+            'topic_id' => 'required|exists:topics,id',
+            'image' => 'nullable|image|max:5120',
+        ]);
+
+        $article = Article::findOrFail($this->articleId);
+        $data = [
+            'title' => $this->title,
+            'slug' => Str::slug($this->title),
+            'body' => $this->content,
+            'topic_id' => $this->topic_id,
+        ];
+
+        if ($this->image) {
+            if ($article->image && Storage::disk('public_direct')->exists($article->image)) {
+                Storage::disk('public_direct')->delete($article->image);
+            }
+
+            $slug = Str::slug($validated['title']);
+            $extension = strtolower($this->image->getClientOriginalExtension());
+            $filename = $slug.'.'.$extension;
+
+            // Process image
+            $processedImage = Image::read($this->image->getRealPath());
+
+            // Encode based on format
+            if ($extension === 'png') {
+                $encoded = $processedImage->toPng();
+            } elseif (in_array($extension, ['jpg', 'jpeg'])) {
+                $encoded = $processedImage->toJpeg(85);
+            } elseif ($extension === 'webp') {
+                $encoded = $processedImage->toWebp(85);
+            } else {
+                $encoded = $processedImage->encode();
+            }
+
+            $imagePath = 'articles/'.$filename;
+            Storage::disk('public_direct')->put($imagePath, (string) $encoded);
+            $data['image'] = $imagePath;
+        }
+        $article->update($data);
+
+        $this->isCreating = false;
+        $this->reset(['title', 'topic_id', 'content', 'image', 'articleId']);
+        $this->dispatch('article-form-closed');
+        session()->flash('status', 'Article successfully updated.');
+    }
+
+    public function editArticle($id)
+    {
+        $article = Article::findOrFail($id);
+        $this->articleId = $id;
+        $this->isCreating = true;
+        $this->resetValidation();
+        $this->resetErrorBag();
+        $this->title = $article->title;
+        $this->content = $article->body;
+        $this->topic_id = $article->topic_id;
+        $this->reset(['image', 'imagePreview']);
+        $this->existingImage = $article->image;
+    }
+
+    public function deleteArticle($id)
+    {
+        $article = Article::findOrFail($id);
+        if ($article->image && Storage::disk('public_direct')->exists($article->image)) {
+            Storage::disk('public_direct')->delete($article->image);
+        }
+        $article->delete();
+        session()->flash('status', 'Article successfully deleted.');
+    }
 
     public function updatedImage()
     {
@@ -34,47 +210,22 @@ class Articles extends Component
     {
         $this->image = null;
         $this->imagePreview = null;
-    }
-
-    public function addArticle()
-    {
-        $this->reset(['title', 'topic_id', 'content', 'image', 'imagePreview', 'existingImage', 'articleId']);
-        $this->isCreating = true;
-    }
-
-    public function cancel()
-    {
-        $this->isCreating = false;
-        $this->dispatch('article-form-closed');
-    }
-
-    public function createArticle()
-    {
-        // Placeholder for frontend demo
-        session()->flash('status', 'Article created (Simulation)');
-        $this->isCreating = false;
-    }
-
-    public function updateArticle()
-    {
-        // Placeholder for frontend demo
-        session()->flash('status', 'Article updated (Simulation)');
-        $this->isCreating = false;
-    }
-
-    public function editArticle($id)
-    {
-        $this->articleId = $id;
-        $this->isCreating = true;
-        // Mock data loading
-        $this->title = 'Sample Article Title';
-        $this->content = '<p>This is some <strong>sample</strong> content.</p>';
+        $this->existingImage = null;
     }
 
     public function render()
     {
+        $query = Article::query();
+        if ($this->search) {
+            $query->where('title', 'like', '%'.$this->search.'%');
+        }
+        if ($this->topicFilter) {
+            $query->where('topic_id', $this->topicFilter);
+        }
+        $articles = $query->paginate($this->perPage);
+
         return view('livewire.articles', [
-            'articles' => Article::paginate(10),
+            'articles' => $articles,
             'topics' => Topic::all(),
         ]);
     }

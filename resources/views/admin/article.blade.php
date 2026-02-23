@@ -1,3 +1,3 @@
 <x-admin.layout>
-    <ivewire:articles />
+    <livewire:articles />
 </x-admin.layout>

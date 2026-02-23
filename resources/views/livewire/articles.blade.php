@@ -23,7 +23,7 @@
                 </button>
             </div>
             <div class="p-6">
-                <form wire:submit.prevent="{{ $articleId ? 'updateArticle' : 'createArticle' }}">
+                <form x-data @submit.prevent="$wire.{{ $articleId ? 'updateArticle' : 'createArticle' }}()">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <!-- Left Column: Basic Info -->
                         <div class="space-y-6">
@@ -210,11 +210,7 @@
             // Use a flag to avoid multiple initializations
             let quillInitialized = false;
 
-            document.addEventListener('livewire:init', () => {
-                initQuill();
-            });
-
-            document.addEventListener('livewire:navigated', () => {
+            document.addEventListener('livewire:initialized', () => {
                 initQuill();
             });
 
@@ -223,7 +219,8 @@
                 el,
                 component
             }) => {
-                if (document.querySelector('#quill-editor') && !quillInitialized) {
+                const editorEl = document.querySelector('#quill-editor');
+                if (editorEl && !quillInitialized) {
                     initQuill();
                 }
             });
