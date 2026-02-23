@@ -57,9 +57,11 @@
     transform: translateY(-4px);
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
 }
-#editor {
-    height: 300px;
+
+.ql-editor {
+    min-height: 300px;
 }
+
 @keyframes fade-in-up {
     from {
         opacity: 0;
