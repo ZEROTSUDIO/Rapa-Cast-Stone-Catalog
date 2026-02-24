@@ -39,8 +39,7 @@
                     </div>
                 </div>
 
-                <x-front.navlink class="hidden" href="{{ url('/articles') }}"
-                    :active="request()->is('articles*')">Journal</x-front.navlink>
+                <x-front.navlink href="{{ url('/articles') }}" :active="request()->is('articles*')">Articles</x-front.navlink>
                 <x-front.navlink href="{{ url('/contact') }}" :active="request()->is('contact')">Contact</x-front.navlink>
             </div>
 

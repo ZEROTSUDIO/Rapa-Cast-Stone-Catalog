@@ -2,7 +2,7 @@
     <section class="min-h-screen">
         <!-- Hero Image -->
         <div class="h-[60vh] w-full relative overflow-hidden">
-            <img src="{{ $article->image ? asset('images/' . $article->image) : 'https://images.unsplash.com/photo-1615529182904-14819c35db37?w=1600' }}"
+            <img src="{{ $article->image ? asset('storage/' . $article->image) : 'https://images.unsplash.com/photo-1615529182904-14819c35db37?w=1600' }}"
                 alt="{{ $article->title }}" class="w-full h-full object-cover">
             <div class="absolute inset-0 bg-black/20"></div>
         </div>
@@ -28,7 +28,7 @@
                 @endif
 
                 <div class="prose prose-stone prose-lg max-w-none text-[#6B5E52] font-light text-left">
-                    {!! nl2br(e($article->body)) !!}
+                    {!! $article->body !!}
                 </div>
 
                 <div class="mt-16 pt-10 border-t border-[#E8E3D8]">
