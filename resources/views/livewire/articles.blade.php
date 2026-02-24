@@ -99,29 +99,36 @@
                             <div x-data="{
                                 content: @entangle('content'),
                                 init() {
-                                    let quill = new Quill(this.$refs.quillEditor, {
-                                        theme: 'snow',
-                                        placeholder: 'Tulis isi artikel di sini...',
-                                        modules: {
-                                            toolbar: [
-                                                [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-                                                ['bold', 'italic', 'underline', 'strike'],
-                                                ['blockquote', 'code-block'],
-                                                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                                                [{ 'script': 'sub' }, { 'script': 'super' }],
-                                                [{ 'indent': '-1' }, { 'indent': '+1' }],
-                                                [{ 'direction': 'rtl' }],
-                                                [{ 'color': [] }, { 'background': [] }],
-                                                [{ 'align': [] }],
-                                                ['link', 'image', 'video'],
-                                                ['clean']
-                                            ]
+                                    const initEditor = () => {
+                                        if (!window.Quill) {
+                                            setTimeout(initEditor, 100);
+                                            return;
                                         }
-                                    });
-                                    quill.root.innerHTML = this.content || '';
-                                    quill.on('text-change', () => {
-                                        this.content = quill.root.innerHTML;
-                                    });
+                                        let quill = new window.Quill(this.$refs.quillEditor, {
+                                            theme: 'snow',
+                                            placeholder: 'Tulis isi artikel di sini...',
+                                            modules: {
+                                                toolbar: [
+                                                    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                                                    ['bold', 'italic', 'underline', 'strike'],
+                                                    ['blockquote', 'code-block'],
+                                                    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                                                    [{ 'script': 'sub' }, { 'script': 'super' }],
+                                                    [{ 'indent': '-1' }, { 'indent': '+1' }],
+                                                    [{ 'direction': 'rtl' }],
+                                                    [{ 'color': [] }, { 'background': [] }],
+                                                    [{ 'align': [] }],
+                                                    ['link', 'image', 'video'],
+                                                    ['clean']
+                                                ]
+                                            }
+                                        });
+                                        quill.root.innerHTML = this.content || '';
+                                        quill.on('text-change', () => {
+                                            this.content = quill.root.innerHTML;
+                                        });
+                                    };
+                                    initEditor();
                                 }
                             }">
                                 <div x-ref="quillEditor" class="bg-white rounded-lg border-2 border-gray-200 pb-12"
