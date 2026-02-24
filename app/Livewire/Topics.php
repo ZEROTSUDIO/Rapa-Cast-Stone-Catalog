@@ -2,16 +2,14 @@
 
 namespace App\Livewire;
 
-use App\Models\topic;
-use Illuminate\Support\Facades\Storage;
+use App\Models\Topic;
 use Illuminate\Support\Str;
-use Intervention\Image\Laravel\Facades\Image;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithoutUrlPagination;
 use Livewire\WithPagination;
 
-class topics extends Component
+class Topics extends Component
 {
     use WithFileUploads;
     use WithoutUrlPagination;
@@ -22,7 +20,6 @@ class topics extends Component
     public $topicId;
 
     public $name;
-
 
     // Filter Properties
     public $search = '';
@@ -56,7 +53,7 @@ class topics extends Component
             'name' => 'required|string|max:255',
         ]);
 
-        topic::create([
+        Topic::create([
             'name' => $validated['name'],
             'slug' => Str::slug($validated['name']),
         ]);
@@ -72,7 +69,7 @@ class topics extends Component
             'name' => 'required|string|max:255',
         ]);
 
-        $topic = topic::findOrFail($this->topicId);
+        $topic = Topic::findOrFail($this->topicId);
 
         $data = [
             'name' => $this->name,
@@ -88,7 +85,7 @@ class topics extends Component
 
     public function edittopic($id)
     {
-        $topic = topic::findOrFail($id);
+        $topic = Topic::findOrFail($id);
         $this->topicId = $id;
         $this->isCreating = true;
         $this->resetValidation();
@@ -99,7 +96,7 @@ class topics extends Component
 
     public function deletetopic($id)
     {
-        $topic = topic::findOrFail($id);
+        $topic = Topic::findOrFail($id);
 
         $topic->delete();
         session()->flash('status', 'topic successfully deleted.');
@@ -107,10 +104,10 @@ class topics extends Component
 
     public function render()
     {
-        $query = topic::query();
+        $query = Topic::query();
 
         if ($this->search) {
-            $query->where('name', 'like', '%' . $this->search . '%');
+            $query->where('name', 'like', '%'.$this->search.'%');
         }
 
         return view('livewire.topics', [
