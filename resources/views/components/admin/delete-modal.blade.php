@@ -34,7 +34,9 @@
                 <h3 class="mb-6 text-gray-700 text-lg font-medium">{{ $message }}
                 </h3>
                 <div class="flex items-center gap-4 justify-center">
-                    <button @click="$wire.{{ $method }}(deleteId); showDeleteModal = false" type="button"
+                    <button
+                        @click="if(deleteId !== null) { $wire.{{ $method }}(deleteId); showDeleteModal = false; }"
+                        type="button"
                         class="text-white bg-gold-accent hover:bg-gold-accent/80 focus:ring-4 focus:ring-gold-accent/20 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none">
                         Yes, I'm sure
                     </button>

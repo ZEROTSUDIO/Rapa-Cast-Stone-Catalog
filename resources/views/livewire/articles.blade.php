@@ -23,7 +23,7 @@
                 </button>
             </div>
             <div class="p-6">
-                <form x-data @submit.prevent="$wire.{{ $articleId ? 'updateArticle' : 'createArticle' }}()">
+                <form wire:submit.prevent="{{ $articleId ? 'updateArticle' : 'createArticle' }}">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <!-- Left Column: Basic Info -->
                         <div class="space-y-6">
@@ -96,7 +96,37 @@
                         <!-- Right Column: Content Editor -->
                         <div class="space-y-2" wire:ignore>
                             <label class="block text-sm font-semibold text-premium-dark mb-2">Isi Artikel</label>
-                            <div id="quill-editor" class="bg-white rounded-lg border-2 border-gray-200"></div>
+                            <div x-data="{
+                                content: @entangle('content'),
+                                init() {
+                                    let quill = new Quill(this.$refs.quillEditor, {
+                                        theme: 'snow',
+                                        placeholder: 'Tulis isi artikel di sini...',
+                                        modules: {
+                                            toolbar: [
+                                                [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                                                ['bold', 'italic', 'underline', 'strike'],
+                                                ['blockquote', 'code-block'],
+                                                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                                                [{ 'script': 'sub' }, { 'script': 'super' }],
+                                                [{ 'indent': '-1' }, { 'indent': '+1' }],
+                                                [{ 'direction': 'rtl' }],
+                                                [{ 'color': [] }, { 'background': [] }],
+                                                [{ 'align': [] }],
+                                                ['link', 'image', 'video'],
+                                                ['clean']
+                                            ]
+                                        }
+                                    });
+                                    quill.root.innerHTML = this.content || '';
+                                    quill.on('text-change', () => {
+                                        this.content = quill.root.innerHTML;
+                                    });
+                                }
+                            }">
+                                <div x-ref="quillEditor" class="bg-white rounded-lg border-2 border-gray-200 pb-12"
+                                    style="min-height: 300px;"></div>
+                            </div>
                         </div>
                     </div>
 
@@ -205,71 +235,4 @@
     {{-- Delete Modal Placeholder --}}
     <x-admin.delete-modal method="deleteArticle" message="Apakah Anda yakin ingin menghapus artikel ini?" />
 
-    @script
-        <script>
-            // Use a flag to avoid multiple initializations
-            let quillInitialized = false;
-
-            document.addEventListener('livewire:initialized', () => {
-                initQuill();
-            });
-
-            // Listen for internal Livewire updates (like switching from table to form)
-            Livewire.hook('morph.updated', ({
-                el,
-                component
-            }) => {
-                const editorEl = document.querySelector('#quill-editor');
-                if (editorEl && !quillInitialized) {
-                    initQuill();
-                }
-            });
-
-            function initQuill() {
-                const editorEl = document.querySelector('#quill-editor');
-                if (!editorEl || quillInitialized) return;
-
-                quillInitialized = true;
-
-                const quill = new Quill('#quill-editor', {
-                    theme: 'snow',
-                    placeholder: 'Tulis isi artikel di sini...',
-                    modules: {
-                        toolbar: [
-                            [{
-                                'header': [1, 2, 3, false]
-                            }],
-                            ['bold', 'italic', 'underline', 'strike'],
-                            [{
-                                'list': 'ordered'
-                            }, {
-                                'list': 'bullet'
-                            }],
-                            [{
-                                'color': []
-                            }, {
-                                'background': []
-                            }],
-                            ['link', 'image'],
-                            ['clean']
-                        ]
-                    }
-                });
-
-                // Set initial content from Livewire
-                const currentContent = @this.get('content') || '';
-                quill.root.innerHTML = currentContent;
-
-                // Sync Quill content with Livewire
-                quill.on('text-change', () => {
-                    @this.set('content', quill.root.innerHTML);
-                });
-
-                // Handle switching back to table mode (reset flag)
-                Livewire.on('article-form-closed', () => {
-                    quillInitialized = false;
-                });
-            }
-        </script>
-    @endscript
 </div>
