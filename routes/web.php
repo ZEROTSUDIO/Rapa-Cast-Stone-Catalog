@@ -10,10 +10,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     $categories = Category::has('products')->get();
     $featuredProducts = Product::where('is_featured', true)->take(3)->get();
+    $latestArticles = Article::latest()->take(3)->get();
 
     return view('front.home', [
         'categories' => $categories,
         'featuredProducts' => $featuredProducts,
+        'latestArticles' => $latestArticles,
         'title' => 'Homepage',
     ]);
 });
