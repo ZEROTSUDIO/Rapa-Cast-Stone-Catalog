@@ -1,5 +1,27 @@
-import Quill from 'quill';
+import tinymce from 'tinymce';
 
-window.Quill = Quill;
+// TinyMCE theme, model, and icons
+import 'tinymce/themes/silver';
+import 'tinymce/models/dom';
+import 'tinymce/icons/default';
 
-// Quill will be initialized per-component in the Blade files to ensure compatibility with Livewire.
+// TinyMCE plugins
+import 'tinymce/plugins/advlist';
+import 'tinymce/plugins/autolink';
+import 'tinymce/plugins/lists';
+import 'tinymce/plugins/link';
+import 'tinymce/plugins/image';
+import 'tinymce/plugins/charmap';
+import 'tinymce/plugins/preview';
+import 'tinymce/plugins/anchor';
+import 'tinymce/plugins/searchreplace';
+import 'tinymce/plugins/visualblocks';
+import 'tinymce/plugins/code';
+import 'tinymce/plugins/fullscreen';
+import 'tinymce/plugins/insertdatetime';
+import 'tinymce/plugins/media';
+import 'tinymce/plugins/table';
+import 'tinymce/plugins/wordcount';
+import 'tinymce/plugins/quickbars';
+
+window.tinymce = tinymce;

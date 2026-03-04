@@ -92,76 +92,72 @@
                         <label class="block text-sm font-semibold text-premium-dark mb-2">Isi Artikel</label>
                         <div x-data="{
                             content: @entangle('content').live,
+                            editor: null,
                             init() {
                                 const initEditor = () => {
-                                    if (!window.Quill) {
+                                    if (!window.tinymce) {
                                         setTimeout(initEditor, 100);
                                         return;
                                     }
                         
-                                    // Register Professional Modules if available
-                                    const ResizeModuleCandidate = window.QuillResize || window.ImageResize || window.QuillResizeModule;
-                                    const ResizeModule = ResizeModuleCandidate?.default || ResizeModuleCandidate;
+                                    window.tinymce.init({
+                                        target: this.$refs.tinymceEditor,
+                                        license_key: 'gpl',
+                                        skin_url: '/build/tinymce/skins/ui/oxide',
+                                        content_css: '/build/tinymce/skins/content/default/content.min.css',
+                                        plugins: 'advlist autolink lists link image charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime media table wordcount quickbars',
+                                        toolbar: 'undo redo | blocks | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media table | forecolor backcolor removeformat | code fullscreen',
+                                        menubar: 'file edit view insert format tools table',
+                                        height: 500,
+                                        promotion: false,
+                                        branding: false,
+                                        image_advtab: true,
+                                        image_caption: true,
+                                        object_resizing: true,
+                                        resize: true,
+                                        paste_data_images: true,
+                                        automatic_uploads: true,
+                                        file_picker_types: 'image',
+                                        file_picker_callback: (cb, value, meta) => {
+                                            const input = document.createElement('input');
+                                            input.setAttribute('type', 'file');
+                                            input.setAttribute('accept', 'image/*');
+                                            input.onchange = function() {
+                                                const file = this.files[0];
+                                                const reader = new FileReader();
+                                                reader.onload = function() {
+                                                    cb(reader.result, { title: file.name });
+                                                };
+                                                reader.readAsDataURL(file);
+                                            };
+                                            input.click();
+                                        },
+                                        setup: (editor) => {
+                                            this.editor = editor;
                         
-                                    if (ResizeModule) {
-                                        Quill.register('modules/resize', ResizeModule);
-                                    }
-                                    if (window.QuillMarkdown) {
-                                        Quill.register('modules/markdownOptions', window.QuillMarkdown);
-                                    }
+                                            editor.on('init', () => {
+                                                if (this.content) {
+                                                    editor.setContent(this.content);
+                                                }
+                                            });
                         
-                                    let quill = new window.Quill(this.$refs.quillEditor, {
-                                        theme: 'snow',
-                                        placeholder: 'Tulis isi artikel di sini...',
-                                        modules: {
-                                            toolbar: [
-                                                [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-                                                ['bold', 'italic', 'underline', 'strike'],
-                                                ['blockquote', 'code-block'],
-                                                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                                                [{ 'script': 'sub' }, { 'script': 'super' }],
-                                                [{ 'indent': '-1' }, { 'indent': '+1' }],
-                                                [{ 'direction': 'rtl' }],
-                                                [{ 'color': [] }, { 'background': [] }],
-                                                [{ 'align': [] }],
-                                                ['link', 'image', 'video'],
-                                                [{ 'table': 'insert' }],
-                                                ['clean']
-                                            ],
-                                            table: true,
-                                            resize: ResizeModule ? {} : false,
-                                            markdownOptions: window.QuillMarkdown ? {} : false
-                                        }
-                                    });
-                        
-                                    // Set initial content
-                                    const delta = quill.clipboard.convert({ html: this.content || '' });
-                                    quill.setContents(delta, 'silent');
-                        
-                                    // Update content on change
-                                    quill.on('text-change', () => {
-                                        this.content = quill.root.innerHTML;
-                                    });
-                        
-                                    // Listen for Livewire updates
-                                    Livewire.on('contentUpdated', (newContent) => {
-                                        if (newContent !== quill.root.innerHTML) {
-                                            quill.root.innerHTML = newContent;
+                                            editor.on('Change Input Undo Redo', () => {
+                                                this.content = editor.getContent();
+                                            });
                                         }
                                     });
                                 };
                                 initEditor();
+                            },
+                            destroy() {
+                                if (this.editor) {
+                                    this.editor.destroy();
+                                }
                             }
                         }">
-                            <div x-ref="quillEditor" class="bg-white rounded-lg border-2 border-gray-200"
-                                style="min-height: 400px;"></div>
+                            <textarea x-ref="tinymceEditor" style="min-height: 400px;"></textarea>
                         </div>
                     </div>
-
-                    @push('scripts')
-                        <script src="https://cdn.jsdelivr.net/npm/quill-resize-module@2.0.0-rc.1/dist/resize.js"></script>
-                        <script src="https://cdn.jsdelivr.net/npm/quilljs-markdown@1.2.0/dist/quilljs-markdown.js"></script>
-                    @endpush
 
                     <div class="mt-8 flex justify-end gap-3 pt-6 border-t border-gray-100">
                         <button type="button" wire:click="cancel"
