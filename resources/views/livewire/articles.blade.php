@@ -98,18 +98,18 @@
                                         setTimeout(initEditor, 100);
                                         return;
                                     }
-
+                        
                                     // Register Professional Modules if available
                                     const ResizeModuleCandidate = window.QuillResize || window.ImageResize || window.QuillResizeModule;
                                     const ResizeModule = ResizeModuleCandidate?.default || ResizeModuleCandidate;
-
+                        
                                     if (ResizeModule) {
                                         Quill.register('modules/resize', ResizeModule);
                                     }
                                     if (window.QuillMarkdown) {
                                         Quill.register('modules/markdownOptions', window.QuillMarkdown);
                                     }
-
+                        
                                     let quill = new window.Quill(this.$refs.quillEditor, {
                                         theme: 'snow',
                                         placeholder: 'Tulis isi artikel di sini...',
@@ -133,16 +133,16 @@
                                             markdownOptions: window.QuillMarkdown ? {} : false
                                         }
                                     });
-
+                        
                                     // Set initial content
                                     const delta = quill.clipboard.convert({ html: this.content || '' });
                                     quill.setContents(delta, 'silent');
-
+                        
                                     // Update content on change
                                     quill.on('text-change', () => {
                                         this.content = quill.root.innerHTML;
                                     });
-
+                        
                                     // Listen for Livewire updates
                                     Livewire.on('contentUpdated', (newContent) => {
                                         if (newContent !== quill.root.innerHTML) {
@@ -234,8 +234,12 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="flex justify-center gap-2">
+                                        <button class="text-yellow-600 hover:text-yellow-800 transition-colors"
+                                            title="View"><a href="{{ url('/articles/' . $article->slug) }}"
+                                                target="_blank"><i class="fas fa-eye"></i></a></button>
                                         <button wire:click="editArticle({{ $article->id }})"
-                                            class="text-blue-600 hover:text-blue-800 transition-colors" title="Edit">
+                                            class="text-blue-600 hover:text-blue-800 transition-colors"
+                                            title="Edit">
                                             <i class="fas fa-edit"></i>
                                         </button>
                                         <button @click="showDeleteModal = true; deleteId = {{ $article->id }}"
