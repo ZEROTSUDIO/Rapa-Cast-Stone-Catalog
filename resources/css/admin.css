@@ -59,8 +59,40 @@
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
 }
 
+.ql-toolbar.ql-snow {
+    border: 2px solid #e9ecef !important;
+    border-top-left-radius: 0.75rem !important;
+    border-top-right-radius: 0.75rem !important;
+    background-color: #f8f9fa;
+    padding: 0.75rem !important;
+}
+
+.ql-container.ql-snow {
+    border: 2px solid #e9ecef !important;
+    border-top: none !important;
+    border-bottom-left-radius: 0.75rem !important;
+    border-bottom-right-radius: 0.75rem !important;
+    font-family: inherit;
+    font-size: 1rem;
+}
+
 .ql-editor {
-    min-height: 300px;
+    min-height: 400px;
+    padding: 1.5rem !important;
+}
+
+.ql-snow .ql-stroke {
+    stroke: #2c3e50 !important;
+}
+
+.ql-snow.ql-toolbar button:hover .ql-stroke,
+.ql-snow.ql-toolbar button.ql-active .ql-stroke {
+    stroke: #d4af37 !important;
+}
+
+.ql-snow.ql-toolbar button:hover .ql-fill,
+.ql-snow.ql-toolbar button.ql-active .ql-fill {
+    fill: #d4af37 !important;
 }
 
 @keyframes fade-in-up {

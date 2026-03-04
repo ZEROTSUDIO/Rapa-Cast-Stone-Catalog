@@ -1,4 +1,4 @@
-<div class="page animated-slide-in" x-data="{ showDeleteModal: false, deleteId: null }">
+<div class="page animate-slide-in" x-data="{ showDeleteModal: false, deleteId: null }">
     <div class="mb-8">
         <h1 class="text-4xl font-bold text-premium-dark mb-2">
             Articles
@@ -24,120 +24,146 @@
             </div>
             <div class="p-6">
                 <form wire:submit.prevent="{{ $articleId ? 'updateArticle' : 'createArticle' }}">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Left Column: Basic Info -->
-                        <div class="space-y-6">
-                            <div>
-                                <label for="title" class="block text-sm font-semibold text-premium-dark mb-2">Judul
-                                    Artikel</label>
-                                <input type="text" id="title" wire:model="title"
-                                    class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-gold-accent focus:ring-2 focus:ring-gold-accent/20 outline-none transition-all"
-                                    placeholder="Judul Artikel">
-                                @error('title')
-                                    <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span>
-                                @enderror
+                    <div class="mb-6">
+                        <label for="title" class="block text-sm font-semibold text-premium-dark mb-2">Judul
+                            Artikel</label>
+                        <input type="text" id="title" wire:model="title"
+                            class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-gold-accent focus:ring-2 focus:ring-gold-accent/20 outline-none transition-all"
+                            placeholder="Judul Artikel">
+                        @error('title')
+                            <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="mb-6">
+                        <label for="topic" class="block text-sm font-semibold text-premium-dark mb-2">Topic</label>
+                        <select wire:model="topic_id"
+                            class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-gold-accent focus:ring-2 focus:ring-gold-accent/20 outline-none transition-all">
+                            <option value="">Pilih Option</option>
+                            @foreach ($topics as $topic)
+                                <option value="{{ $topic->id }}">{{ $topic->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('topic_id')
+                            <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <!-- Featured Image Upload -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-semibold text-premium-dark mb-2">Featured Image</label>
+
+                        {{-- Upload Box --}}
+                        <div @click="$refs.imageInput.click()"
+                            class="relative border-2 border-dashed border-gray-300 rounded-xl p-8 text-center cursor-pointer hover:border-gold-accent hover:bg-gray-50 transition-all duration-300">
+
+                            {{-- Loading Indicator --}}
+                            <div wire:loading wire:target="image"
+                                class="absolute inset-0 bg-white/90 flex flex-col justify-center items-center z-10 backdrop-blur-sm rounded-xl">
+                                <i class="fas fa-circle-notch fa-spin text-3xl text-gold-accent mb-2"></i>
+                                <p class="text-xs text-gray-600 font-semibold animate-pulse">Uploading...</p>
                             </div>
 
-                            <div>
-                                <label for="topic"
-                                    class="block text-sm font-semibold text-premium-dark mb-2">Topic</label>
-                                <select wire:model="topic_id"
-                                    class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-gold-accent focus:ring-2 focus:ring-gold-accent/20 outline-none transition-all">
-                                    <option value="">Pilih Option</option>
-                                    @foreach ($topics as $topic)
-                                        <option value="{{ $topic->id }}">{{ $topic->name }}</option>
-                                    @endforeach
-                                </select>
-                                @error('topic_id')
-                                    <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span>
-                                @enderror
-                            </div>
-
-                            <!-- Featured Image Upload -->
-                            <div class="space-y-2">
-                                <label class="block text-sm font-semibold text-premium-dark mb-2">Featured Image</label>
-
-                                {{-- Upload Box --}}
-                                <div @click="$refs.imageInput.click()"
-                                    class="relative border-2 border-dashed border-gray-300 rounded-xl p-6 text-center cursor-pointer hover:border-gold-accent hover:bg-gray-50 transition-all duration-300">
-
-                                    {{-- Loading Indicator --}}
-                                    <div wire:loading wire:target="image"
-                                        class="absolute inset-0 bg-white/90 flex flex-col justify-center items-center z-10 backdrop-blur-sm rounded-xl">
-                                        <i class="fas fa-circle-notch fa-spin text-3xl text-gold-accent mb-2"></i>
-                                        <p class="text-xs text-gray-600 font-semibold animate-pulse">Uploading...</p>
-                                    </div>
-
-                                    @if ($imagePreview || $existingImage)
-                                        <div class="relative group mx-auto w-full max-w-[200px]">
-                                            <img src="{{ $imagePreview ?: asset('storage/' . $existingImage) }}"
-                                                class="w-full h-40 object-cover rounded-lg shadow-md border-2 border-gray-100">
-                                            <button type="button" wire:click="removeImage"
-                                                class="absolute -top-2 -right-2 bg-red-500 text-white p-1.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
-                                                <i class="fas fa-times text-xs"></i>
-                                            </button>
-                                        </div>
-                                    @else
-                                        <i class="fas fa-cloud-upload-alt text-4xl text-gold-accent mb-3"></i>
-                                        <h5 class="text-sm font-semibold text-gray-700">Click to upload featured image
-                                        </h5>
-                                        <p class="text-xs text-gray-500 mt-1">PNG, JPG up to 5MB</p>
-                                    @endif
+                            @if ($imagePreview || $existingImage)
+                                <div class="relative group mx-auto w-full max-w-2xl">
+                                    <img src="{{ $imagePreview ?: asset('storage/' . $existingImage) }}"
+                                        class="w-full h-auto object-cover rounded-lg shadow-md border-2 border-gray-100">
+                                    <button type="button" wire:click="removeImage"
+                                        class="absolute -top-2 -right-2 bg-red-500 text-white p-1.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <i class="fas fa-times text-xs"></i>
+                                    </button>
                                 </div>
-
-                                <input type="file" wire:model="image" class="hidden" x-ref="imageInput"
-                                    accept="image/*">
-                                @error('image')
-                                    <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span>
-                                @enderror
-                            </div>
+                            @else
+                                <i class="fas fa-cloud-upload-alt text-4xl text-gold-accent mb-3"></i>
+                                <h5 class="text-sm font-semibold text-gray-700">Click to upload featured image
+                                </h5>
+                                <p class="text-xs text-gray-500 mt-1">PNG, JPG up to 5MB</p>
+                            @endif
                         </div>
 
-                        <!-- Right Column: Content Editor -->
-                        <div class="space-y-2" wire:ignore>
-                            <label class="block text-sm font-semibold text-premium-dark mb-2">Isi Artikel</label>
-                            <div x-data="{
-                                content: @entangle('content'),
-                                init() {
-                                    const initEditor = () => {
-                                        if (!window.Quill) {
-                                            setTimeout(initEditor, 100);
-                                            return;
+                        <input type="file" wire:model="image" class="hidden" x-ref="imageInput" accept="image/*">
+                        @error('image')
+                            <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <!-- Content Editor -->
+                    <div class="mb-6" wire:ignore>
+                        <label class="block text-sm font-semibold text-premium-dark mb-2">Isi Artikel</label>
+                        <div x-data="{
+                            content: @entangle('content').live,
+                            init() {
+                                const initEditor = () => {
+                                    if (!window.Quill) {
+                                        setTimeout(initEditor, 100);
+                                        return;
+                                    }
+
+                                    // Register Professional Modules if available
+                                    const ResizeModuleCandidate = window.QuillResize || window.ImageResize || window.QuillResizeModule;
+                                    const ResizeModule = ResizeModuleCandidate?.default || ResizeModuleCandidate;
+
+                                    if (ResizeModule) {
+                                        Quill.register('modules/resize', ResizeModule);
+                                    }
+                                    if (window.QuillMarkdown) {
+                                        Quill.register('modules/markdownOptions', window.QuillMarkdown);
+                                    }
+
+                                    let quill = new window.Quill(this.$refs.quillEditor, {
+                                        theme: 'snow',
+                                        placeholder: 'Tulis isi artikel di sini...',
+                                        modules: {
+                                            toolbar: [
+                                                [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                                                ['bold', 'italic', 'underline', 'strike'],
+                                                ['blockquote', 'code-block'],
+                                                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                                                [{ 'script': 'sub' }, { 'script': 'super' }],
+                                                [{ 'indent': '-1' }, { 'indent': '+1' }],
+                                                [{ 'direction': 'rtl' }],
+                                                [{ 'color': [] }, { 'background': [] }],
+                                                [{ 'align': [] }],
+                                                ['link', 'image', 'video'],
+                                                [{ 'table': 'insert' }],
+                                                ['clean']
+                                            ],
+                                            table: true,
+                                            resize: ResizeModule ? {} : false,
+                                            markdownOptions: window.QuillMarkdown ? {} : false
                                         }
-                                        let quill = new window.Quill(this.$refs.quillEditor, {
-                                            theme: 'snow',
-                                            placeholder: 'Tulis isi artikel di sini...',
-                                            modules: {
-                                                toolbar: [
-                                                    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-                                                    ['bold', 'italic', 'underline', 'strike'],
-                                                    ['blockquote', 'code-block'],
-                                                    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                                                    [{ 'script': 'sub' }, { 'script': 'super' }],
-                                                    [{ 'indent': '-1' }, { 'indent': '+1' }],
-                                                    [{ 'direction': 'rtl' }],
-                                                    [{ 'color': [] }, { 'background': [] }],
-                                                    [{ 'align': [] }],
-                                                    ['link', 'image', 'video'],
-                                                    ['clean']
-                                                ]
-                                            }
-                                        });
-                                        quill.root.innerHTML = this.content || '';
-                                        quill.on('text-change', () => {
-                                            this.content = quill.root.innerHTML;
-                                        });
-                                    };
-                                    initEditor();
-                                }
-                            }">
-                                <div x-ref="quillEditor" class="bg-white rounded-lg border-2 border-gray-200 pb-12"
-                                    style="min-height: 300px;"></div>
-                            </div>
+                                    });
+
+                                    // Set initial content
+                                    const delta = quill.clipboard.convert({ html: this.content || '' });
+                                    quill.setContents(delta, 'silent');
+
+                                    // Update content on change
+                                    quill.on('text-change', () => {
+                                        this.content = quill.root.innerHTML;
+                                    });
+
+                                    // Listen for Livewire updates
+                                    Livewire.on('contentUpdated', (newContent) => {
+                                        if (newContent !== quill.root.innerHTML) {
+                                            quill.root.innerHTML = newContent;
+                                        }
+                                    });
+                                };
+                                initEditor();
+                            }
+                        }">
+                            <div x-ref="quillEditor" class="bg-white rounded-lg border-2 border-gray-200"
+                                style="min-height: 400px;"></div>
                         </div>
                     </div>
 
-                    <div class="mt-8 flex justify-end gap-3">
+                    @push('scripts')
+                        <script src="https://cdn.jsdelivr.net/npm/quill-resize-module@2.0.0-rc.1/dist/resize.js"></script>
+                        <script src="https://cdn.jsdelivr.net/npm/quilljs-markdown@1.2.0/dist/quilljs-markdown.js"></script>
+                    @endpush
+
+                    <div class="mt-8 flex justify-end gap-3 pt-6 border-t border-gray-100">
                         <button type="button" wire:click="cancel"
                             class="bg-white border-2 border-gray-200 text-gray-700 px-6 py-2.5 rounded-lg font-semibold hover:bg-gray-50 transition-all">
                             Batal
@@ -166,22 +192,26 @@
                 <table class="w-full">
                     <thead class="bg-gray-50 border-b border-gray-200">
                         <tr>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                            <th
+                                class="px-6 py-4 text-left text-xs font-bold text-premium-dark uppercase tracking-wider">
                                 Image</th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                            <th
+                                class="px-6 py-4 text-left text-xs font-bold text-premium-dark uppercase tracking-wider">
                                 Judul Artikel</th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                            <th
+                                class="px-6 py-4 text-left text-xs font-bold text-premium-dark uppercase tracking-wider">
                                 Topic</th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                            <th
+                                class="px-6 py-4 text-left text-xs font-bold text-premium-dark uppercase tracking-wider">
                                 Created At</th>
                             <th
-                                class="px-6 py-4 text-center text-xs font-bold text-gray-500 uppercase tracking-wider px-6">
+                                class="px-6 py-4 text-center text-xs font-bold text-premium-dark uppercase tracking-wider">
                                 Actions</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
                         @forelse ($articles as $article)
-                            <tr class="hover:bg-gray-50/50 transition-colors">
+                            <tr class="hover:bg-gold-accent/5 transition-colors duration-200">
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="w-16 h-12 rounded overflow-hidden shadow-sm border border-gray-100">
                                         <img src="{{ $article->image ? asset('storage/' . $article->image) : asset('img/placeholder-article.jpg') }}"
@@ -202,16 +232,14 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">
                                     {{ $article->created_at->format('d M Y') }}
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-center">
+                                <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="flex justify-center gap-2">
                                         <button wire:click="editArticle({{ $article->id }})"
-                                            class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                                            title="Edit">
+                                            class="text-blue-600 hover:text-blue-800 transition-colors" title="Edit">
                                             <i class="fas fa-edit"></i>
                                         </button>
                                         <button @click="showDeleteModal = true; deleteId = {{ $article->id }}"
-                                            class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                                            title="Delete">
+                                            class="text-red-600 hover:text-red-800 transition-colors" title="Delete">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </div>
@@ -232,8 +260,8 @@
             </div>
 
             @if ($articles->hasPages())
-                <div class="px-6 py-4 border-t border-gray-100 bg-gray-50">
-                    {{ $articles->links() }}
+                <div class="mt-6 px-6 pb-6">
+                    {{ $articles->links('vendor.pagination.table-pagination') }}
                 </div>
             @endif
         </div>
