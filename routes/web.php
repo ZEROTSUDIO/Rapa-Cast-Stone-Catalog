@@ -61,7 +61,7 @@ Route::get('/catalogs', function () {
     return view('front.catalog.index', [
         'catalogs' => Product::filter(request(['search', 'category']))
             ->latest()
-            ->paginate(9)->withQueryString(),
+            ->paginate(15)->withQueryString(),
         'categories' => Category::has('products')->get(),
     ]);
 });
