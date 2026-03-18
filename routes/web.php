@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     $categories = Category::has('products')->get();
     $featuredProducts = Product::where('is_featured', true)->take(3)->get();
-    $latestArticles = Article::latest()->take(3)->get();
+    $latestArticles = Article::published()->latest()->take(3)->get();
 
     return view('front.home', [
         'categories' => $categories,
@@ -43,7 +43,7 @@ Route::post('/contact', [\App\Http\Controllers\ContactController::class, 'store'
 
 Route::get('/articles', function () {
     return view('front.articles.index', [
-        'articles' => Article::filter(request(['topic', 'author']))
+        'articles' => Article::published()->filter(request(['topic', 'author']))
             ->latest()
             ->paginate(6)
             ->withQueryString(),
@@ -52,6 +52,8 @@ Route::get('/articles', function () {
 });
 
 Route::get('/articles/{article:slug}', function (Article $article) {
+    abort_unless($article->status === App\Enums\ArticleStatus::Published, 404);
+
     return view('front.articles.show', ['article' => $article]);
 });
 
@@ -70,7 +72,7 @@ Route::get('/catalogs/{category:slug}/{product:slug}', function (Category $categ
 
 Route::get('/sitemap.xml', function () {
     $products = Product::with('category')->get();
-    $articles = Article::all();
+    $articles = Article::published()->get();
 
     return response()
         ->view('front.sitemap', compact('products', 'articles'))

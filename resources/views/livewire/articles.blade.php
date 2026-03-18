@@ -35,18 +35,35 @@
                         @enderror
                     </div>
 
-                    <div class="mb-6">
-                        <label for="topic" class="block text-sm font-semibold text-premium-dark mb-2">Topic</label>
-                        <select wire:model="topic_id"
-                            class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-gold-accent focus:ring-2 focus:ring-gold-accent/20 outline-none transition-all">
-                            <option value="">Pilih Option</option>
-                            @foreach ($topics as $topic)
-                                <option value="{{ $topic->id }}">{{ $topic->name }}</option>
-                            @endforeach
-                        </select>
-                        @error('topic_id')
-                            <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span>
-                        @enderror
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label for="topic"
+                                class="block text-sm font-semibold text-premium-dark mb-2">Topic</label>
+                            <select wire:model="topic_id"
+                                class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-gold-accent focus:ring-2 focus:ring-gold-accent/20 outline-none transition-all">
+                                <option value="">Pilih Option</option>
+                                @foreach ($topics as $topic)
+                                    <option value="{{ $topic->id }}">{{ $topic->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('topic_id')
+                                <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div>
+                            <label for="status"
+                                class="block text-sm font-semibold text-premium-dark mb-2">Status</label>
+                            <select wire:model="status"
+                                class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-gold-accent focus:ring-2 focus:ring-gold-accent/20 outline-none transition-all">
+                                @foreach (App\Enums\ArticleStatus::cases() as $articleStatus)
+                                    <option value="{{ $articleStatus->value }}">{{ $articleStatus->label() }}</option>
+                                @endforeach
+                            </select>
+                            @error('status')
+                                <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span>
+                            @enderror
+                        </div>
                     </div>
 
                     <!-- Featured Image Upload -->
@@ -199,6 +216,9 @@
                                 Topic</th>
                             <th
                                 class="px-6 py-4 text-left text-xs font-bold text-premium-dark uppercase tracking-wider">
+                                Status</th>
+                            <th
+                                class="px-6 py-4 text-left text-xs font-bold text-premium-dark uppercase tracking-wider">
                                 Created At</th>
                             <th
                                 class="px-6 py-4 text-center text-xs font-bold text-premium-dark uppercase tracking-wider">
@@ -225,6 +245,19 @@
                                         {{ $article->topic->name ?? 'Uncategorized' }}
                                     </span>
                                 </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    @if ($article->status === App\Enums\ArticleStatus::Published)
+                                        <span
+                                            class="px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700 border border-green-200">
+                                            <i class="fas fa-check-circle mr-1"></i>Published
+                                        </span>
+                                    @else
+                                        <span
+                                            class="px-2.5 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700 border border-yellow-200">
+                                            <i class="fas fa-pencil-alt mr-1"></i>Draft
+                                        </span>
+                                    @endif
+                                </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">
                                     {{ $article->created_at->format('d M Y') }}
                                 </td>
@@ -247,7 +280,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="px-6 py-12 text-center">
+                                <td colspan="6" class="px-6 py-12 text-center">
                                     <div class="flex flex-col items-center">
                                         <i class="fas fa-newspaper text-4xl text-gray-200 mb-3"></i>
                                         <p class="text-gray-400 font-medium">Belum ada data artikel</p>

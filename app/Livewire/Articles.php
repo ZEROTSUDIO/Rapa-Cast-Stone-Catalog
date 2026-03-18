@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Enums\ArticleStatus;
 use App\Models\Article;
 use App\Models\Topic;
 use Illuminate\Support\Facades\Storage;
@@ -26,6 +27,9 @@ class Articles extends Component
     #[Validate('required|exists:topics,id')]
     public $topic_id;
 
+    #[Validate('required|in:draft,published')]
+    public $status = 'draft';
+
     public $articleId = null;
 
     public $image;
@@ -39,6 +43,8 @@ class Articles extends Component
 
     public $topicFilter = '';
 
+    public $statusFilter = '';
+
     public $perPage = 8;
 
     public function updatedSearch()
@@ -51,9 +57,14 @@ class Articles extends Component
         $this->resetPage();
     }
 
+    public function updatedStatusFilter()
+    {
+        $this->resetPage();
+    }
+
     public function resetFilters()
     {
-        $this->reset(['search', 'topicFilter']);
+        $this->reset(['search', 'topicFilter', 'statusFilter']);
         $this->resetPage();
     }
 
@@ -64,14 +75,15 @@ class Articles extends Component
 
     public function addArticle()
     {
-        $this->reset(['title', 'topic_id', 'content', 'image']);
+        $this->reset(['title', 'topic_id', 'content', 'image', 'status']);
+        $this->status = 'draft';
         $this->isCreating = true;
     }
 
     public function cancel()
     {
         $this->isCreating = false;
-        $this->reset(['title', 'topic_id', 'content', 'image', 'articleId']);
+        $this->reset(['title', 'topic_id', 'content', 'image', 'articleId', 'status']);
         $this->dispatch('article-form-closed');
     }
 
@@ -82,12 +94,13 @@ class Articles extends Component
             'content' => 'required|min:10',
             'topic_id' => 'required|exists:topics,id',
             'image' => 'nullable|image|max:5120',
+            'status' => 'required|in:draft,published',
         ]);
         $imagePath = null;
         if ($this->image) {
             $slug = Str::slug($validated['title']);
             $extension = strtolower($this->image->getClientOriginalExtension());
-            $filename = $slug.'.'.$extension;
+            $filename = $slug . '.' . $extension;
 
             // Process image
             $processedImage = Image::read($this->image->getRealPath());
@@ -103,7 +116,7 @@ class Articles extends Component
                 $encoded = $processedImage->encode();
             }
 
-            $imagePath = 'articles/'.$filename;
+            $imagePath = 'articles/' . $filename;
             Storage::disk('public_direct')->put($imagePath, (string) $encoded);
         }
         Article::create([
@@ -113,10 +126,11 @@ class Articles extends Component
             'topic_id' => $validated['topic_id'],
             'author_id' => auth()->id(),
             'image' => $imagePath,
+            'status' => $validated['status'],
         ]);
 
         $this->isCreating = false;
-        $this->reset(['title', 'topic_id', 'content', 'image']);
+        $this->reset(['title', 'topic_id', 'content', 'image', 'status']);
         $this->dispatch('article-form-closed');
         session()->flash('status', 'Article successfully created.');
     }
@@ -128,6 +142,7 @@ class Articles extends Component
             'content' => 'required|min:10',
             'topic_id' => 'required|exists:topics,id',
             'image' => 'nullable|image|max:5120',
+            'status' => 'required|in:draft,published',
         ]);
 
         $article = Article::findOrFail($this->articleId);
@@ -136,6 +151,7 @@ class Articles extends Component
             'slug' => Str::slug($this->title),
             'body' => $this->content,
             'topic_id' => $this->topic_id,
+            'status' => $this->status,
         ];
 
         if ($this->image) {
@@ -145,7 +161,7 @@ class Articles extends Component
 
             $slug = Str::slug($validated['title']);
             $extension = strtolower($this->image->getClientOriginalExtension());
-            $filename = $slug.'.'.$extension;
+            $filename = $slug . '.' . $extension;
 
             // Process image
             $processedImage = Image::read($this->image->getRealPath());
@@ -161,14 +177,14 @@ class Articles extends Component
                 $encoded = $processedImage->encode();
             }
 
-            $imagePath = 'articles/'.$filename;
+            $imagePath = 'articles/' . $filename;
             Storage::disk('public_direct')->put($imagePath, (string) $encoded);
             $data['image'] = $imagePath;
         }
         $article->update($data);
 
         $this->isCreating = false;
-        $this->reset(['title', 'topic_id', 'content', 'image', 'articleId']);
+        $this->reset(['title', 'topic_id', 'content', 'image', 'articleId', 'status']);
         $this->dispatch('article-form-closed');
         session()->flash('status', 'Article successfully updated.');
     }
@@ -183,6 +199,7 @@ class Articles extends Component
         $this->title = $article->title;
         $this->content = $article->body;
         $this->topic_id = $article->topic_id;
+        $this->status = $article->status->value;
         $this->reset(['image', 'imagePreview']);
         $this->existingImage = $article->image;
     }
@@ -217,12 +234,15 @@ class Articles extends Component
     {
         $query = Article::query();
         if ($this->search) {
-            $query->where('title', 'like', '%'.$this->search.'%');
+            $query->where('title', 'like', '%' . $this->search . '%');
         }
         if ($this->topicFilter) {
             $query->where('topic_id', $this->topicFilter);
         }
-        $articles = $query->paginate($this->perPage);
+        if ($this->statusFilter) {
+            $query->where('status', $this->statusFilter);
+        }
+        $articles = $query->latest()->paginate($this->perPage);
 
         return view('livewire.articles', [
             'articles' => $articles,
