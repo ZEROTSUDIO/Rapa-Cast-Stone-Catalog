@@ -23,7 +23,7 @@
                 </button>
             </div>
             <div class="p-6">
-                <form wire:submit.prevent="{{ $articleId ? 'updateArticle' : 'createArticle' }}">
+                <form wire:submit.prevent="saveArticle">
                     <div class="mb-6">
                         <label for="title" class="block text-sm font-semibold text-premium-dark mb-2">Judul
                             Artikel</label>
@@ -35,35 +35,18 @@
                         @enderror
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                        <div>
-                            <label for="topic"
-                                class="block text-sm font-semibold text-premium-dark mb-2">Topic</label>
-                            <select wire:model="topic_id"
-                                class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-gold-accent focus:ring-2 focus:ring-gold-accent/20 outline-none transition-all">
-                                <option value="">Pilih Option</option>
-                                @foreach ($topics as $topic)
-                                    <option value="{{ $topic->id }}">{{ $topic->name }}</option>
-                                @endforeach
-                            </select>
-                            @error('topic_id')
-                                <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span>
-                            @enderror
-                        </div>
-
-                        <div>
-                            <label for="status"
-                                class="block text-sm font-semibold text-premium-dark mb-2">Status</label>
-                            <select wire:model="status"
-                                class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-gold-accent focus:ring-2 focus:ring-gold-accent/20 outline-none transition-all">
-                                @foreach (App\Enums\ArticleStatus::cases() as $articleStatus)
-                                    <option value="{{ $articleStatus->value }}">{{ $articleStatus->label() }}</option>
-                                @endforeach
-                            </select>
-                            @error('status')
-                                <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span>
-                            @enderror
-                        </div>
+                    <div class="mb-6">
+                        <label for="topic" class="block text-sm font-semibold text-premium-dark mb-2">Topic</label>
+                        <select wire:model="topic_id"
+                            class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-gold-accent focus:ring-2 focus:ring-gold-accent/20 outline-none transition-all">
+                            <option value="">Pilih Option</option>
+                            @foreach ($topics as $topic)
+                                <option value="{{ $topic->id }}">{{ $topic->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('topic_id')
+                            <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <!-- Featured Image Upload -->
@@ -181,9 +164,13 @@
                             class="bg-white border-2 border-gray-200 text-gray-700 px-6 py-2.5 rounded-lg font-semibold hover:bg-gray-50 transition-all">
                             Batal
                         </button>
-                        <button type="submit"
+                        <button type="button" wire:click="saveArticle('draft')"
+                            class="bg-gray-100 border border-gray-200 text-gray-700 px-8 py-2.5 rounded-lg font-semibold shadow-sm hover:bg-gray-200 transition-all duration-300">
+                            <i class="fas fa-file-alt mr-2"></i>Simpan Sebagai Draft
+                        </button>
+                        <button type="button" wire:click="saveArticle('published')"
                             class="gradient-gold text-white px-8 py-2.5 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105">
-                            <i class="fas fa-save mr-2"></i>Simpan Artikel
+                            <i class="fas fa-paper-plane mr-2"></i>Publish Artikel
                         </button>
                     </div>
                 </form>

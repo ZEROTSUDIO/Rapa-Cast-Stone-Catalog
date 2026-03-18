@@ -2,7 +2,6 @@
 
 namespace App\Livewire;
 
-use App\Enums\ArticleStatus;
 use App\Models\Article;
 use App\Models\Topic;
 use Illuminate\Support\Facades\Storage;
@@ -100,7 +99,7 @@ class Articles extends Component
         if ($this->image) {
             $slug = Str::slug($validated['title']);
             $extension = strtolower($this->image->getClientOriginalExtension());
-            $filename = $slug . '.' . $extension;
+            $filename = $slug.'.'.$extension;
 
             // Process image
             $processedImage = Image::read($this->image->getRealPath());
@@ -116,7 +115,7 @@ class Articles extends Component
                 $encoded = $processedImage->encode();
             }
 
-            $imagePath = 'articles/' . $filename;
+            $imagePath = 'articles/'.$filename;
             Storage::disk('public_direct')->put($imagePath, (string) $encoded);
         }
         Article::create([
@@ -133,6 +132,19 @@ class Articles extends Component
         $this->reset(['title', 'topic_id', 'content', 'image', 'status']);
         $this->dispatch('article-form-closed');
         session()->flash('status', 'Article successfully created.');
+    }
+
+    public function saveArticle($status = null)
+    {
+        if ($status) {
+            $this->status = $status;
+        }
+
+        if ($this->articleId) {
+            $this->updateArticle();
+        } else {
+            $this->createArticle();
+        }
     }
 
     public function updateArticle()
@@ -161,7 +173,7 @@ class Articles extends Component
 
             $slug = Str::slug($validated['title']);
             $extension = strtolower($this->image->getClientOriginalExtension());
-            $filename = $slug . '.' . $extension;
+            $filename = $slug.'.'.$extension;
 
             // Process image
             $processedImage = Image::read($this->image->getRealPath());
@@ -177,7 +189,7 @@ class Articles extends Component
                 $encoded = $processedImage->encode();
             }
 
-            $imagePath = 'articles/' . $filename;
+            $imagePath = 'articles/'.$filename;
             Storage::disk('public_direct')->put($imagePath, (string) $encoded);
             $data['image'] = $imagePath;
         }
@@ -234,7 +246,7 @@ class Articles extends Component
     {
         $query = Article::query();
         if ($this->search) {
-            $query->where('title', 'like', '%' . $this->search . '%');
+            $query->where('title', 'like', '%'.$this->search.'%');
         }
         if ($this->topicFilter) {
             $query->where('topic_id', $this->topicFilter);
