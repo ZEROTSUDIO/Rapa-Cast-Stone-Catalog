@@ -65,13 +65,13 @@
             <h2 class="font-heading text-5xl md:text-6xl text-center mb-20 tracking-wide font-light">Produk Unggulan
             </h2>
 
-            <div class="grid md:grid-cols-3 gap-12 scroll-reveal">
+            <div class="grid md:grid-cols-5 gap-12 scroll-reveal">
                 @foreach ($featuredProducts as $product)
                     <div class="product-card group">
                         <a href="{{ url('/catalogs/' . $product->category->slug . '/' . $product->slug) }}">
                             <div class="overflow-hidden mb-8 shadow-lg">
                                 <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('img/default.jpg') }}"
-                                    alt="{{ $product->name }}" class="product-image w-full h-[500px] object-cover">
+                                    alt="{{ $product->name }}" class="product-image w-full h-[200px] object-cover">
                             </div>
                         </a>
                         <h4 class="font-heading text-3xl mb-3 tracking-wide">{{ $product->name }}</h4>
@@ -90,6 +90,12 @@
                         @endif
                     </div>
                 @endforeach
+            </div>
+            <div class="mt-16 text-center">
+                <a href="{{ url('/catalogs') }}"
+                    class="inline-block px-10 py-4 border border-[#3A352F] text-sm tracking-[2px] uppercase hover:bg-[#3A352F] hover:text-white transition">
+                    Lihat Semua
+                </a>
             </div>
         </div>
     </section>

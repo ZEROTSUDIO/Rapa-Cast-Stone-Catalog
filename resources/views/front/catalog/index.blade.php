@@ -6,7 +6,7 @@
 
             <x-front.category-filter :categories="$categories" />
 
-            <div id="products" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+            <div id="products" class="grid md:grid-cols-2 lg:grid-cols-5 gap-8 mt-12">
                 @foreach ($catalogs as $catalog)
                     <div class="product-item group" data-category="{{ $catalog->category->name }}">
                         <a href="{{ url('/catalogs/' . $catalog->category->slug . '/' . $catalog->slug) }}"
@@ -14,7 +14,7 @@
                             <div class="overflow-hidden mb-6 shadow-md hover:shadow-xl transition-shadow duration-500">
                                 <img src="{{ $catalog->image ? asset('storage/' . $catalog->image) : asset('img/default.jpg') }}"
                                     alt="{{ $catalog->name }}"
-                                    class="w-full h-[400px] object-cover transition-transform duration-700 group-hover:scale-105">
+                                    class="w-full h-[200px] object-cover transition-transform duration-700 group-hover:scale-105">
                             </div>
                             <h4 class="font-heading text-2xl mb-2 tracking-wide text-[#3A352F]">{{ $catalog->name }}
                             </h4>
