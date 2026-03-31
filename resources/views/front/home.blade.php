@@ -69,9 +69,15 @@
                 @foreach ($featuredProducts as $product)
                     <div class="product-card group">
                         <a href="{{ url('/catalogs/' . $product->category->slug . '/' . $product->slug) }}">
-                            <div class="overflow-hidden mb-8 shadow-lg">
-                                <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('img/default.jpg') }}"
-                                    alt="{{ $product->name }}" class="product-image w-full h-[200px] object-cover">
+                            <div class="product-thumb-wrapper mb-8">
+                                <div class="overflow-hidden shadow-lg">
+                                    <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('img/default.jpg') }}"
+                                        alt="{{ $product->name }}" class="product-image w-full h-[200px] object-cover">
+                                </div>
+                                <div class="product-hover-preview">
+                                    <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('img/default.jpg') }}"
+                                        alt="{{ $product->name }}">
+                                </div>
                             </div>
                         </a>
                         <h4 class="font-heading text-3xl mb-3 tracking-wide">{{ $product->name }}</h4>
@@ -102,7 +108,7 @@
 
 
     <!-- Our Process -->
-    <section class="py-32 px-6 bg-[#F5F1E8]">
+    {{-- <section class="py-32 px-6 bg-[#F5F1E8]">
         <div class="max-w-7xl mx-auto">
             <p class="text-center text-xs text-[#8B7F6E] tracking-[2px] uppercase mb-4">
                 How It’s Made
@@ -179,7 +185,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
 
     <!-- Collections -->
     <section class="py-32 px-6">

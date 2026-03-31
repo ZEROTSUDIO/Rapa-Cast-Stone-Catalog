@@ -77,6 +77,39 @@
     transform: scale(1.05);
     filter: brightness(1) saturate(1);
 }
+
+/* Product image hover preview */
+.product-thumb-wrapper {
+    position: relative;
+}
+.product-hover-preview {
+    position: absolute;
+    bottom: calc(100% + 12px);
+    left: 50%;
+    transform: translateX(-50%) scale(0.95);
+    width: 300px;
+    max-height: 400px;
+    background: white;
+    padding: 6px;
+    box-shadow: 0 12px 40px rgba(58, 53, 47, 0.2);
+    border-radius: 4px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 50;
+}
+.product-hover-preview img {
+    width: 100%;
+    height: auto;
+    max-height: 388px;
+    object-fit: contain;
+    display: block;
+}
+.product-thumb-wrapper:hover .product-hover-preview {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+    pointer-events: auto;
+}
 .thumbnail {
     transition:
         opacity 0.4s ease,

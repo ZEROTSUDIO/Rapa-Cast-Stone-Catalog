@@ -11,10 +11,16 @@
                     <div class="product-item group" data-category="{{ $catalog->category->name }}">
                         <a href="{{ url('/catalogs/' . $catalog->category->slug . '/' . $catalog->slug) }}"
                             class="block">
-                            <div class="overflow-hidden mb-6 shadow-md hover:shadow-xl transition-shadow duration-500">
-                                <img src="{{ $catalog->image ? asset('storage/' . $catalog->image) : asset('img/default.jpg') }}"
-                                    alt="{{ $catalog->name }}"
-                                    class="w-full h-[200px] object-cover transition-transform duration-700 group-hover:scale-105">
+                            <div class="product-thumb-wrapper mb-6">
+                                <div class="overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-500">
+                                    <img src="{{ $catalog->image ? asset('storage/' . $catalog->image) : asset('img/default.jpg') }}"
+                                        alt="{{ $catalog->name }}"
+                                        class="w-full h-[200px] object-cover transition-transform duration-700 group-hover:scale-105">
+                                </div>
+                                <div class="product-hover-preview">
+                                    <img src="{{ $catalog->image ? asset('storage/' . $catalog->image) : asset('img/default.jpg') }}"
+                                        alt="{{ $catalog->name }}">
+                                </div>
                             </div>
                             <h4 class="font-heading text-2xl mb-2 tracking-wide text-[#3A352F]">{{ $catalog->name }}
                             </h4>
