@@ -1,59 +1,115 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Rapa Cast Stone — Product Catalog v2
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A modern, full-featured product catalog and company website for **Rapa Cast Stone**, built with Laravel 12, Livewire 3, and Tailwind CSS 4.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## ✨ Features
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- **Product Catalog** — Browse cast stone products organized by categories, with support for multiple product images.
+- **Articles / Blog** — Company news and articles with topic tagging and publish/draft status.
+- **Contact System** — Visitor contact form with admin reply management via email.
+- **Admin Panel** — Full CRUD management for products, categories, articles, topics, and contacts, all powered by Livewire reactive components.
+- **Authentication** — Secure admin login with Laravel's built-in auth scaffolding.
+- **Image Processing** — Product image uploads handled by Intervention Image.
+- **Rich Text Editor** — TinyMCE integration for article content editing.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 🛠 Tech Stack
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+| Layer        | Technology                          |
+|--------------|-------------------------------------|
+| Backend      | PHP 8.4, Laravel 12                 |
+| Frontend     | Livewire 3, Alpine.js, Tailwind CSS 4 |
+| Bundler      | Vite                                |
+| Database     | SQLite (dev) / MySQL (prod)         |
+| Image        | Intervention Image 3                |
+| Icons        | Font Awesome 7                      |
+| Rich Text    | TinyMCE 7                           |
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## 📁 Project Structure
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```
+app/
+├── Livewire/          # Reactive admin components (Catalogues, Articles, Contacts, etc.)
+├── Models/            # Eloquent models (Product, Category, Article, Contact, ...)
+├── Mail/              # Mailable classes for contact replies
+resources/
+├── views/
+│   ├── front/         # Public-facing pages
+│   ├── admin/         # Admin panel views
+│   └── livewire/      # Livewire component views
+database/
+├── migrations/        # All database migrations
+├── factories/         # Model factories for testing
+└── seeders/           # Database seeders
+```
 
-### Premium Partners
+---
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## 🚀 Getting Started
 
-## Contributing
+### Prerequisites
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- PHP 8.2+
+- Composer
+- Node.js & npm
+- Laravel Herd (or another local server)
 
-## Code of Conduct
+### Installation
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+# Clone the repository
+git clone <repository-url> rapa-cast-stone-v2
+cd rapa-cast-stone-v2
 
-## Security Vulnerabilities
+# Install dependencies & set up environment
+composer run setup
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+The `setup` script will:
+1. Install PHP dependencies via Composer
+2. Copy `.env.example` to `.env` and generate an app key
+3. Run all database migrations
+4. Install Node dependencies and build frontend assets
 
-## License
+### Development Server
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```bash
+composer run dev
+```
+
+This starts the Laravel dev server, queue worker, log watcher (Pail), and Vite — all in one command.
+
+---
+
+## 🧪 Testing
+
+```bash
+# Run the full test suite
+composer run test
+
+# Or via Artisan directly
+php artisan test
+```
+
+---
+
+## 🔑 Environment Variables
+
+Key variables to configure in your `.env` file:
+
+| Variable         | Description                        |
+|------------------|------------------------------------|
+| `APP_URL`        | Application base URL               |
+| `DB_CONNECTION`  | Database driver (`sqlite` / `mysql`) |
+| `MAIL_*`         | Mail driver settings for contact replies |
+
+---
+
+## 📄 License
+
+This project is proprietary software. All rights reserved by Rapa Cast Stone.
